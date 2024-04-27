@@ -8,6 +8,7 @@
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 
 		<class>ch.hslu.informatik.swde.wda.domain.City</class>
+		<class>ch.hslu.informatik.swde.wda.domain.Weather</class>
 
 		<validation-mode>AUTO</validation-mode>
 
