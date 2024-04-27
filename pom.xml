@@ -21,7 +21,7 @@
     <groupId>ch.hslu.swde23hs.g01</groupId>
     <artifactId>wda-app</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
 
     <name>wda-app</name>
     <description>
@@ -69,6 +69,10 @@
         <system>GitLab Pipelines - HSLU I</system>
         <url>https://gitlab.switch.ch/${scm.group.name}/g01/${project.artifactId}/pipelines</url>
     </ciManagement>
+
+    <modules>
+        <module>wda-domain</module>
+    </modules>
 
     <properties>
         <!-- VM-Args (z.B. Memory-Settings) für Unit- und Integrationstests. -->
