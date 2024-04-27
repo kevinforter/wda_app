@@ -35,7 +35,8 @@ public class CityDAOImpl extends GenericDAOImpl<City> implements CityDAO {
             objFromDb = tQry.getSingleResult();
         } catch (Exception e) {
             // No entity found in the database
-            LOG.info("No Weather found for City: " + cityName);
+            LOG.error("City not found: " + cityName, e);
+            throw new CityPersistenceException("City not found: " + cityName, e);
         }
 
         return objFromDb;
