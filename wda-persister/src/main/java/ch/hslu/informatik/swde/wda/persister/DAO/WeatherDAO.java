@@ -1,6 +1,6 @@
 package ch.hslu.informatik.swde.wda.persister.DAO;
 
-import ch.hslu.informatik.swde.domain.Weather;
+import ch.hslu.informatik.swde.wda.domain.Weather;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;

@@ -61,7 +61,7 @@
     <dependencies>
         <!-- Modul dependencies -->
         <dependency>
-            <groupId>ch.hslu.informatik.swde</groupId>
+            <groupId>ch.hslu.swde23hs.g01</groupId>
             <artifactId>wda-domain</artifactId>
             <version>1.0.0-SNAPSHOT</version>
             <scope>compile</scope>

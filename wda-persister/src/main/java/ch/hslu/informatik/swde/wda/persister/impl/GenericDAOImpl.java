@@ -1,7 +1,7 @@
 package ch.hslu.informatik.swde.wda.persister.impl;
 
-import ch.hslu.informatik.swde.persister.DAO.GenericDAO;
-import ch.hslu.informatik.swde.persister.util.JpaUtil;
+import ch.hslu.informatik.swde.wda.persister.DAO.GenericDAO;
+import ch.hslu.informatik.swde.wda.persister.util.JpaUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import org.slf4j.Logger;

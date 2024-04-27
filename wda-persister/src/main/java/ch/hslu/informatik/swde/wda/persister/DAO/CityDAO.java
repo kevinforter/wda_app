@@ -1,6 +1,6 @@
 package ch.hslu.informatik.swde.wda.persister.DAO;
 
-import ch.hslu.informatik.swde.domain.City;
+import ch.hslu.informatik.swde.wda.domain.City;
 
 import java.util.LinkedHashMap;
 
