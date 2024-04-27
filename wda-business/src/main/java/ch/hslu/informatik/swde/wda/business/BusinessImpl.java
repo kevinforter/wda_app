@@ -9,6 +9,7 @@ import ch.hslu.informatik.swde.wda.reader.ApiReader;
 import ch.hslu.informatik.swde.wda.reader.ApiReaderImpl;
 
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 
 public class BusinessImpl implements BusinessAPI{
 
@@ -20,6 +21,8 @@ public class BusinessImpl implements BusinessAPI{
 
         if(daoC.alle().isEmpty()) {
             LinkedHashMap<Integer, City> cityRes = reader.readCityDetailsList(reader.readCityNames());
+
+            daoC.saveAllCities(cityRes);
         }
     }
 
