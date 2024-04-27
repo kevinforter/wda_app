@@ -2,13 +2,16 @@ package ch.hslu.informatik.swde.wda.persister.impl;
 
 import ch.hslu.informatik.swde.wda.domain.City;
 import ch.hslu.informatik.swde.wda.persister.DAO.CityDAO;
+import ch.hslu.informatik.swde.wda.persister.exception.CityPersistenceException;
 import ch.hslu.informatik.swde.wda.persister.util.JpaUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.Set;
 
 public class CityDAOImpl extends GenericDAOImpl<City> implements CityDAO {
 
@@ -33,35 +36,31 @@ public class CityDAOImpl extends GenericDAOImpl<City> implements CityDAO {
         } catch (Exception e) {
             // No entity found in the database
             LOG.info("No Weather found for City: " + cityName);
-        } finally {
-            em.close();
-            return objFromDb;
         }
+
+        return objFromDb;
     }
 
     @Override
     public void saveAllCities(LinkedHashMap<Integer, City> cityMap) {
-        EntityManager em = JpaUtil.createEntityManager();
-
-        try {
+        try (EntityManager em = JpaUtil.createEntityManager()) {
             em.getTransaction().begin();
+
+            // Get all city names from the database
+            TypedQuery<String> nameQuery = em.createQuery("SELECT c.name FROM City c", String.class);
+            Set<String> existingNames = new HashSet<>(nameQuery.getResultList());
 
             for (City city : cityMap.values()) {
                 // Check if the city is already in the database
-                City existingCity = findEntityByFieldAndString("name", city.getName());
-
-                // If the city is not in the database, persist it
-                if (existingCity == null) em.persist(city);
+                if (!existingNames.contains(city.getName())) {
+                    em.persist(city);
+                }
             }
 
             em.getTransaction().commit();
         } catch (Exception e) {
-            if (em.getTransaction().isActive()) {
-                em.getTransaction().rollback();
-            }
-            System.out.println(e.getMessage());
-        } finally {
-            em.close();
+            LOG.error("Error while saving cities", e);
+            throw new CityPersistenceException("Error while saving cities", e);
         }
     }
 }
