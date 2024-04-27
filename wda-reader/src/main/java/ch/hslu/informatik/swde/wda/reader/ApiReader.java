@@ -1,7 +1,7 @@
 package ch.hslu.informatik.swde.wda.reader;
 
-import ch.hslu.informatik.swde.domain.City;
-import ch.hslu.informatik.swde.domain.Weather;
+import ch.hslu.informatik.swde.wda.domain.City;
+import ch.hslu.informatik.swde.wda.domain.Weather;
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
