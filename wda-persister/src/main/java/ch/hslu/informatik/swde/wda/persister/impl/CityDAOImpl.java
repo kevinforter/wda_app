@@ -28,7 +28,7 @@ public class CityDAOImpl extends GenericDAOImpl<City> implements CityDAO {
 
         City objFromDb = null;
 
-        TypedQuery<City> tQry = em.createQuery("SELECT o FROM City" + " o WHERE o.name = :name", City.class);
+        TypedQuery<City> tQry = em.createQuery("SELECT o.name FROM City" + " o WHERE o.name = :name", City.class);
         tQry.setParameter("name", cityName);
 
         try {
@@ -40,6 +40,29 @@ public class CityDAOImpl extends GenericDAOImpl<City> implements CityDAO {
         }
 
         return objFromDb;
+    }
+
+
+    @Override
+    public boolean cityExists(String cityName) {
+        EntityManager em = JpaUtil.createEntityManager();
+
+        // Create a query to count the number of cities with the given name
+        TypedQuery<Long> tQry = em.createQuery("SELECT COUNT(c) FROM City c WHERE c.name = :name", Long.class);
+        tQry.setParameter("name", cityName);
+
+        long count = 0;
+        try {
+            // Execute the query
+            count = tQry.getSingleResult();
+        } catch (Exception e) {
+            LOG.error("Error while checking if city exists: " + cityName, e);
+        } finally {
+            em.close();
+        }
+
+        // If count is greater than 0, the city exists
+        return count > 0;
     }
 
     @Override
