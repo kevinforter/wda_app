@@ -24,11 +24,10 @@ public interface CityDAO extends GenericDAO<City> {
     City findCityByName(String cityName);
 
     /**
-     * Sucht und liefert eine City anhand ihres Namens.
+     * Sucht nach einem Städtenamen
      *
      * @param cityName Der Name der zu suchenden City.
-     * @return Ein City-Objekt, falls eine City mit dem angegebenen Namen gefunden wurde
-     * andernfalls leeres City-Objekt.
+     * @return true oder false, falls Stadt schon existiert
      */
     boolean cityExists(String cityName);
 
