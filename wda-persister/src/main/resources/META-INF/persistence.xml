@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd" version="2.0">
+
+	<persistence-unit name="postgresPU" transaction-type="RESOURCE_LOCAL">
+
+		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+
+		<class>ch.hslu.informatik.swde.domain.City</class>
+		<class>ch.hslu.informatik.swde.domain.Weather</class>
+
+		<validation-mode>AUTO</validation-mode>
+
+		<properties>
+			<property name="jakarta.persistence.jdbc.driver"
+					  value="org.postgresql.Driver" />
+			<property name="jakarta.persistence.jdbc.url"
+					  value="jdbc:postgresql://localhost:5432/app_db" />
+			<property name="jakarta.persistence.jdbc.user"
+					  value="postgres" />
+			<property name="jakarta.persistence.jdbc.password"
+					  value="postgres" />
+
+			<property name="eclipselink.ddl-generation.output-mode"
+					  value="database" />
+
+			<property name="eclipselink.ddl-generation"
+					  value="create-tables" />
+
+			<!-- SQL-Statements ausgeben (JPA-Provider spezifisch, nur während der
+				Entwicklungszeit sinnvoll!) -->
+			<property name="eclipselink.logging.level.sql" value="off" />
+			<property name="eclipselink.logging.parameters" value="false" />
+
+		</properties>
+	</persistence-unit>
+
+</persistence>
