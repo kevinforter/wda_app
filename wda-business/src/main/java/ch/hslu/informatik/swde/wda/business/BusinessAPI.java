@@ -11,7 +11,7 @@ public interface BusinessAPI {
 
     void addAllCities();
 
-    void addCurrentWeatherOfCity();
+    void addCurrentWeatherOfCity(int cityId);
 
     void addWeatherOfCityByYear();
 

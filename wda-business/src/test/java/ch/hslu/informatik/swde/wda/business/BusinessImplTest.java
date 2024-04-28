@@ -29,7 +29,22 @@ class BusinessImplTest {
     }
 
 
+    @Test
     void addCurrentWeatherOfCity() {
+
+        final BusinessAPI serviceAPI = new BusinessImpl();
+
+        List<City> resCityList = serviceAPI.getAllCities();
+
+        for (City c : resCityList) {
+
+            long start = System.currentTimeMillis();
+            serviceAPI.addCurrentWeatherOfCity(c.getId());
+            long end = System.currentTimeMillis();
+
+            long time = end - start;
+            LOG.info("Time used to save current Weather: " + time + " ms");
+        }
     }
 
 
@@ -42,7 +57,7 @@ class BusinessImplTest {
         final BusinessAPI serviceAPI = new BusinessImpl();
 
         List<City> resCity = serviceAPI.getAllCities();
-        for(City c : resCity) {
+        for (City c : resCity) {
             LOG.info("City : " + c);
         }
     }
@@ -53,7 +68,7 @@ class BusinessImplTest {
         final BusinessAPI serviceAPI = new BusinessImpl();
 
         List<City> resCity = serviceAPI.getAllCities();
-        for(City c : resCity) {
+        for (City c : resCity) {
             Weather currentWeather = serviceAPI.getCurrentWeatherOfCity(c.getId());
             LOG.info("Current Weather: " + currentWeather);
         }
