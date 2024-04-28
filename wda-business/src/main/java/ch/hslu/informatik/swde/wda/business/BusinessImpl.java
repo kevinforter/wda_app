@@ -12,6 +12,7 @@ import ch.hslu.informatik.swde.wda.reader.ApiReaderImpl;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.List;
 
 public class BusinessImpl implements BusinessAPI{
 
@@ -39,8 +40,9 @@ public class BusinessImpl implements BusinessAPI{
     }
 
     @Override
-    public LinkedHashMap<Integer, City> getAllCities() {
-        return null;
+    public List<City> getAllCities() {
+
+        return daoC.alle();
     }
 
     @Override

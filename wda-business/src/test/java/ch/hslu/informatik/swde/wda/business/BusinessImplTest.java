@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -35,17 +36,24 @@ class BusinessImplTest {
     void addWeatherOfCityByYear() {
     }
 
-
+    @Test
     void getAllCities() {
+
+        final BusinessAPI serviceAPI = new BusinessImpl();
+
+        List<City> resCity = serviceAPI.getAllCities();
+        for(City c : resCity) {
+            LOG.info("City : " + c);
+        }
     }
 
-
+    @Test
     void getCurrentWeatherOfCity() {
 
         final BusinessAPI serviceAPI = new BusinessImpl();
 
-        LinkedHashMap<Integer, City> resCity = serviceAPI.getAllCities();
-        for(City c : resCity.values()) {
+        List<City> resCity = serviceAPI.getAllCities();
+        for(City c : resCity) {
             Weather currentWeather = serviceAPI.getCurrentWeatherOfCity(c.getId());
             LOG.info("Current Weather: " + currentWeather);
         }

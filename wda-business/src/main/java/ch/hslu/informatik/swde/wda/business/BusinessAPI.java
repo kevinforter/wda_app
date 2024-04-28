@@ -5,6 +5,7 @@ import ch.hslu.informatik.swde.wda.domain.Weather;
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 public interface BusinessAPI {
 
@@ -14,7 +15,7 @@ public interface BusinessAPI {
 
     void addWeatherOfCityByYear();
 
-    LinkedHashMap<Integer, City> getAllCities();
+    List<City> getAllCities();
 
     Weather getCurrentWeatherOfCity(int cityId);
 
