@@ -1,5 +1,11 @@
 package ch.hslu.informatik.swde.wda.business;
 
+import ch.hslu.informatik.swde.wda.domain.City;
+import ch.hslu.informatik.swde.wda.domain.Weather;
+
+import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
+
 public interface BusinessAPI {
 
     void addAllCities();
@@ -8,9 +14,9 @@ public interface BusinessAPI {
 
     void addWeatherOfCityByYear();
 
-    void getAllCities();
+    LinkedHashMap<Integer, City> getAllCities();
 
-    void getCurrentWeatherOfCity();
+    Weather getCurrentWeatherOfCity(int cityId);
 
-    void getWeatherOfCityByYear();
+    LinkedHashMap<LocalDateTime, Weather> getWeatherOfCityByYear();
 }

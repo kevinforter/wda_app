@@ -1,8 +1,12 @@
 package ch.hslu.informatik.swde.wda.business;
 
+import ch.hslu.informatik.swde.wda.domain.City;
+import ch.hslu.informatik.swde.wda.domain.Weather;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.LinkedHashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -37,6 +41,14 @@ class BusinessImplTest {
 
 
     void getCurrentWeatherOfCity() {
+
+        final BusinessAPI serviceAPI = new BusinessImpl();
+
+        LinkedHashMap<Integer, City> resCity = serviceAPI.getAllCities();
+        for(City c : resCity.values()) {
+            Weather currentWeather = serviceAPI.getCurrentWeatherOfCity(c.getId());
+            LOG.info("Current Weather: " + currentWeather);
+        }
     }
 
 
