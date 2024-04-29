@@ -28,17 +28,16 @@ public class CityDAOImpl extends GenericDAOImpl<City> implements CityDAO {
 
         City objFromDb = null;
 
-        TypedQuery<City> tQry = em.createQuery("SELECT o.name FROM City" + " o WHERE o.name = :name", City.class);
+        TypedQuery<City> tQry = em.createQuery("SELECT o FROM City" + " o WHERE o.name = :name", City.class);
         tQry.setParameter("name", cityName);
 
         try {
             objFromDb = tQry.getSingleResult();
         } catch (Exception e) {
             // No entity found in the database
-            LOG.error("City not found: " + cityName, e);
-            throw new CityPersistenceException("City not found: " + cityName, e);
+            LOG.info("No Weather found for City: " + cityName);
         }
-
+        em.close();
         return objFromDb;
     }
 
