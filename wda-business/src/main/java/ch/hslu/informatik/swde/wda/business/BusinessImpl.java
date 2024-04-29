@@ -37,18 +37,21 @@ public class BusinessImpl implements BusinessAPI {
     @Override
     public void addCurrentWeatherOfCity(int cityId) {
 
-        City city = daoC.findById(cityId);
-        String cityName = city.getName();
         Weather currentWeatherDAO = getCurrentWeatherOfCity(cityId);
-        Weather currentWeatherREADER = reader.readCurrentWeatherByCity(cityName);
 
         if (currentWeatherDAO != null) {
+            Weather currentWeatherREADER = reader.readCurrentWeatherByCity(currentWeatherDAO.getCity().getName());
 
             if (currentWeatherREADER != null && !currentWeatherDAO.getDTstamp().isEqual(currentWeatherREADER.getDTstamp())) {
                 currentWeatherREADER.setCityId(cityId);
                 daoW.speichern(currentWeatherREADER);
             }
         } else {
+            City city = daoC.findById(cityId);
+            String cityName = city.getName();
+
+            Weather currentWeatherREADER = reader.readCurrentWeatherByCity(cityName);
+
             currentWeatherREADER.setCityId(cityId);
             daoW.speichern(currentWeatherREADER);
         }
