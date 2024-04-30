@@ -8,13 +8,18 @@ import ch.hslu.informatik.swde.wda.persister.util.Util;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class WeatherDAOImplTest {
+
+    private static final Logger LOG = LoggerFactory.getLogger(WeatherDAOImplTest.class);
 
     @BeforeEach
     void setUp() {
@@ -116,8 +121,12 @@ public class WeatherDAOImplTest {
             assertEquals(w, daoW.findById(w.getId()));
         }
 
-        List<Weather> weatherRes = daoW.findWeatherFromCityByYear(2024,daoO.findCityByName("Davos").getId());
-        List<Weather> weatherResNull = daoW.findWeatherFromCityByYear(2025,daoO.findCityByName("Davos").getId());
+        List<LocalDateTime> weatherRes = daoW.findWeatherFromCityByYear(2024,daoO.findCityByName("Davos").getId());
+        List<LocalDateTime> weatherResNull = daoW.findWeatherFromCityByYear(2025,daoO.findCityByName("Davos").getId());
+
+        for (LocalDateTime ldt : weatherRes) {
+            LOG.info("LDT: " + ldt);
+        }
 
         assertAll(
                 () -> assertNotNull(weatherRes, "2024 sollte nicht eine leere Liste ergeben"),
