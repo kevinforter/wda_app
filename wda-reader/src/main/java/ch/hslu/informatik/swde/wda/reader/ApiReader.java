@@ -48,17 +48,17 @@ public interface ApiReader {
     /**
      * Liest Wetterdaten für eine spezifische Ortschaft von einem externen Webservice.
      *
-     * @param name Der Name der Ortschaft.
+     * @param cityName Der Name der Ortschaft.
      * @return Ein Wetter-Objekt mit den Wetterdaten der angegebenen Ortschaft.
      */
-    Weather readCurrentWeatherByCity(String name);
+    Weather readCurrentWeatherByCity(String cityName);
 
     /**
      * Liest Wetterdaten für eine spezifische Ortschaft und ein bestimmtes Jahr von einem externen Webservice.
      *
-     * @param city Der Name der Ortschaft.
+     * @param cityName Der Name der Ortschaft.
      * @param jahr Das spezifizierte Jahr.
      * @return Eine Liste von Wetter-Objekten, die den Wetterdaten für das angegebene Jahr und die Ortschaft entsprechen.
      */
-    LinkedHashMap<LocalDateTime, Weather> readWeatherByCityAndYear(String city, int jahr);
+    LinkedHashMap<LocalDateTime, Weather> readWeatherByCityAndYear(String cityName, int jahr);
 }

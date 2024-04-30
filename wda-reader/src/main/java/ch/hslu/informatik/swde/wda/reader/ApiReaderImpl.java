@@ -230,10 +230,10 @@ public class ApiReaderImpl implements ApiReader {
     /*----------------------------------------------WEATHER API REQUEST---------------------------------------------*/
 
     @Override
-    public Weather readCurrentWeatherByCity(String name) {
+    public Weather readCurrentWeatherByCity(String cityName) {
         try {
 
-            String encodedCityName = name.replace(" ", "+");
+            String encodedCityName = cityName.replace(" ", "+");
 
             URI uri = URI.create(BASE_URI + "weatherdata-provider/rest/weatherdata?city=" + encodedCityName);
             HttpRequest req = HttpRequest.newBuilder(uri).GET().header("Accept", format).build();
@@ -292,10 +292,10 @@ public class ApiReaderImpl implements ApiReader {
     }
 
     @Override
-    public LinkedHashMap<LocalDateTime, Weather> readWeatherByCityAndYear(String ortschaft, int jahr) {
+    public LinkedHashMap<LocalDateTime, Weather> readWeatherByCityAndYear(String cityName, int jahr) {
         try {
 
-            String encodedCityName = ortschaft.replace(" ", "+");
+            String encodedCityName = cityName.replace(" ", "+");
 
             URI uri = URI.create(BASE_URI + "weatherdata-provider/rest/weatherdata/cityandyear?city=" + encodedCityName + "&year=" + jahr);
             HttpRequest req = HttpRequest.newBuilder(uri).header("Accept", format).build();

@@ -61,7 +61,11 @@ public class BusinessImpl implements BusinessAPI {
     }
 
     @Override
-    public void addWeatherOfCityByYear() {
+    public void addWeatherOfCityByYear(String cityName, int year) {
+
+        LinkedHashMap<LocalDateTime, Weather> weatherMap = reader.readWeatherByCityAndYear(cityName, year);
+
+
 
     }
 

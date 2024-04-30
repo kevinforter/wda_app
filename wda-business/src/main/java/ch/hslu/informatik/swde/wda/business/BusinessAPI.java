@@ -13,7 +13,7 @@ public interface BusinessAPI {
 
     void addCurrentWeatherOfCity(int cityId);
 
-    void addWeatherOfCityByYear();
+    void addWeatherOfCityByYear(String city, int year);
 
     List<City> getAllCities();
 
