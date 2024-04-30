@@ -3,6 +3,7 @@ package ch.hslu.informatik.swde.wda.persister.DAO;
 import ch.hslu.informatik.swde.wda.domain.City;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * Diese Schnittstelle ergänzt die generische Persister-Schnittstelle
@@ -30,6 +31,13 @@ public interface CityDAO extends GenericDAO<City> {
      * @return true oder false, falls Stadt schon existiert
      */
     boolean cityExists(String cityName);
+
+    /**
+     * Sucht nach einem Städtenamen
+     *
+     * @return eine Liste aller City Namen
+     */
+    List<String> allCityNames();
 
     /**
      * Speichert alle Städte in der Map ab

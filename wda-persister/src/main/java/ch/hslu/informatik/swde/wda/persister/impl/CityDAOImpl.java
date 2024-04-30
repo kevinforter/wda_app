@@ -9,9 +9,7 @@ import jakarta.persistence.TypedQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.Set;
+import java.util.*;
 
 public class CityDAOImpl extends GenericDAOImpl<City> implements CityDAO {
 
@@ -65,13 +63,24 @@ public class CityDAOImpl extends GenericDAOImpl<City> implements CityDAO {
     }
 
     @Override
+    public List<String> allCityNames() {
+        EntityManager em = JpaUtil.createEntityManager();
+
+        TypedQuery<String> tQry = em.createQuery("SELECT c.name FROM City c", String.class);
+        List<String> objListe = tQry.getResultList();
+
+        em.close();
+        return objListe != null ? objListe : new ArrayList<>();
+    }
+
+    @Override
     public void saveAllCities(LinkedHashMap<Integer, City> cityMap) {
         try (EntityManager em = JpaUtil.createEntityManager()) {
             em.getTransaction().begin();
 
             // Get all city names from the database
-            TypedQuery<String> nameQuery = em.createQuery("SELECT c.name FROM City c", String.class);
-            Set<String> existingNames = new HashSet<>(nameQuery.getResultList());
+            TypedQuery<String> tQry = em.createQuery("SELECT c.name FROM City c", String.class);
+            Set<String> existingNames = new HashSet<>(tQry.getResultList());
 
             for (City city : cityMap.values()) {
                 // Check if the city is already in the database
