@@ -12,9 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class BusinessImpl implements BusinessAPI {
 
@@ -36,10 +34,29 @@ public class BusinessImpl implements BusinessAPI {
  */
 
         LinkedHashMap<Integer, City> cityRes = reader.readCityDetailsList(reader.readCityNames());
+        List<City> cityList = daoC.alle();
 
+        // Convert the cityList into a HashSet
+        Set<String> citySet = new HashSet<>();
+        for (City city : cityList) {
+            citySet.add(city.getName());
+        }
+
+        // Iterate over the cityRes map
+        for (City city : cityRes.values()) {
+            if (!citySet.contains(city.getName())) {
+                // The city is not in the database, so you can add it
+                daoC.speichern(city);
+            }
+        }
+
+
+
+        /*
         for (City c : cityRes.values()) {
             if (!daoC.cityExists(c.getName())) daoC.speichern(c);
         }
+         */
     }
 
     @Override
