@@ -4,6 +4,7 @@ import ch.hslu.informatik.swde.wda.domain.Weather;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -19,19 +20,28 @@ public interface WeatherDAO extends GenericDAO<Weather> {
     /**
      * Holt das neueste Weather für eine bestimmte Ortschaft basierend auf der Ortschafts-ID.
      *
-     * @param ortschaftId Die ID der Ortschaft.
+     * @param cityId Die ID der Ortschaft.
      * @return Das neueste Weather-Objekt für die angegebene Ortschaft; null, wenn keine Daten gefunden werden.
      */
-    Weather findLatestWeatherByCity(int ortschaftId);
+    Weather findLatestWeatherByCity(int cityId);
 
     /**
      * Holt Wetterdaten für eine bestimmte Ortschaft zu einem bestimmten Zeitpunkt.
      *
      * @param date Der spezifische Zeitpunkt.
-     * @param ortschaftId Die ID der Ortschaft.
+     * @param cityId Die ID der Ortschaft.
      * @return Eine Liste von Weather-Objekten; leer, wenn keine Daten gefunden werden.
      */
-    Weather findWeatherFromCityByDateTime(LocalDateTime date, int ortschaftId);
+    Weather findWeatherFromCityByDateTime(LocalDateTime date, int cityId);
+
+    /**
+     * Holt Wetterdaten für eine bestimmte Ortschaft zu ein bestimmtes Jahr.
+     *
+     * @param year Das spezifische Jahr.
+     * @param cityId Die ID der Ortschaft.
+     * @return Eine Liste von Weather-Objekten; leer, wenn keine Daten gefunden werden.
+     */
+    List<Weather> findWeatherFromCityByYear(int year, int cityId);
 
     /**
      * Holt Wetterdaten für eine bestimmte Ortschaft innerhalb eines bestimmten Zeitraums.

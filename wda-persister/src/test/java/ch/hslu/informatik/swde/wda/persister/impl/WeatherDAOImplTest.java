@@ -12,7 +12,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class WeatherDAOImplTest {
 
@@ -94,6 +94,35 @@ public class WeatherDAOImplTest {
             daoW.speichern(w);
             assertEquals(w, daoW.findById(w.getId()));
         }
+    }
+
+    @Tag("unittest")
+    @ParameterizedTest
+    @MethodSource("cityListProvider")
+    void test_GetWeatherFromCityByYear_ShouldReturnMultibleWeather(List<City> cityList) {
+
+        WeatherDAO daoW = new WeatherDAOImpl();
+        CityDAO daoO = new CityDAOImpl();
+
+        for (City c : cityList) {
+            daoO.speichern(c);
+            assertEquals(c, daoO.findById(c.getId()));
+        }
+
+        List<Weather> wetterList = Util.createWetterList();
+
+        for (Weather w : wetterList) {
+            daoW.speichern(w);
+            assertEquals(w, daoW.findById(w.getId()));
+        }
+
+        List<Weather> weatherRes = daoW.findWeatherFromCityByYear(2024,daoO.findCityByName("Davos").getId());
+        List<Weather> weatherResNull = daoW.findWeatherFromCityByYear(2025,daoO.findCityByName("Davos").getId());
+
+        assertAll(
+                () -> assertNotNull(weatherRes, "2024 sollte nicht eine leere Liste ergeben"),
+                () -> assertTrue(weatherResNull.isEmpty(), "2025 sollte leer sein")
+        );
     }
 
     @Tag("unittest")

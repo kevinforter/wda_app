@@ -72,6 +72,27 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
     }
 
     @Override
+    public List<Weather> findWeatherFromCityByYear(int year, int cityId) {
+
+        EntityManager em = JpaUtil.createEntityManager();
+
+        LocalDateTime DTstamp = LocalDateTime.of(year, 1,1,0,0,0);
+
+        TypedQuery<Weather> tQry = em.createQuery("SELECT w FROM Weather" + " w " +
+                        "WHERE w.cityId = :cityId AND w.DTstamp >= :DTstamp"
+                , Weather.class);
+
+        tQry.setParameter("DTstamp", DTstamp);
+        tQry.setParameter("cityId", cityId);
+
+        List<Weather> objListe = tQry.getResultList();
+
+        em.close();
+
+        return objListe != null ? objListe : new ArrayList<>();
+    }
+
+    @Override
     public List<Weather> findWeatherFromCityByTimeSpan(int cityId, LocalDateTime von, LocalDateTime bis) {
 
         EntityManager em = JpaUtil.createEntityManager();
