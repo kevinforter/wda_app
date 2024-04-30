@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -47,8 +48,18 @@ class BusinessImplTest {
         }
     }
 
-
+    @Test
     void addWeatherOfCityByYear() {
+
+        final BusinessAPI serviceAPI = new BusinessImpl();
+
+        long start = System.currentTimeMillis();
+        serviceAPI.addWeatherOfCityByYear("Davos",2024);
+        long end = System.currentTimeMillis();
+
+        long time = end - start;
+        LOG.info("Time used to get and save all weather Data: " + time + " ms");
+
     }
 
     @Test
@@ -75,6 +86,21 @@ class BusinessImplTest {
     }
 
 
+    @Test
     void getWeatherOfCityByYear() {
+
+        final BusinessAPI serviceAPI = new BusinessImpl();
+
+        serviceAPI.addAllCities();
+
+        List<City> cityList = serviceAPI.getAllCities();
+
+        for (City c : cityList) {
+            serviceAPI.addCurrentWeatherOfCity(c.getId());
+            List<LocalDateTime> restLDT = serviceAPI.getWeatherOfCityByYear(c.getId() ,2024);
+            assertAll(
+                    () -> assertNotNull(restLDT, "Liste sollte nicht null sein:")
+            );
+        }
     }
 }

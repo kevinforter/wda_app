@@ -19,5 +19,7 @@ public interface BusinessAPI {
 
     Weather getCurrentWeatherOfCity(int cityId);
 
-    LinkedHashMap<LocalDateTime, Weather> getWeatherOfCityByYear();
+    Weather getCurrentWeatherOfCity(String cityName);
+
+    List<LocalDateTime> getWeatherOfCityByYear(int cityId, int year);
 }

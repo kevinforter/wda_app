@@ -64,9 +64,15 @@ public class BusinessImpl implements BusinessAPI {
     public void addWeatherOfCityByYear(String cityName, int year) {
 
         LinkedHashMap<LocalDateTime, Weather> weatherMap = reader.readWeatherByCityAndYear(cityName, year);
+        Weather currentWeather = getCurrentWeatherOfCity(cityName);
+        List<LocalDateTime> weatherList = getWeatherOfCityByYear(year, currentWeather.getCityId());
 
-
-
+        for (Weather weather : weatherMap.values()) {
+            if(!weatherList.contains(weather.getDTstamp())) {
+                weather.setCityId(currentWeather.getCityId());
+                daoW.speichern(weather);
+            }
+        }
     }
 
     @Override
@@ -81,9 +87,15 @@ public class BusinessImpl implements BusinessAPI {
         return daoW.findLatestWeatherByCity(cityId);
 
     }
+   @Override
+    public Weather getCurrentWeatherOfCity(String cityName) {
+
+        return daoW.findLatestWeatherByCity(daoC.findCityByName(cityName).getId());
+    }
 
     @Override
-    public LinkedHashMap<LocalDateTime, Weather> getWeatherOfCityByYear() {
-        return null;
+    public List<LocalDateTime> getWeatherOfCityByYear(int year, int cityId) {
+
+        return daoW.findWeatherFromCityByYear(year, cityId);
     }
 }
