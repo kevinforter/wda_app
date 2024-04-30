@@ -26,11 +26,19 @@ public class BusinessImpl implements BusinessAPI {
 
     @Override
     public void addAllCities() {
-
+/*
         if (daoC.alle().isEmpty()) {
             LinkedHashMap<Integer, City> cityRes = reader.readCityDetailsList(reader.readCityNames());
 
             daoC.saveAllCities(cityRes);
+        }
+
+ */
+
+        LinkedHashMap<Integer, City> cityRes = reader.readCityDetailsList(reader.readCityNames());
+
+        for (City c : cityRes.values()) {
+            if (!daoC.cityExists(c.getName())) daoC.speichern(c);
         }
     }
 
