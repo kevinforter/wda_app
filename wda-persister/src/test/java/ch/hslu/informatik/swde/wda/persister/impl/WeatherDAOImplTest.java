@@ -154,12 +154,23 @@ public class WeatherDAOImplTest {
     }
 
     @Tag("unittest")
-    @Test
-    void checkIfTableExist_ShouldReturnBoolean() {
+    @ParameterizedTest
+    @MethodSource("cityListProvider")
+    void checkIfTableExist_ShouldReturnBoolean(List<City> cityList) {
 
-        WeatherDAO dao = new WeatherDAOImpl();
+        WeatherDAO daoW = new WeatherDAOImpl();
+        CityDAO daoO = new CityDAOImpl();
 
-        boolean status = dao.ifTableExist();
+        for (City c : cityList) {
+            daoO.speichern(c);
+            assertEquals(c, daoO.findById(c.getId()));
+        }
+
+        daoW.saveAllWeather(Util.createWeatherMap());
+
+        assertEquals(3, daoW.alle().size());
+
+        boolean status = daoW.ifTableExist();
         assumeTrue(status, "Table was empty");
 
     }

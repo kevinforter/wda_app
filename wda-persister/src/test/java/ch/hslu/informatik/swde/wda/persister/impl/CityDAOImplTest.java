@@ -11,9 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class CityDAOImplTest {
 
@@ -102,16 +100,21 @@ public class CityDAOImplTest {
     }
 
     @Tag("unittest")
-    @Test
-    void checkIfTableExist_ShouldReturnBoolean() {
+    @ParameterizedTest
+    @MethodSource("cityListProvider")
+    void checkIfTableExist_ShouldReturnBoolean(List<City> listFromUtil) {
 
         CityDAO dao = new CityDAOImpl();
 
+        for (City c : listFromUtil) {
+            dao.speichern(c);
+            assertEquals(c, dao.findById(c.getId()), "Objekte stimmen nicht überein");
+        }
+
         boolean status = dao.ifTableExist();
-        assumeTrue(status, "Table was empty");
+        assertTrue(status, "Table was empty");
 
     }
-
 
     static Stream<List<City>> cityListProvider() {
         List<City> cities = Util.createCityList();
