@@ -17,14 +17,11 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.eclipse.persistence.jpa.jpql.Assert;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
 import org.junit.jupiter.api.*;
 
-
-import static org.glassfish.jersey.internal.guava.Predicates.equalTo;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
@@ -37,7 +34,6 @@ class ApiReaderTest {
 
 
     /*-----------------------------------------------CITY API REQUEST-----------------------------------------------*/
-
     @Nested
     class CityTest {
         @Tag("unittest")
@@ -103,7 +99,6 @@ class ApiReaderTest {
     }
 
     /*----------------------------------------------WEATHER API REQUEST---------------------------------------------*/
-
     @Nested
     class WeatherTest {
         @Tag("unittest")
@@ -138,6 +133,13 @@ class ApiReaderTest {
         }
 
 
+    }
+
+    /*----------------------------------------------API STATUS TEST---------------------------------------------*/
+    @Nested
+    class apiTest {
+
+        @Tag("unittest")
         @Test
         public void allCitiesExist_whenCitiesAreRetrieved_then200IsReceived()
                 throws IOException, InterruptedException {
@@ -151,10 +153,11 @@ class ApiReaderTest {
 
             // Then
             assertEquals(
-                    200, res.statusCode()
+                    200, res.statusCode(), "Should be Code 200"
             );
         }
 
+        @Tag("unittest")
         @Test
         public void givenCityDoesNotExists_whenWeatherDataIsRetrieved_then500IsReceived()
                 throws IOException, InterruptedException {
@@ -169,7 +172,7 @@ class ApiReaderTest {
 
             // Then
             assertEquals(
-                    500, res.statusCode()
+                    500, res.statusCode(), "Should be Code 500"
             );
         }
     }
