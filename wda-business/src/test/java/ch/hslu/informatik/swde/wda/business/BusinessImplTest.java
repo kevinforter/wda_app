@@ -2,12 +2,12 @@ package ch.hslu.informatik.swde.wda.business;
 
 import ch.hslu.informatik.swde.wda.domain.City;
 import ch.hslu.informatik.swde.wda.domain.Weather;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,6 +16,7 @@ class BusinessImplTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(BusinessImplTest.class);
 
+    @Tag("integration")
     @Test
     void addAllCities() {
 
@@ -29,7 +30,7 @@ class BusinessImplTest {
         LOG.info("Time used to save all Cities: " + time + " ms");
     }
 
-
+    @Tag("integration")
     @Test
     void addCurrentWeatherOfCity() {
 
@@ -48,6 +49,7 @@ class BusinessImplTest {
         }
     }
 
+    @Tag("integration")
     @Test
     void addWeatherOfCityByYear() {
 
@@ -62,6 +64,7 @@ class BusinessImplTest {
 
     }
 
+    @Tag("integration")
     @Test
     void getAllCities() {
 
@@ -73,6 +76,7 @@ class BusinessImplTest {
         }
     }
 
+    @Tag("integration")
     @Test
     void getCurrentWeatherOfCity() {
 
@@ -85,7 +89,7 @@ class BusinessImplTest {
         }
     }
 
-
+    @Tag("integration")
     @Test
     void getWeatherOfCityByYear() {
 
