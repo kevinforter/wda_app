@@ -4,6 +4,11 @@ import ch.hslu.informatik.swde.wda.domain.Weather;
 import ch.hslu.informatik.swde.wda.domain.City;
 import ch.hslu.informatik.swde.wda.reader.util.Util;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -11,15 +16,24 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.eclipse.persistence.jpa.jpql.Assert;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
 import org.junit.jupiter.api.*;
 
+
+import static org.glassfish.jersey.internal.guava.Predicates.equalTo;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 class ApiReaderTest {
+
+    private static final HttpClient client = HttpClient.newHttpClient();
+    private static final String BASE_URI = "http://eee-03318.simple.eee.intern:8080/";
+    private static final ObjectMapper mapper = new ObjectMapper();
+    private static final String format = "application/json";
 
 
     /*-----------------------------------------------CITY API REQUEST-----------------------------------------------*/
@@ -121,6 +135,42 @@ class ApiReaderTest {
         static Stream<LinkedList<String>> cityListProvider() {
             LinkedList<String> cities = Util.createCities();
             return Stream.of(cities);
+        }
+
+
+        @Test
+        public void allCitiesExist_whenCitiesAreRetrieved_then200IsReceived()
+                throws IOException, InterruptedException {
+
+            // Given
+            URI uri = URI.create(BASE_URI + "weatherdata-provider/rest/weatherdata/cities/");
+            HttpRequest req = HttpRequest.newBuilder(uri).header("Accept", format).build();
+
+            // When
+            HttpResponse<String> res = client.send(req, HttpResponse.BodyHandlers.ofString());
+
+            // Then
+            assertEquals(
+                    200, res.statusCode()
+            );
+        }
+
+        @Test
+        public void givenCityDoesNotExists_whenWeatherDataIsRetrieved_then500IsReceived()
+                throws IOException, InterruptedException {
+
+            // Given
+            String cityName = "Berlin";
+            URI uri = URI.create(BASE_URI + "weatherdata-provider/rest/weatherdata?city=" + cityName);
+            HttpRequest req = HttpRequest.newBuilder(uri).header("Accept", format).build();
+
+            // When
+            HttpResponse<String> res = client.send(req, HttpResponse.BodyHandlers.ofString());
+
+            // Then
+            assertEquals(
+                    500, res.statusCode()
+            );
         }
     }
 }
