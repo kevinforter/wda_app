@@ -157,7 +157,7 @@ public class WeatherDAOImplTest {
     @Test
     void checkIfTableExist_ShouldReturnBoolean() {
 
-        CityDAO dao = new CityDAOImpl();
+        WeatherDAO dao = new WeatherDAOImpl();
 
         boolean status = dao.ifTableExist();
         assumeTrue(status, "Table was empty");
