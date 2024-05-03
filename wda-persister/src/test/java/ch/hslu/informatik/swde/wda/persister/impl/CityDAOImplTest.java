@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class CityDAOImplTest {
 
@@ -98,6 +100,18 @@ public class CityDAOImplTest {
         assertEquals(mapFromUtil.size(), dao.alle().size(), "Array not the Same");
 
     }
+
+    @Tag("unittest")
+    @Test
+    void checkIfTableExist_ShouldReturnBoolean() {
+
+        CityDAO dao = new CityDAOImpl();
+
+        boolean status = dao.ifTableExist();
+        assumeTrue(status, "Table was empty");
+
+    }
+
 
     static Stream<List<City>> cityListProvider() {
         List<City> cities = Util.createCityList();

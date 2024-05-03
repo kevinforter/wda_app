@@ -125,8 +125,8 @@ public class GenericDAOImpl<T> implements GenericDAO<T> {
             LOG.info("No Entity found for field: " + fieldName + " and value: " + value);
         } finally {
             em.close();
-            return objFromDb;
         }
+        return objFromDb;
     }
 
     @Override

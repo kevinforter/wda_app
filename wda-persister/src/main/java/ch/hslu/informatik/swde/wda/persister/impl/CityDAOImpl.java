@@ -95,4 +95,24 @@ public class CityDAOImpl extends GenericDAOImpl<City> implements CityDAO {
             throw new CityPersistenceException("Error while saving cities", e);
         }
     }
+
+    @Override
+    public boolean ifTableExist() {
+
+        EntityManager em = JpaUtil.createEntityManager();
+
+        long status = 0;
+
+        TypedQuery<Long> tQry = em.createQuery("SELECT COUNT(c) FROM City c", Long.class);
+        long count = tQry.getSingleResult();
+
+        try {
+            status = tQry.getSingleResult();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            em.close();
+        }
+        return count > 0;
+    }
 }

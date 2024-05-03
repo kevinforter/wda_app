@@ -45,4 +45,10 @@ public interface CityDAO extends GenericDAO<City> {
      * @param cityMap mit allen Städten
      */
     void saveAllCities(LinkedHashMap<Integer, City> cityMap);
+
+
+    /**
+     * Gibt an obe eine Tabelle leer oder voll ist
+     */
+    boolean ifTableExist();
 }
