@@ -49,6 +49,8 @@ public interface CityDAO extends GenericDAO<City> {
 
     /**
      * Gibt an obe eine Tabelle leer oder voll ist
+     *
+     * @return true oder false
      */
     boolean ifTableExist();
 }

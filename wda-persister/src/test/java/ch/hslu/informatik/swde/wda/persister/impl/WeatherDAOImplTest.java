@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class WeatherDAOImplTest {
 
@@ -150,6 +151,17 @@ public class WeatherDAOImplTest {
         daoW.saveAllWeather(Util.createWeatherMap());
 
         assertEquals(3, daoW.alle().size());
+    }
+
+    @Tag("unittest")
+    @Test
+    void checkIfTableExist_ShouldReturnBoolean() {
+
+        CityDAO dao = new CityDAOImpl();
+
+        boolean status = dao.ifTableExist();
+        assumeTrue(status, "Table was empty");
+
     }
 
     static Stream<List<City>> cityListProvider() {

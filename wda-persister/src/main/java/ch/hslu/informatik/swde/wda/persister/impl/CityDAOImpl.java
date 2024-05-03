@@ -101,13 +101,12 @@ public class CityDAOImpl extends GenericDAOImpl<City> implements CityDAO {
 
         EntityManager em = JpaUtil.createEntityManager();
 
-        long status = 0;
+        long count;
 
         TypedQuery<Long> tQry = em.createQuery("SELECT COUNT(c) FROM City c", Long.class);
-        long count = tQry.getSingleResult();
 
         try {
-            status = tQry.getSingleResult();
+            count = tQry.getSingleResult();
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {

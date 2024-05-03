@@ -205,4 +205,23 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
             em.close();
         }
     }
+
+    @Override
+    public boolean ifTableExist() {
+
+        EntityManager em = JpaUtil.createEntityManager();
+
+        long count;
+
+        TypedQuery<Long> tQry = em.createQuery("SELECT COUNT(c) FROM City c", Long.class);
+
+        try {
+            count = tQry.getSingleResult();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            em.close();
+        }
+        return count > 0;
+    }
 }

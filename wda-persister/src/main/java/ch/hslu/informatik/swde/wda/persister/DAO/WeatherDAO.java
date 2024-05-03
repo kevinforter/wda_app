@@ -83,4 +83,11 @@ public interface WeatherDAO extends GenericDAO<Weather> {
      * @param weatherMap mit allen Wetterdaten
      */
     void saveAllWeather(HashMap<LocalDateTime, Weather> weatherMap);
+
+    /**
+     * Gibt an obe eine Tabelle leer oder voll ist
+     *
+     * @return true oder false
+     */
+    boolean ifTableExist();
 }
