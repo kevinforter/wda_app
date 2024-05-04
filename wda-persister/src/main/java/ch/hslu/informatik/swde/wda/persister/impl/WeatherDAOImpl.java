@@ -46,6 +46,30 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
 
     // https://chat.openai.com/share/5271fd85-cbcf-4fbc-9e5e-f28880cc1cc3
 
+
+    @Override
+    public Weather findOldestWeatherByCity(int cityId) {
+
+        EntityManager em = JpaUtil.createEntityManager();
+
+        Weather objFromDb = null;
+
+        TypedQuery<Weather> tQry = em.createQuery("SELECT w FROM Weather" +
+                " w WHERE w.cityId = :cityId AND w.DTstamp = (SELECT MIN(w.DTstamp) FROM Weather" +
+                " w WHERE w.cityId = :cityId)", Weather.class);
+
+        tQry.setParameter("cityId", cityId);
+
+        try {
+            objFromDb = tQry.getSingleResult();
+        } catch (Exception e) {
+            // No entities found in the database
+            LOG.info("No Weather found for City ID: " + cityId);
+        }
+        em.close();
+        return objFromDb;
+    }
+
     @Override
     public Weather findWeatherFromCityByDateTime(LocalDateTime DTstamp, int cityId) {
 

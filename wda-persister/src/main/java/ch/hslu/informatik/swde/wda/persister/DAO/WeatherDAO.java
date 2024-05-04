@@ -26,6 +26,14 @@ public interface WeatherDAO extends GenericDAO<Weather> {
     Weather findLatestWeatherByCity(int cityId);
 
     /**
+     * Holt das älteste Weather für eine bestimmte Ortschaft basierend auf der Ortschafts-ID.
+     *
+     * @param cityId Die ID der Ortschaft.
+     * @return Das neueste Weather-Objekt für die angegebene Ortschaft; null, wenn keine Daten gefunden werden.
+     */
+    Weather findOldestWeatherByCity(int cityId);
+
+    /**
      * Holt Wetterdaten für eine bestimmte Ortschaft zu einem bestimmten Zeitpunkt.
      *
      * @param date Der spezifische Zeitpunkt.
