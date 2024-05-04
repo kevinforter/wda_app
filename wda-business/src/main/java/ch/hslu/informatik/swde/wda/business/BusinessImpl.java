@@ -28,34 +28,32 @@ public class BusinessImpl implements BusinessAPI {
         LinkedHashMap<Integer, City> cityRes = reader.readCityDetailsList(reader.readCityNames());
         List<String> cityList = daoC.allCityNames();
 
-        // Iterate over the cityRes map
+        // Iteration über die HashMap cityRes
         for (City city : cityRes.values()) {
             if (!cityList.contains(city.getName())) {
-                // The city is not in the database, so you can add it
+                // Falls die Stadt nicht in der DB ist, wird sie gespeichert
                 daoC.speichern(city);
             }
         }
     }
 
     @Override
-    public void addCurrentWeatherOfCity(int cityId) {
+    public void addCurrentWeatherOfCity(String cityName) {
 
-        Weather currentWeatherDAO = getCurrentWeatherOfCity(cityId);
+        Weather currentWeatherDAO = getCurrentWeatherOfCity(cityName);
 
         if (currentWeatherDAO != null) {
-            Weather currentWeatherREADER = reader.readCurrentWeatherByCity(currentWeatherDAO.getCity().getName());
+            Weather currentWeatherREADER = reader.readCurrentWeatherByCity(cityName);
 
             if (currentWeatherREADER != null && !currentWeatherDAO.getDTstamp().isEqual(currentWeatherREADER.getDTstamp())) {
-                currentWeatherREADER.setCityId(cityId);
+                currentWeatherREADER.setCityId(currentWeatherDAO.getCityId());
                 daoW.speichern(currentWeatherREADER);
             }
         } else {
-            City city = daoC.findById(cityId);
-            String cityName = city.getName();
 
             Weather currentWeatherREADER = reader.readCurrentWeatherByCity(cityName);
 
-            currentWeatherREADER.setCityId(cityId);
+            currentWeatherREADER.setCityId(daoC.findCityByName(cityName).getId());
             daoW.speichern(currentWeatherREADER);
         }
     }

@@ -41,7 +41,7 @@ class BusinessImplTest {
         for (City c : resCityList) {
 
             long start = System.currentTimeMillis();
-            serviceAPI.addCurrentWeatherOfCity(c.getId());
+            serviceAPI.addCurrentWeatherOfCity(c.getName());
             long end = System.currentTimeMillis();
 
             long time = end - start;
@@ -100,7 +100,7 @@ class BusinessImplTest {
         List<City> cityList = serviceAPI.getAllCities();
 
         for (City c : cityList) {
-            serviceAPI.addCurrentWeatherOfCity(c.getId());
+            serviceAPI.addCurrentWeatherOfCity(c.getName());
             List<LocalDateTime> restLDT = serviceAPI.getWeatherOfCityByYear(c.getId() ,2024);
             assertAll(
                     () -> assertNotNull(restLDT, "Liste sollte nicht null sein:")
