@@ -97,5 +97,5 @@ public interface WeatherDAO extends GenericDAO<Weather> {
      *
      * @return true oder false
      */
-    boolean ifTableExist();
+    boolean ifWeatherOfCityExist(String cityName);
 }

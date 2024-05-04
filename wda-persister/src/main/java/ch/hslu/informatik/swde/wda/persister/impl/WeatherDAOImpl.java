@@ -100,7 +100,7 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
 
         EntityManager em = JpaUtil.createEntityManager();
 
-        LocalDateTime DTstamp = LocalDateTime.of(year, 1,1,0,0,0);
+        LocalDateTime DTstamp = LocalDateTime.of(year, 1, 1, 0, 0, 0);
 
         TypedQuery<LocalDateTime> tQry = em.createQuery("SELECT w.DTstamp FROM Weather" + " w " +
                         "WHERE w.cityId = :cityId AND w.DTstamp >= :DTstamp"
@@ -231,13 +231,14 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
     }
 
     @Override
-    public boolean ifTableExist() {
+    public boolean ifWeatherOfCityExist(String cityName) {
 
         EntityManager em = JpaUtil.createEntityManager();
 
         long count;
 
-        TypedQuery<Long> tQry = em.createQuery("SELECT COUNT(c) FROM City c", Long.class);
+        TypedQuery<Long> tQry = em.createQuery("SELECT COUNT(w) FROM Weather w WHERE w.city.name = :cityName", Long.class);
+        tQry.setParameter("cityName", cityName);
 
         try {
             count = tQry.getSingleResult();

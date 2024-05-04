@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class WeatherDAOImplTest {
@@ -122,8 +123,8 @@ public class WeatherDAOImplTest {
             assertEquals(w, daoW.findById(w.getId()));
         }
 
-        List<LocalDateTime> weatherRes = daoW.findWeatherFromCityByYear(2024,daoO.findCityByName("Davos").getId());
-        List<LocalDateTime> weatherResNull = daoW.findWeatherFromCityByYear(2025,daoO.findCityByName("Davos").getId());
+        List<LocalDateTime> weatherRes = daoW.findWeatherFromCityByYear(2024, daoO.findCityByName("Davos").getId());
+        List<LocalDateTime> weatherResNull = daoW.findWeatherFromCityByYear(2025, daoO.findCityByName("Davos").getId());
 
         for (LocalDateTime ldt : weatherRes) {
             LOG.info("LDT: " + ldt);
@@ -163,15 +164,19 @@ public class WeatherDAOImplTest {
 
         for (City c : cityList) {
             daoO.speichern(c);
-            assertEquals(c, daoO.findById(c.getId()));
+
+            assertAll(
+                    () -> assertEquals(c, daoO.findById(c.getId()), "City Wasn't in List"),
+                    () -> assertFalse(daoW.ifWeatherOfCityExist(c.getName()), "Table was empty")
+            );
         }
 
         daoW.saveAllWeather(Util.createWeatherMap());
-
         assertEquals(3, daoW.alle().size());
 
-        boolean status = daoW.ifTableExist();
-        assumeTrue(status, "Table was empty");
+        for (City c : cityList) {
+            assertTrue(daoW.ifWeatherOfCityExist("Neuchatel"));
+        }
 
     }
 
