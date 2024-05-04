@@ -9,9 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDAO {
 
@@ -210,12 +208,17 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
         try {
             em.getTransaction().begin();
 
+            // Speichern Sie die neuen Wetterdaten in Batches
+            int i = 0;
             for (Weather weather : weatherMap.values()) {
-                // Check if the city is already in the database
-                Weather existingWeather = findWeatherFromCityByDateTime(weather.getDTstamp(), weather.getCityId());
 
-                // If the city is not in the database, persist it
-                if (existingWeather == null) em.persist(weather);
+                em.persist(weather);
+                i++;
+                // Flushen und leeren Sie den EntityManager alle 50 Wetterdaten
+                if (i % 50 == 0) {
+                    em.flush();
+                    em.clear();
+                }
 
             }
 

@@ -80,17 +80,21 @@ public class BusinessImpl implements BusinessAPI {
         if (!daoW.ifWeatherOfCityExist(cityName)) {
             addCurrentWeatherOfCity(cityName);
         } else {
-
             LinkedHashMap<LocalDateTime, Weather> weatherMap = reader.readWeatherByCityAndYear(cityName, year);
-            Weather currentWeather = getLatestWeatherOfCity(cityName);
-            List<LocalDateTime> weatherList = getWeatherOfCityByYear(year, currentWeather.getCityId());
+            Weather latestWeatherObj = getLatestWeatherOfCity(cityName);
+
+            LocalDateTime latestWeather = latestWeatherObj.getDTstamp();
+            LocalDateTime oldestWeather = getOldestWeatherOfCity(cityName).getDTstamp();
+
+            LinkedHashMap<LocalDateTime, Weather> weatherToPersist = new LinkedHashMap<>();
 
             for (Weather weather : weatherMap.values()) {
-                if (!weatherList.contains(weather.getDTstamp())) {
-                    weather.setCityId(currentWeather.getCityId());
-                    daoW.speichern(weather);
+                if (weather.getDTstamp().isBefore(oldestWeather) || weather.getDTstamp().isAfter(latestWeather)) {
+                    weather.setCityId(latestWeatherObj.getCityId());
+                    weatherToPersist.put(weather.getDTstamp(), weather);
                 }
             }
+            daoW.saveAllWeather(weatherToPersist);
         }
     }
 
