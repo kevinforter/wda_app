@@ -32,6 +32,7 @@ public class BusinessImpl implements BusinessAPI {
 
         // Iteration über die HashMap cityRes
         for (City city : cityRes.values()) {
+
             if (!cityList.contains(city.getName())) {
                 // Falls die Stadt nicht in der DB ist, wird sie gespeichert
                 daoC.speichern(city);
@@ -42,30 +43,36 @@ public class BusinessImpl implements BusinessAPI {
     @Override
     public void addCurrentWeatherOfCity(String cityName) {
 
+        // Wetterdaten von DB und API abfragen
         Weather currentWeatherDAO = getCurrentWeatherOfCity(cityName);
         Weather currentWeatherREADER = reader.readCurrentWeatherByCity(cityName);
 
-        Duration diff = Duration.between(currentWeatherDAO.getDTstamp(), currentWeatherREADER.getDTstamp());
-
         if (currentWeatherDAO == null) {
 
+            // Aktuelles Wetter von API holen und speichern
             currentWeatherREADER.setCityId(daoC.findCityIdByName(cityName));
             daoW.speichern(currentWeatherREADER);
 
-        } else {
+        } else if (currentWeatherREADER != null && !currentWeatherDAO.getDTstamp().isEqual(currentWeatherREADER.getDTstamp())) {
 
-            if (currentWeatherREADER != null && !currentWeatherDAO.getDTstamp().isEqual(currentWeatherREADER.getDTstamp())) {
+            // Zeitunterschied zwischen DB und API Wetter
+            Duration diff = Duration.between(currentWeatherDAO.getDTstamp(), currentWeatherREADER.getDTstamp());
 
-                if (diff.toMinutes() < 40) {
-                    currentWeatherREADER.setCityId(currentWeatherDAO.getCityId());
-                    daoW.speichern(currentWeatherREADER);
-                } else {
-                    LOG.info("TIME diff was:" + diff);
-                    addWeatherOfCityByYear(cityName ,Year.now().getValue());
-                }
+            if (diff.toMinutes() < 40) {
+
+                // Aktuelles Wetter von API holen und speichern
+                currentWeatherREADER.setCityId(currentWeatherDAO.getCityId());
+                daoW.speichern(currentWeatherREADER);
+
+            } else {
+
+                // Wetter vom ganzen Jahr holen
+                addWeatherOfCityByYear(cityName, Year.now().getValue());
+
             }
         }
     }
+
 
     @Override
     public void addWeatherOfCityByYear(String cityName, int year) {
