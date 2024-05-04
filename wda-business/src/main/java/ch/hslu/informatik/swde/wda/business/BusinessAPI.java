@@ -17,9 +17,9 @@ public interface BusinessAPI {
 
     List<City> getAllCities();
 
-    Weather getCurrentWeatherOfCity(int cityId);
+    Weather getLatestWeatherOfCity(int cityId);
 
-    Weather getCurrentWeatherOfCity(String cityName);
+    Weather getLatestWeatherOfCity(String cityName);
 
     Weather getOldestWeatherOfCity(String cityName);
 

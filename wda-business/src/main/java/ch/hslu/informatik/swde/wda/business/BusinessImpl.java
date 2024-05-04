@@ -44,24 +44,24 @@ public class BusinessImpl implements BusinessAPI {
     public void addCurrentWeatherOfCity(String cityName) {
 
         // Wetterdaten von DB und API abfragen
-        Weather currentWeatherDAO = getCurrentWeatherOfCity(cityName);
+        Weather latestWeatherDAO = getLatestWeatherOfCity(cityName);
         Weather currentWeatherREADER = reader.readCurrentWeatherByCity(cityName);
 
-        if (currentWeatherDAO == null) {
+        if (latestWeatherDAO == null) {
 
             // Aktuelles Wetter von API holen und speichern
             currentWeatherREADER.setCityId(daoC.findCityIdByName(cityName));
             daoW.speichern(currentWeatherREADER);
 
-        } else if (currentWeatherREADER != null && !currentWeatherDAO.getDTstamp().isEqual(currentWeatherREADER.getDTstamp())) {
+        } else if (currentWeatherREADER != null && !latestWeatherDAO.getDTstamp().isEqual(currentWeatherREADER.getDTstamp())) {
 
             // Zeitunterschied zwischen DB und API Wetter
-            Duration diff = Duration.between(currentWeatherDAO.getDTstamp(), currentWeatherREADER.getDTstamp());
+            Duration diff = Duration.between(latestWeatherDAO.getDTstamp(), currentWeatherREADER.getDTstamp());
 
             if (diff.toMinutes() < 40) {
 
                 // Aktuelles Wetter von API holen und speichern
-                currentWeatherREADER.setCityId(currentWeatherDAO.getCityId());
+                currentWeatherREADER.setCityId(latestWeatherDAO.getCityId());
                 daoW.speichern(currentWeatherREADER);
 
             } else {
@@ -77,14 +77,19 @@ public class BusinessImpl implements BusinessAPI {
     @Override
     public void addWeatherOfCityByYear(String cityName, int year) {
 
-        LinkedHashMap<LocalDateTime, Weather> weatherMap = reader.readWeatherByCityAndYear(cityName, year);
-        Weather currentWeather = getCurrentWeatherOfCity(cityName);
-        List<LocalDateTime> weatherList = getWeatherOfCityByYear(year, currentWeather.getCityId());
+        if (!daoW.ifWeatherOfCityExist(cityName)) {
+            addCurrentWeatherOfCity(cityName);
+        } else {
 
-        for (Weather weather : weatherMap.values()) {
-            if (!weatherList.contains(weather.getDTstamp())) {
-                weather.setCityId(currentWeather.getCityId());
-                daoW.speichern(weather);
+            LinkedHashMap<LocalDateTime, Weather> weatherMap = reader.readWeatherByCityAndYear(cityName, year);
+            Weather currentWeather = getLatestWeatherOfCity(cityName);
+            List<LocalDateTime> weatherList = getWeatherOfCityByYear(year, currentWeather.getCityId());
+
+            for (Weather weather : weatherMap.values()) {
+                if (!weatherList.contains(weather.getDTstamp())) {
+                    weather.setCityId(currentWeather.getCityId());
+                    daoW.speichern(weather);
+                }
             }
         }
     }
@@ -96,14 +101,14 @@ public class BusinessImpl implements BusinessAPI {
     }
 
     @Override
-    public Weather getCurrentWeatherOfCity(int cityId) {
+    public Weather getLatestWeatherOfCity(int cityId) {
 
         return daoW.findLatestWeatherByCity(cityId);
 
     }
 
     @Override
-    public Weather getCurrentWeatherOfCity(String cityName) {
+    public Weather getLatestWeatherOfCity(String cityName) {
 
         return daoW.findLatestWeatherByCity(daoC.findCityIdByName(cityName));
     }
