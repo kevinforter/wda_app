@@ -19,7 +19,7 @@ public interface CityDAO extends GenericDAO<City> {
      *
      * @return Anzahl der Städte
      */
-    int getNumberOfCities();
+    long getNumberOfCities();
 
     /**
      * Sucht und liefert eine City anhand ihres Namens.

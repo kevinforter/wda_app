@@ -20,23 +20,22 @@ public class CityDAOImpl extends GenericDAOImpl<City> implements CityDAO {
     }
 
     @Override
-    public int getNumberOfCities() {
+    public long getNumberOfCities() {
 
         EntityManager em = JpaUtil.createEntityManager();
 
-        int countCities = 0;
+        long count;
 
-        TypedQuery<Integer> tQry = em.createQuery("SELECT COUNT(c) FROM City c", Integer.class);
+        TypedQuery<Long> tQry = em.createQuery("SELECT COUNT(c) FROM City c", Long.class);
 
         try {
-            countCities = tQry.getSingleResult();
+            count = tQry.getSingleResult();
         } catch (Exception e) {
-            // No entity found in DB
-            LOG.info("No Cities found" + e);
+            throw new RuntimeException(e);
         } finally {
             em.close();
         }
-        return countCities;
+        return count;
     }
 
     @Override

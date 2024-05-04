@@ -27,7 +27,8 @@ class BusinessImplTest {
         long end = System.currentTimeMillis();
 
         long time = end - start;
-        LOG.info("Time used to save all Cities: " + time + " ms");
+        System.out.println(time);
+        //LOG.info("Time used to save all Cities: " + time + " ms");
     }
 
     @Tag("integration")

@@ -8,8 +8,6 @@ import ch.hslu.informatik.swde.wda.persister.impl.CityDAOImpl;
 import ch.hslu.informatik.swde.wda.persister.impl.WeatherDAOImpl;
 import ch.hslu.informatik.swde.wda.reader.ApiReader;
 import ch.hslu.informatik.swde.wda.reader.ApiReaderImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -22,20 +20,20 @@ public class BusinessImpl implements BusinessAPI {
     private static final WeatherDAO daoW = new WeatherDAOImpl();
     private static final ApiReader reader = new ApiReaderImpl();
 
-    private static final Logger LOG = LoggerFactory.getLogger(BusinessImpl.class);
-
     @Override
     public void addAllCities() {
 
         LinkedHashMap<Integer, City> cityRes = reader.readCityDetailsList(reader.readCityNames());
         List<String> cityList = daoC.allCityNames();
 
-        // Iteration über die HashMap cityRes
-        for (City city : cityRes.values()) {
+        if (cityRes.size() != daoC.getNumberOfCities()) {
+            // Iteration über die HashMap cityRes
+            for (City city : cityRes.values()) {
 
-            if (!cityList.contains(city.getName())) {
-                // Falls die Stadt nicht in der DB ist, wird sie gespeichert
-                daoC.speichern(city);
+                if (!cityList.contains(city.getName())) {
+                    // Falls die Stadt nicht in der DB ist, wird sie gespeichert
+                    daoC.speichern(city);
+                }
             }
         }
     }
