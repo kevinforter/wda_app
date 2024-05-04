@@ -19,6 +19,15 @@ public interface CityDAO extends GenericDAO<City> {
      * Sucht und liefert eine City anhand ihres Namens.
      *
      * @param cityName Der Name der zu suchenden City.
+     * @return eine City ID, falls Stadt mit diesem Namen gefunden wurde,
+     * ansonsten wird 0 zurückgegeben
+     */
+    int findCityIdByName(String cityName);
+
+    /**
+     * Sucht und liefert eine City anhand ihres Namens.
+     *
+     * @param cityName Der Name der zu suchenden City.
      * @return Ein City-Objekt, falls eine City mit dem angegebenen Namen gefunden wurde
      * andernfalls leeres City-Objekt.
      */

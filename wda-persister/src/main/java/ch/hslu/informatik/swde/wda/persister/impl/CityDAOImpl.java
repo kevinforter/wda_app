@@ -20,13 +20,33 @@ public class CityDAOImpl extends GenericDAOImpl<City> implements CityDAO {
     }
 
     @Override
+    public int findCityIdByName(String cityName) {
+
+        EntityManager em = JpaUtil.createEntityManager();
+
+        int cityId = 0;
+
+        TypedQuery<Integer> tQry = em.createQuery("SELECT c.id FROM City c WHERE c.name = :name", Integer.class);
+        tQry.setParameter("name", cityName);
+
+        try {
+            cityId = tQry.getSingleResult();
+        } catch (Exception e) {
+            // No entity found in the database
+            LOG.info("No Weather found for City: " + cityName);
+        }
+        em.close();
+        return cityId;
+    }
+
+    @Override
     public City findCityByName(String cityName) {
 
         EntityManager em = JpaUtil.createEntityManager();
 
         City objFromDb = null;
 
-        TypedQuery<City> tQry = em.createQuery("SELECT o FROM City" + " o WHERE o.name = :name", City.class);
+        TypedQuery<City> tQry = em.createQuery("SELECT c FROM City c WHERE c.name = :name", City.class);
         tQry.setParameter("name", cityName);
 
         try {

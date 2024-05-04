@@ -47,6 +47,20 @@ public class CityDAOImplTest {
     @Tag("unittest")
     @ParameterizedTest
     @MethodSource("cityListProvider")
+    void test_FindCityIdByName_ShouldBeSameAsSaved(List<City> listFromUtil) {
+
+        CityDAO dao = new CityDAOImpl();
+
+        for (City c : listFromUtil) {
+            dao.speichern(c);
+            assertEquals(c.getId(), dao.findCityIdByName(c.getName()), "Objekte stimmen nicht überein");
+        }
+
+    }
+
+    @Tag("unittest")
+    @ParameterizedTest
+    @MethodSource("cityListProvider")
     void test_SavingCity_ShouldBeSameAsFoundByName(List<City> listFromUtil) {
 
         CityDAO dao = new CityDAOImpl();
@@ -102,7 +116,7 @@ public class CityDAOImplTest {
     @Tag("unittest")
     @ParameterizedTest
     @MethodSource("cityListProvider")
-    void checkIfTableExist_ShouldReturnBoolean(List<City> listFromUtil) {
+    void test_checkIfTableExist_ShouldReturnBoolean(List<City> listFromUtil) {
 
         CityDAO dao = new CityDAOImpl();
 
