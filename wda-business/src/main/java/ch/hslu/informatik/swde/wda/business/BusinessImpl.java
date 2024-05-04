@@ -75,10 +75,14 @@ public class BusinessImpl implements BusinessAPI {
     @Override
     public void addWeatherOfCityByYear(String cityName, int year) {
 
-        if (!daoW.ifWeatherOfCityExist(cityName)) {
-            addCurrentWeatherOfCity(cityName);
-        } else {
-            LinkedHashMap<LocalDateTime, Weather> weatherMap = reader.readWeatherByCityAndYear(cityName, year);
+        LinkedHashMap<LocalDateTime, Weather> weatherMap = reader.readWeatherByCityAndYear(cityName, year);
+
+        if (weatherMap.size() != daoW.getNumberOfWeatherByCity(cityName)) {
+
+            if (!daoW.ifWeatherOfCityExist(cityName)) {
+                addCurrentWeatherOfCity(cityName);
+            }
+
             Weather latestWeatherObj = getLatestWeatherOfCity(cityName);
 
             LocalDateTime latestWeather = latestWeatherObj.getDTstamp();
