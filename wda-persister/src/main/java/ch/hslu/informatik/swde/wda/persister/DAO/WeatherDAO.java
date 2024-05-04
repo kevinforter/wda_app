@@ -18,6 +18,12 @@ import java.util.List;
 public interface WeatherDAO extends GenericDAO<Weather> {
 
     /**
+     *
+     * @return Anzahl der Wetterdaten pro Stadt
+     */
+    int getNumberOfWeatherByCity(String cityName);
+
+    /**
      * Holt das neueste Weather für eine bestimmte Ortschaft basierend auf der Ortschafts-ID.
      *
      * @param cityId Die ID der Ortschaft.

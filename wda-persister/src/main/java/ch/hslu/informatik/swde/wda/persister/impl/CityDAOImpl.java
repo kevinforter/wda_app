@@ -20,6 +20,26 @@ public class CityDAOImpl extends GenericDAOImpl<City> implements CityDAO {
     }
 
     @Override
+    public int getNumberOfCities() {
+
+        EntityManager em = JpaUtil.createEntityManager();
+
+        int countCities = 0;
+
+        TypedQuery<Integer> tQry = em.createQuery("SELECT COUNT(c) FROM City c", Integer.class);
+
+        try {
+            countCities = tQry.getSingleResult();
+        } catch (Exception e) {
+            // No entity found in DB
+            LOG.info("No Cities found" + e);
+        } finally {
+            em.close();
+        }
+        return countCities;
+    }
+
+    @Override
     public int findCityIdByName(String cityName) {
 
         EntityManager em = JpaUtil.createEntityManager();
@@ -33,7 +53,7 @@ public class CityDAOImpl extends GenericDAOImpl<City> implements CityDAO {
             cityId = tQry.getSingleResult();
         } catch (Exception e) {
             // No entity found in the database
-            LOG.info("No Weather found for City: " + cityName);
+            LOG.info("No found for City: " + cityName);
         }
         em.close();
         return cityId;
@@ -53,7 +73,7 @@ public class CityDAOImpl extends GenericDAOImpl<City> implements CityDAO {
             objFromDb = tQry.getSingleResult();
         } catch (Exception e) {
             // No entity found in the database
-            LOG.info("No Weather found for City: " + cityName);
+            LOG.info("No found for City: " + cityName);
         }
         em.close();
         return objFromDb;

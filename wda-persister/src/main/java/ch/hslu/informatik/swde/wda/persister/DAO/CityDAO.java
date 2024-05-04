@@ -16,6 +16,12 @@ import java.util.List;
 public interface CityDAO extends GenericDAO<City> {
 
     /**
+     *
+     * @return Anzahl der Städte
+     */
+    int getNumberOfCities();
+
+    /**
      * Sucht und liefert eine City anhand ihres Namens.
      *
      * @param cityName Der Name der zu suchenden City.

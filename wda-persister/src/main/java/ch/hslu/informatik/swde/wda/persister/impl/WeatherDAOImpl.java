@@ -20,6 +20,27 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
     }
 
     @Override
+    public int getNumberOfWeatherByCity(String cityName) {
+
+        EntityManager em = JpaUtil.createEntityManager();
+
+        int countWeatherData = 0;
+
+        TypedQuery<Integer> tQry = em.createQuery("SELECT COUNT(w) FROM Weather w WHERE w.city.name = :cityName", Integer.class);
+        tQry.setParameter("cityName", cityName);
+
+        try {
+            countWeatherData = tQry.getSingleResult();
+        } catch (Exception e) {
+            // No entity found in DB
+            LOG.info("No Cities found" + e);
+        } finally {
+            em.close();
+        }
+        return countWeatherData;
+    }
+
+    @Override
     public Weather findLatestWeatherByCity(int cityId) {
 
         EntityManager em = JpaUtil.createEntityManager();
