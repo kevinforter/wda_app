@@ -24,17 +24,11 @@ public class BusinessImpl implements BusinessAPI {
     public void addAllCities() {
 
         LinkedHashMap<Integer, City> cityRes = reader.readCityDetailsList(reader.readCityNames());
-        List<String> cityList = daoC.allCityNames();
 
         if (cityRes.size() != daoC.getNumberOfCities()) {
-            // Iteration über die HashMap cityRes
-            for (City city : cityRes.values()) {
 
-                if (!cityList.contains(city.getName())) {
-                    // Falls die Stadt nicht in der DB ist, wird sie gespeichert
-                    daoC.speichern(city);
-                }
-            }
+            // cityRes als Batch speichern
+            daoC.saveAllCities(cityRes);
         }
     }
 
@@ -75,29 +69,22 @@ public class BusinessImpl implements BusinessAPI {
     @Override
     public void addWeatherOfCityByYear(String cityName, int year) {
 
-        LinkedHashMap<LocalDateTime, Weather> weatherMap = reader.readWeatherByCityAndYear(cityName, year);
-
-        if (weatherMap.size() != daoW.getNumberOfWeatherByCity(cityName)) {
-
-            if (!daoW.ifWeatherOfCityExist(cityName)) {
-                addCurrentWeatherOfCity(cityName);
-            }
-
-            Weather latestWeatherObj = getLatestWeatherOfCity(cityName);
-
-            LocalDateTime latestWeather = latestWeatherObj.getDTstamp();
-            LocalDateTime oldestWeather = getOldestWeatherOfCity(cityName).getDTstamp();
-
-            LinkedHashMap<LocalDateTime, Weather> weatherToPersist = new LinkedHashMap<>();
-
-            for (Weather weather : weatherMap.values()) {
-                if (weather.getDTstamp().isBefore(oldestWeather) || weather.getDTstamp().isAfter(latestWeather)) {
-                    weather.setCityId(latestWeatherObj.getCityId());
-                    weatherToPersist.put(weather.getDTstamp(), weather);
-                }
-            }
-            daoW.saveAllWeather(weatherToPersist);
+        // Überprüfe ob Wetterdaten vorhanden sind
+        if (!daoW.ifWeatherOfCityExist(cityName)) {
+            addCurrentWeatherOfCity(cityName);
         }
+
+        // API call der Wetterdaten
+        LinkedHashMap<LocalDateTime, Weather> weatherMap = reader.readWeatherByCityAndYear(cityName, year);
+        Weather latestWeather = getLatestWeatherOfCity(cityName);
+
+        // CityId setzen
+        for (Weather weather : weatherMap.values()) {
+            weather.setCityId(latestWeather.getCityId());
+        }
+
+        // Als Batch speicher
+        daoW.saveAllWeather(weatherMap);
     }
 
     @Override

@@ -223,23 +223,28 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
 
     @Override
     public void saveAllWeather(HashMap<LocalDateTime, Weather> weatherMap) {
+
         EntityManager em = JpaUtil.createEntityManager();
 
         try {
             em.getTransaction().begin();
 
+            // Erstellen Sie ein Set mit den vorhandenen Wetterdaten
+            Set<LocalDateTime> existingWeatherDates = new HashSet<>(em.createQuery("SELECT w.DTstamp FROM Weather w", LocalDateTime.class).getResultList());
+
             // Speichern Sie die neuen Wetterdaten in Batches
             int i = 0;
             for (Weather weather : weatherMap.values()) {
-
-                em.persist(weather);
-                i++;
-                // Flushen und leeren Sie den EntityManager alle 50 Wetterdaten
-                if (i % 50 == 0) {
-                    em.flush();
-                    em.clear();
+                // Überprüfen Sie, ob das Wetter bereits existiert
+                if (!existingWeatherDates.contains(weather.getDTstamp())) {
+                    em.persist(weather);
+                    i++;
+                    // Flushen und leeren Sie den EntityManager alle 50 Wetterdaten
+                    if (i % 50 == 0) {
+                        em.flush();
+                        em.clear();
+                    }
                 }
-
             }
 
             em.getTransaction().commit();
@@ -247,7 +252,7 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
             if (em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
             }
-            System.out.println(e.getMessage());
+            LOG.info(e.getMessage());
         } finally {
             em.close();
         }

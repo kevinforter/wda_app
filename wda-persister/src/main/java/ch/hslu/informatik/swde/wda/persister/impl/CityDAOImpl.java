@@ -81,6 +81,7 @@ public class CityDAOImpl extends GenericDAOImpl<City> implements CityDAO {
 
     @Override
     public boolean cityExists(String cityName) {
+
         EntityManager em = JpaUtil.createEntityManager();
 
         // Create a query to count the number of cities with the given name
@@ -114,24 +115,38 @@ public class CityDAOImpl extends GenericDAOImpl<City> implements CityDAO {
 
     @Override
     public void saveAllCities(LinkedHashMap<Integer, City> cityMap) {
-        try (EntityManager em = JpaUtil.createEntityManager()) {
+
+        EntityManager em = JpaUtil.createEntityManager();
+
+        try {
             em.getTransaction().begin();
 
             // Get all city names from the database
-            TypedQuery<String> tQry = em.createQuery("SELECT c.name FROM City c", String.class);
-            Set<String> existingNames = new HashSet<>(tQry.getResultList());
+            Set<String> existingNames = new HashSet<>(em.createQuery("SELECT c.name FROM City c", String.class).getResultList());
 
+            int i = 0;
             for (City city : cityMap.values()) {
                 // Check if the city is already in the database
                 if (!existingNames.contains(city.getName())) {
                     em.persist(city);
+                    i++;
+                    // Flushen und leeren Sie den EntityManager alle 50 Wetterdaten
+                    if (i % 10 == 0) {
+                        em.flush();
+                        em.clear();
+                    }
                 }
             }
 
             em.getTransaction().commit();
         } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
             LOG.error("Error while saving cities", e);
             throw new CityPersistenceException("Error while saving cities", e);
+        } finally {
+            em.close();
         }
     }
 
