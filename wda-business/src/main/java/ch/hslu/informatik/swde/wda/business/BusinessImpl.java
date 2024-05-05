@@ -78,13 +78,16 @@ public class BusinessImpl implements BusinessAPI {
         LinkedHashMap<LocalDateTime, Weather> weatherMap = reader.readWeatherByCityAndYear(cityName, year);
         Weather latestWeather = getLatestWeatherOfCity(cityName);
 
-        // CityId setzen
-        for (Weather weather : weatherMap.values()) {
-            weather.setCityId(latestWeather.getCityId());
-        }
+        if (weatherMap.size() != daoW.getNumberOfWeatherByCity(cityName)) {
 
-        // Als Batch speicher
-        daoW.saveAllWeather(weatherMap, cityName);
+            // CityId setzen
+            for (Weather weather : weatherMap.values()) {
+                weather.setCityId(latestWeather.getCityId());
+            }
+
+            // Als Batch speicher
+            daoW.saveAllWeather(weatherMap, cityName);
+        }
     }
 
     @Override
