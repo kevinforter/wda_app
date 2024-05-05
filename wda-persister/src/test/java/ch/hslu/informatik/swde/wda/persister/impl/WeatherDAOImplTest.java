@@ -149,7 +149,7 @@ public class WeatherDAOImplTest {
             assertEquals(c, daoO.findById(c.getId()));
         }
 
-        daoW.saveAllWeather(Util.createWeatherMap());
+        daoW.saveAllWeather(Util.createWeatherMap(), "Neuchatel");
 
         assertEquals(3, daoW.alle().size());
     }
@@ -171,7 +171,7 @@ public class WeatherDAOImplTest {
             );
         }
 
-        daoW.saveAllWeather(Util.createWeatherMap());
+        daoW.saveAllWeather(Util.createWeatherMap(), "Neuchatel");
         assertEquals(3, daoW.alle().size());
 
         for (City c : cityList) {

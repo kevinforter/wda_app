@@ -222,7 +222,7 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
     }
 
     @Override
-    public void saveAllWeather(HashMap<LocalDateTime, Weather> weatherMap) {
+    public void saveAllWeather(HashMap<LocalDateTime, Weather> weatherMap, String cityName) {
 
         EntityManager em = JpaUtil.createEntityManager();
 
@@ -230,7 +230,10 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
             em.getTransaction().begin();
 
             // Erstellen Sie ein Set mit den vorhandenen Wetterdaten
-            Set<LocalDateTime> existingWeatherDates = new HashSet<>(em.createQuery("SELECT w.DTstamp FROM Weather w", LocalDateTime.class).getResultList());
+            TypedQuery<LocalDateTime> tQry = em.createQuery("SELECT w.DTstamp FROM Weather w WHERE w.city.name = :cityName", LocalDateTime.class);
+            tQry.setParameter("cityName", cityName);
+
+            Set<LocalDateTime> existingWeatherDates = new HashSet<>(tQry.getResultList());
 
             // Speichern Sie die neuen Wetterdaten in Batches
             int i = 0;

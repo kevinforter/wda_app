@@ -67,6 +67,24 @@ class BusinessImplTest {
 
     @Tag("integration")
     @Test
+    void addWeatherOfAllCitiesByYear() {
+
+        final BusinessAPI serviceAPI = new BusinessImpl();
+
+        List<City> resCity = serviceAPI.getAllCities();
+        for (City c : resCity) {
+
+            long start = System.currentTimeMillis();
+            serviceAPI.addWeatherOfCityByYear(c.getName(),2024);
+            long end = System.currentTimeMillis();
+
+            long time = end - start;
+            LOG.info("Time used to get and save all weather Data: " + time + " ms");
+        }
+    }
+
+    @Tag("integration")
+    @Test
     void getAllCities() {
 
         final BusinessAPI serviceAPI = new BusinessImpl();

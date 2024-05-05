@@ -84,7 +84,7 @@ public class BusinessImpl implements BusinessAPI {
         }
 
         // Als Batch speicher
-        daoW.saveAllWeather(weatherMap);
+        daoW.saveAllWeather(weatherMap, cityName);
     }
 
     @Override
