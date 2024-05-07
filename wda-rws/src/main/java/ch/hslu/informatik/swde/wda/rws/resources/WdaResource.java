@@ -23,9 +23,7 @@ import ch.hslu.informatik.swde.wda.reader.ApiReader;
 import ch.hslu.informatik.swde.wda.reader.ApiReaderImpl;
 
 import com.github.javaparser.utils.Log;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.slf4j.Logger;
@@ -47,10 +45,36 @@ public class WdaResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(WdaResource.class);
 
-    /** Proxy-Komponente */
+    /**
+     * Proxy-Komponente
+     */
     ApiReader apiReader = new ApiReaderImpl();
 
     private final BusinessAPI service = new BusinessImpl();
+
+
+    /**
+     * This method is used to add a city to the WDA application.
+     *
+     * @return A simple string message.
+     */
+    @POST
+    @Path("cities")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response addAllCities() {
+
+        try {
+            service.addAllCities();
+
+            return Response.ok().build();
+        } catch (Exception e) {
+            LOG.error("Error while adding cities: ", e);
+            return Response
+                    .status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Error while adding cities")
+                    .build();
+        }
+    }
 
     /**
      * This method is used to get all cities from the WDA application.
@@ -60,14 +84,17 @@ public class WdaResource {
     @GET
     @Path("cities")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response allCities() {
+    public Response getAllCities() {
 
         try {
             List<City> cityList = service.getAllCities();
             return Response.ok(cityList).build();
         } catch (Exception e) {
-            LOG.error("Error accused while getting cities: ", e);
-            throw new RuntimeException(e);
+            LOG.error("Error while adding cities: ", e);
+            return Response
+                    .status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Error while adding cities")
+                    .build();
         }
     }
 
@@ -79,14 +106,14 @@ public class WdaResource {
 //     * @return A simple string message.
 //     */
 //    @GET
-//    @Path("ortschaften/name")
+//    @Path("cities/name")
 //    @Produces(MediaType.APPLICATION_JSON)
-//    public Response findCityByName(@QueryParam("name") String name) throws Exception {
+//    public Response findCityByName(@QueryParam("name") String name) {
 //
-//        Ortschaft ortschaftByName = service.findCityByName(name);
+//        City cityByName = service.findCityByName(name);
 //
-//        if (ortschaftByName != null) {
-//            return Response.ok(ortschaftByName).build();
+//        if (cityByName != null) {
+//            return Response.ok(cityByName).build();
 //        } else {
 //            return Response.status(Response.Status.NOT_FOUND).build();
 //        }
@@ -112,20 +139,7 @@ public class WdaResource {
 //        }
 //    }
 //
-//    /**
-//     * This method is used to add a city to the WDA application.
-//     *
-//     * @return A simple string message.
-//     */
-//    @POST
-//    @Path("ortschaften")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response addOrtschaften() throws Exception {
-//
-//        service.addOrtschaft();
-//
-//        return Response.ok(service.alleOrtschaft()).build();
-//    }
+
 //
 //    /**
 //     * This method is used to get the weather data from a specific city and time span from the WDA application.
