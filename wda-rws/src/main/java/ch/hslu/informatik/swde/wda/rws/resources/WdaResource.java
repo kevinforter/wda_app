@@ -121,6 +121,16 @@ public class WdaResource {
         }
     }
 
+    /**
+     * This method is a RESTful web service endpoint that retrieves the latest weather data for a specific city.
+     * The city is specified by the client through a query parameter in the request.
+     *
+     * @param name The name of the city for which the latest weather data is to be retrieved. This is passed as a query parameter in the request.
+     * @return A Response object containing the latest weather data for the specified city. The weather data is represented as a JSON object in the response body.
+     * If the operation is successful, the HTTP status code of the response is 200 (OK).
+     * If an error occurs during the operation, the HTTP status code of the response is 500 (Internal Server Error), and the response body contains a message describing the error.
+     * @throws Exception If an error occurs while retrieving the weather data. The exception is logged and a response with status code 500 is returned.
+     */
     @GET
     @Path("weather/current")
     @Produces(MediaType.APPLICATION_JSON)
@@ -134,6 +144,30 @@ public class WdaResource {
             return Response
                     .status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("Error while getting weather")
+                    .build();
+        }
+    }
+
+    /**
+     * This method is used to add weather data to the WDA application.
+     *
+     * @param name The name of the city to be added
+     * @param year The year of the weather data to be added
+     */
+    @POST
+    @Path("weather/2024")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response addWetterJahr(@QueryParam("name") String name, @QueryParam("year") int year) {
+
+        try {
+            service.addWeatherOfCityByYear(name, year);
+
+            return Response.ok().build();
+        } catch (Exception e) {
+            LOG.error("Error while adding weather: ", e);
+            return Response
+                    .status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Error while adding weather")
                     .build();
         }
     }
