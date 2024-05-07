@@ -98,6 +98,29 @@ public class WdaResource {
         }
     }
 
+    /**
+     * This method is used to add thre current weather data to the WDA application.
+     *
+     * @param name The name of the city to be added
+     */
+    @POST
+    @Path("weather/current")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response addCurrentWeatherOfCity(@QueryParam("name") String name) {
+
+        try {
+            service.addCurrentWeatherOfCity(name);
+
+            return Response.ok().build();
+        } catch (Exception e) {
+            LOG.error("Error while adding weather: ", e);
+            return Response
+                    .status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Error while adding weather")
+                    .build();
+        }
+    }
+
 
 //    /**
 //     * This method is used to find a city by its name.
