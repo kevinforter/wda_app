@@ -16,6 +16,7 @@
 package ch.hslu.informatik.swde.wda.rws.server;
 
 import ch.hslu.informatik.swde.wda.rws.resources.WdaResource;
+import ch.hslu.informatik.swde.wda.rws.util.LocalDateTimeConverterProvider;
 import com.sun.net.httpserver.HttpServer;
 import org.glassfish.jersey.jdkhttp.JdkHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -38,7 +39,7 @@ public class ServerApp {
 		URI uri = URI.create(URI_BASE);
 		ResourceConfig resConf = new ResourceConfig(WdaResource.class);
 
-		//resConf.register(LocalDateTimeConverterProvider.class);
+		resConf.register(LocalDateTimeConverterProvider.class);
 
 		HttpServer srv = JdkHttpServerFactory.createHttpServer(uri, resConf);
 
