@@ -22,15 +22,19 @@ import ch.hslu.informatik.swde.wda.domain.Weather;
 import ch.hslu.informatik.swde.wda.reader.ApiReader;
 import ch.hslu.informatik.swde.wda.reader.ApiReaderImpl;
 
+import com.github.javaparser.utils.Log;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.function.Supplier;
 
 
 /**
@@ -40,6 +44,8 @@ import java.util.List;
 public class WdaResource {
 
     private static final String BASE_URI = "http://localhost:8080/wda/";
+
+    private static final Logger LOG = LoggerFactory.getLogger(WdaResource.class);
 
     /** Proxy-Komponente */
     ApiReader apiReader = new ApiReaderImpl();
@@ -52,12 +58,17 @@ public class WdaResource {
      * @return A simple string message.
      */
     @GET
-    @Path("ortschaften")
+    @Path("cities")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response alleOrtschaften() {
+    public Response allCities() {
 
-        List<City> cityList = service.getAllCities();
-        return Response.ok(cityList).build();
+        try {
+            List<City> cityList = service.getAllCities();
+            return Response.ok(cityList).build();
+        } catch (Exception e) {
+            LOG.error("Error accused while getting cities: ", e);
+            throw new RuntimeException(e);
+        }
     }
 
 
