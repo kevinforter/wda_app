@@ -90,10 +90,10 @@ public class WdaResource {
             List<City> cityList = service.getAllCities();
             return Response.ok(cityList).build();
         } catch (Exception e) {
-            LOG.error("Error while adding cities: ", e);
+            LOG.error("Error while getting cities: ", e);
             return Response
                     .status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("Error while adding cities")
+                    .entity("Error while getting cities")
                     .build();
         }
     }
@@ -121,6 +121,22 @@ public class WdaResource {
         }
     }
 
+    @GET
+    @Path("weather/current")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getLatestWeatherOfCity(@QueryParam("name") String name) {
+
+        try {
+            Weather latestWeather = service.getLatestWeatherOfCity(name);
+            return Response.ok(latestWeather).build();
+        } catch (Exception e) {
+            LOG.error("Error while getting weather: ", e);
+            return Response
+                    .status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Error while getting weather")
+                    .build();
+        }
+    }
 
 //    /**
 //     * This method is used to find a city by its name.
