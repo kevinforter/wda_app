@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.TreeMap;
 
 public class Util {
 
@@ -86,10 +87,10 @@ public class Util {
         return list;
     }
 
-    public static LinkedHashMap<LocalDateTime, Weather> createWeatherMap() {
+    public static TreeMap<LocalDateTime, Weather> createWeatherMap() {
 
         CityDAO daoO = new CityDAOImpl();
-        LinkedHashMap<LocalDateTime, Weather> weatherMap = new LinkedHashMap<>();
+        TreeMap<LocalDateTime, Weather> weatherMap = new TreeMap<>();
 
         List<City> cityList = createCityList();
 

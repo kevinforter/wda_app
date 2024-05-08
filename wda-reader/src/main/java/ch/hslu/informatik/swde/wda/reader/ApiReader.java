@@ -6,6 +6,7 @@ import ch.hslu.informatik.swde.wda.domain.Weather;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.TreeMap;
 
 /**
  * Diese Schnittstelle gibt die Funktionalitäten vor, welche für die Abfrage
@@ -60,5 +61,5 @@ public interface ApiReader {
      * @param jahr Das spezifizierte Jahr.
      * @return Eine Liste von Wetter-Objekten, die den Wetterdaten für das angegebene Jahr und die Ortschaft entsprechen.
      */
-    LinkedHashMap<LocalDateTime, Weather> readWeatherByCityAndYear(String cityName, int jahr);
+    TreeMap<LocalDateTime, Weather> readWeatherByCityAndYear(String cityName, int jahr);
 }

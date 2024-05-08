@@ -79,7 +79,7 @@ public class BusinessImpl implements BusinessAPI {
         }
 
         // API call der Wetterdaten
-        LinkedHashMap<LocalDateTime, Weather> weatherMap = reader.readWeatherByCityAndYear(cityName, year);
+        TreeMap<LocalDateTime, Weather> weatherMap = reader.readWeatherByCityAndYear(cityName, year);
         Weather latestWeather = getLatestWeatherOfCity(cityName);
 
         if (weatherMap.size() != daoW.getNumberOfWeatherByCity(cityName)) {

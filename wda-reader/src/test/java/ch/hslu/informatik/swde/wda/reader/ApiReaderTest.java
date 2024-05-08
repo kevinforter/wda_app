@@ -12,6 +12,7 @@ import java.net.http.HttpResponse;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -123,7 +124,7 @@ class ApiReaderTest {
             ApiReader proxy = new ApiReaderImpl();
 
             for (String cityName : cityList) {
-                LinkedHashMap<LocalDateTime, Weather> resWeather = proxy.readWeatherByCityAndYear(cityName, 2024);
+                TreeMap<LocalDateTime, Weather> resWeather = proxy.readWeatherByCityAndYear(cityName, 2024);
                 assertNotNull(resWeather, "Liste ist leer");
             }
         }

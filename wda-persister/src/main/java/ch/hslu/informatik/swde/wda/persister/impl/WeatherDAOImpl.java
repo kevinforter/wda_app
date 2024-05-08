@@ -250,7 +250,7 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
     }
 
     @Override
-    public void saveAllWeather(HashMap<LocalDateTime, Weather> weatherMap, String cityName) {
+    public void saveAllWeather(TreeMap<LocalDateTime, Weather> weatherMap, String cityName) {
 
         EntityManager em = JpaUtil.createEntityManager();
 

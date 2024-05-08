@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.TreeMap;
 
 /**
  * Diese Klasse stellt eine konkrete Implementierung der Schnittstelle 'ApiReader' dar.
@@ -292,7 +293,7 @@ public class ApiReaderImpl implements ApiReader {
     }
 
     @Override
-    public LinkedHashMap<LocalDateTime, Weather> readWeatherByCityAndYear(String cityName, int jahr) {
+    public TreeMap<LocalDateTime, Weather> readWeatherByCityAndYear(String cityName, int jahr) {
         try {
 
             String encodedCityName = cityName.replace(" ", "+");
@@ -301,7 +302,7 @@ public class ApiReaderImpl implements ApiReader {
             HttpRequest req = HttpRequest.newBuilder(uri).header("Accept", format).build();
             HttpResponse<String> res = client.send(req, HttpResponse.BodyHandlers.ofString());
 
-            LinkedHashMap<LocalDateTime, Weather> weatherMap = new LinkedHashMap<>();
+            TreeMap<LocalDateTime, Weather> weatherMap = new TreeMap<>();
             LocalDateTime formatDateTime;
             if (res.statusCode() == 200) {
 
@@ -345,7 +346,7 @@ public class ApiReaderImpl implements ApiReader {
                 if (weatherMap.isEmpty()) {
                     // No data found in JSON response, log message and return empty List
                     LOG.info("No data found for" + uri);
-                    return new LinkedHashMap<>();
+                    return new TreeMap<>();
                 }
 
                 return weatherMap;
@@ -353,7 +354,7 @@ public class ApiReaderImpl implements ApiReader {
             } else {
                 // Log-Eintrag machen
                 LOG.info("Error occurred, Status code: " + res.statusCode());
-                return new LinkedHashMap<>();
+                return new TreeMap<>();
             }
 
         } catch (Exception e) {
