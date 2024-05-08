@@ -22,19 +22,15 @@ import ch.hslu.informatik.swde.wda.domain.Weather;
 import ch.hslu.informatik.swde.wda.reader.ApiReader;
 import ch.hslu.informatik.swde.wda.reader.ApiReaderImpl;
 
-import com.github.javaparser.utils.Log;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.URI;
 import java.time.LocalDateTime;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeMap;
-import java.util.function.Supplier;
 
 
 /**
@@ -48,9 +44,8 @@ public class WdaResource {
     private static final Logger LOG = LoggerFactory.getLogger(WdaResource.class);
 
     /**
-     * Proxy-Komponente
+     * Business-Komponente
      */
-    ApiReader apiReader = new ApiReaderImpl();
 
     private final BusinessAPI service = new BusinessImpl();
 
