@@ -21,7 +21,7 @@ public class BusinessImpl implements BusinessAPI {
     private static final ApiReader reader = new ApiReaderImpl();
 
     @Override
-    public LinkedList<City> addAllCities() {
+    public void addAllCities() {
 
         LinkedHashMap<Integer, City> cityRes = reader.readCityDetailsList(reader.readCityNames());
         LinkedList<City> cityList = new LinkedList<>();
@@ -31,8 +31,6 @@ public class BusinessImpl implements BusinessAPI {
             // cityRes als Batch speichern
             cityList = daoC.saveAllCities(cityRes);
         }
-
-        return cityList;
 
     }
 
