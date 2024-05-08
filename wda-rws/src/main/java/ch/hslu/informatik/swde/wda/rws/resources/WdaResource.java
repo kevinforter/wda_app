@@ -146,6 +146,28 @@ public class WdaResource {
         }
     }
 
+    @GET
+    @Path("weather/current")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getCurrentWeatherOfCity(@QueryParam("name") String name) {
+
+        try {
+            Weather currentWeather = service.getCurrentWeatherOfCity(name);
+
+            if (currentWeather != null) {
+                return Response.ok(currentWeather).build();
+            } else {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+        } catch (Exception e) {
+            LOG.error("Error while getting weather: ", e);
+            return Response
+                    .status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Error while getting weather")
+                    .build();
+        }
+    }
+
     /**
      * This method is a RESTful web service endpoint that retrieves the latest weather data for a specific city.
      * The city is specified by the client through a query parameter in the request.
@@ -157,7 +179,7 @@ public class WdaResource {
      * @throws Exception If an error occurs while retrieving the weather data. The exception is logged and a response with status code 500 is returned.
      */
     @GET
-    @Path("weather/current")
+    @Path("weather/latest")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getLatestWeatherOfCity(@QueryParam("name") String name) {
 

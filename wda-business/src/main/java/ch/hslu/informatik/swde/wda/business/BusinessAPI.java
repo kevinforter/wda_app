@@ -19,6 +19,8 @@ public interface BusinessAPI {
 
     List<City> getAllCities();
 
+    Weather getCurrentWeatherOfCity(String cityName);
+
     Weather getLatestWeatherOfCity(String cityName);
 
     TreeMap<LocalDateTime, Weather> getWeatherOfCityByYear(int year, String cityName);
