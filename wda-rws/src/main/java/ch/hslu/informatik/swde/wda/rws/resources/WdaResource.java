@@ -68,7 +68,7 @@ public class WdaResource {
         try {
             service.addAllCities();
 
-            return Response.noContent().build();
+            return Response.ok().build();
         } catch (Exception e) {
             LOG.error("Error while adding cities: ", e);
             return Response
@@ -90,6 +90,7 @@ public class WdaResource {
 
         try {
             List<City> cityList = service.getAllCities();
+
             if (!cityList.isEmpty()) {
                 return Response.ok(cityList).build();
             } else {
@@ -110,12 +111,20 @@ public class WdaResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getCityByName(@PathParam("name") String name) {
 
-        City cityByName = service.getCityByName(name);
+        try {
+            City cityByName = service.getCityByName(name);
 
-        if (cityByName != null) {
-            return Response.ok(cityByName).build();
-        } else {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            if (cityByName != null) {
+                return Response.ok(cityByName).build();
+            } else {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+        } catch (Exception e) {
+            LOG.error("Error while getting cities: ", e);
+            return Response
+                    .status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Error while getting cities")
+                    .build();
         }
     }
 
@@ -159,6 +168,7 @@ public class WdaResource {
 
         try {
             Weather latestWeather = service.getLatestWeatherOfCity(name);
+
             if (latestWeather != null) {
                 return Response.ok(latestWeather).build();
             } else {
@@ -178,7 +188,6 @@ public class WdaResource {
      *
      * @param year The year of the weather data to be added
      */
-
     @POST
     @Path("weather/{year}/{name}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -204,6 +213,7 @@ public class WdaResource {
 
         try {
             TreeMap<LocalDateTime, Weather> weatherMap = service.getWeatherOfCityByYear(year, name);
+
             if (!weatherMap.isEmpty()) {
                 return Response.ok(weatherMap).build();
             } else {
