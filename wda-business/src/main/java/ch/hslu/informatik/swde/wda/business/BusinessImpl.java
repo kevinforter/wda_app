@@ -137,4 +137,11 @@ public class BusinessImpl implements BusinessAPI {
         int cityId = daoC.findCityIdByName(cityName);
         return getWeatherDateOfCityByYear(year, cityId);
     }
+
+    @Override
+    public TreeMap<LocalDateTime, Weather> getWeatherOfCityByYear(int year, String cityName) {
+
+        int cityId = daoC.findCityIdByName(cityName);
+        return daoW.findWeatherFromCityByYear(year, cityId);
+    }
 }

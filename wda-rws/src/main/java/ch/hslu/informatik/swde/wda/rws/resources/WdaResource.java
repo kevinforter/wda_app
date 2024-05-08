@@ -33,6 +33,7 @@ import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.TreeMap;
 import java.util.function.Supplier;
 
 
@@ -202,9 +203,9 @@ public class WdaResource {
     public Response getWeatherOfCityByYear(@PathParam("year") int year, @QueryParam("name") String name) {
 
         try {
-            List<LocalDateTime> weatherList = service.getWeatherOfCityByYear(year, name);
-            if (!weatherList.isEmpty()) {
-                return Response.ok(weatherList).build();
+            TreeMap<LocalDateTime, Weather> weatherMap = service.getWeatherOfCityByYear(year, name);
+            if (!weatherMap.isEmpty()) {
+                return Response.ok(weatherMap).build();
             } else {
                 return Response.status(Response.Status.NOT_FOUND).build();
             }

@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.TreeMap;
 
 public interface BusinessAPI {
 
@@ -29,4 +30,6 @@ public interface BusinessAPI {
     List<LocalDateTime> getWeatherDateOfCityByYear(int year, int cityId);
 
     List<LocalDateTime> getWeatherDateOfCityByYear(int year, String cityName);
+
+    TreeMap<LocalDateTime, Weather> getWeatherOfCityByYear(int year, String cityName);
 }
