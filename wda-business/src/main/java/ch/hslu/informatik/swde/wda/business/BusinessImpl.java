@@ -104,22 +104,27 @@ public class BusinessImpl implements BusinessAPI {
     }
 
     @Override
-    public Weather getLatestWeatherOfCity(int cityId) {
+    public Weather getLatestWeatherOfCity(String cityName) {
+
+        int cityId = daoC.findCityIdByName(cityName);
+        return cityId != 0 ? getLatestWeatherOfCity(cityId) : new Weather();
+    }
+
+    private static Weather getLatestWeatherOfCity(int cityId) {
 
         return daoW.findLatestWeatherByCity(cityId);
 
     }
 
     @Override
-    public Weather getLatestWeatherOfCity(String cityName) {
-
-        return getLatestWeatherOfCity(daoC.findCityIdByName(cityName));
-    }
-
-    @Override
     public TreeMap<LocalDateTime, Weather> getWeatherOfCityByYear(int year, String cityName) {
 
         int cityId = daoC.findCityIdByName(cityName);
+        return cityId != 0 ? getWeatherOfCityByYear(year, cityId) : new TreeMap<>();
+    }
+
+    private static TreeMap<LocalDateTime, Weather> getWeatherOfCityByYear(int year, int cityId) {
+
         return daoW.findWeatherFromCityByYear(year, cityId);
     }
 }

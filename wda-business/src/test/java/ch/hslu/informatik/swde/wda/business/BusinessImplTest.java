@@ -104,7 +104,7 @@ class BusinessImplTest {
 
         List<City> resCity = serviceAPI.getAllCities();
         for (City c : resCity) {
-            Weather currentWeather = serviceAPI.getLatestWeatherOfCity(c.getId());
+            Weather currentWeather = serviceAPI.getLatestWeatherOfCity(c.getName());
             LOG.info("Current Weather: " + currentWeather);
         }
     }
