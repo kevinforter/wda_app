@@ -123,8 +123,8 @@ public class WeatherDAOImplTest {
             assertEquals(w, daoW.findById(w.getId()));
         }
 
-        List<LocalDateTime> weatherRes = daoW.findWeatherFromCityByYear(2024, daoO.findCityByName("Davos").getId());
-        List<LocalDateTime> weatherResNull = daoW.findWeatherFromCityByYear(2025, daoO.findCityByName("Davos").getId());
+        List<LocalDateTime> weatherRes = daoW.findWeatherDateFromCityByYear(2024, daoO.findCityByName("Davos").getId());
+        List<LocalDateTime> weatherResNull = daoW.findWeatherDateFromCityByYear(2025, daoO.findCityByName("Davos").getId());
 
         for (LocalDateTime ldt : weatherRes) {
             LOG.info("LDT: " + ldt);

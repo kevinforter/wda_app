@@ -114,7 +114,7 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
     }
 
     @Override
-    public List<LocalDateTime> findWeatherFromCityByYear(int year, int cityId) {
+    public List<LocalDateTime> findWeatherDateFromCityByYear(int year, int cityId) {
 
         EntityManager em = JpaUtil.createEntityManager();
 

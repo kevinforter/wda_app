@@ -128,7 +128,7 @@ public class BusinessImpl implements BusinessAPI {
     @Override
     public List<LocalDateTime> getWeatherOfCityByYear(int year, int cityId) {
 
-        return daoW.findWeatherFromCityByYear(year, cityId);
+        return daoW.findWeatherDateFromCityByYear(year, cityId);
     }
 
     @Override
