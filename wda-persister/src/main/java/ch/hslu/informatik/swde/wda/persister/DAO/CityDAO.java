@@ -3,6 +3,7 @@ package ch.hslu.informatik.swde.wda.persister.DAO;
 import ch.hslu.informatik.swde.wda.domain.City;
 
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -59,7 +60,7 @@ public interface CityDAO extends GenericDAO<City> {
      *
      * @param cityMap mit allen Städten
      */
-    void saveAllCities(LinkedHashMap<Integer, City> cityMap);
+    LinkedList<City> saveAllCities(LinkedHashMap<Integer, City> cityMap);
 
 
     /**

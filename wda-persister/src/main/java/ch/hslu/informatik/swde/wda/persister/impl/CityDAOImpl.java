@@ -114,7 +114,7 @@ public class CityDAOImpl extends GenericDAOImpl<City> implements CityDAO {
     }
 
     @Override
-    public void saveAllCities(LinkedHashMap<Integer, City> cityMap) {
+    public LinkedList<City> saveAllCities(LinkedHashMap<Integer, City> cityMap) {
 
         EntityManager em = JpaUtil.createEntityManager();
 
@@ -125,10 +125,12 @@ public class CityDAOImpl extends GenericDAOImpl<City> implements CityDAO {
             Set<String> existingNames = new HashSet<>(em.createQuery("SELECT c.name FROM City c", String.class).getResultList());
 
             int i = 0;
+            LinkedList<City> cityList = new LinkedList<>();
             for (City city : cityMap.values()) {
                 // Check if the city is already in the database
                 if (!existingNames.contains(city.getName())) {
                     em.persist(city);
+                    cityList.add(city);
                     i++;
                     // Flushen und leeren Sie den EntityManager alle 50 Wetterdaten
                     if (i % 10 == 0) {
@@ -139,6 +141,7 @@ public class CityDAOImpl extends GenericDAOImpl<City> implements CityDAO {
             }
 
             em.getTransaction().commit();
+            return cityList;
         } catch (Exception e) {
             if (em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
