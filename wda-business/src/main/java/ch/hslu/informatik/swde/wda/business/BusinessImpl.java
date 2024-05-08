@@ -21,15 +21,19 @@ public class BusinessImpl implements BusinessAPI {
     private static final ApiReader reader = new ApiReaderImpl();
 
     @Override
-    public void addAllCities() {
+    public LinkedList<City> addAllCities() {
 
         LinkedHashMap<Integer, City> cityRes = reader.readCityDetailsList(reader.readCityNames());
+        LinkedList<City> cityList = new LinkedList<>();
 
         if (cityRes.size() != daoC.getNumberOfCities()) {
 
             // cityRes als Batch speichern
-            daoC.saveAllCities(cityRes);
+            cityList = daoC.saveAllCities(cityRes);
         }
+
+        return cityList;
+
     }
 
     @Override

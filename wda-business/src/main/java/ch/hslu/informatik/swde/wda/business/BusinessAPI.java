@@ -5,11 +5,12 @@ import ch.hslu.informatik.swde.wda.domain.Weather;
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 public interface BusinessAPI {
 
-    void addAllCities();
+    LinkedList<City> addAllCities();
 
     void addCurrentWeatherOfCity(String cityName);
 
