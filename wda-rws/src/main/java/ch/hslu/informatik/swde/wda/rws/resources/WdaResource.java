@@ -111,7 +111,7 @@ public class WdaResource {
 
         City cityByName = service.getCityByName(name);
 
-        if(cityByName != null) {
+        if (cityByName != null) {
             return Response.ok(cityByName).build();
         } else {
             return Response.status(Response.Status.NOT_FOUND).build();
@@ -181,7 +181,7 @@ public class WdaResource {
     @POST
     @Path("weather/{year}/{name}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response addWetterJahr(@PathParam("year") int year, @PathParam("name") String name) {
+    public Response addWeatherOfCityByYear(@PathParam("year") int year, @PathParam("name") String name) {
 
         try {
             service.addWeatherOfCityByYear(name, year);
@@ -192,6 +192,27 @@ public class WdaResource {
             return Response
                     .status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("Error while adding weather")
+                    .build();
+        }
+    }
+
+    @GET
+    @Path("weather/{year}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getWeatherOfCityByYear(@PathParam("year") int year, @QueryParam("name") String name) {
+
+        try {
+            List<LocalDateTime> weatherList = service.getWeatherOfCityByYear(name, year);
+            if (!weatherList.isEmpty()) {
+                return Response.ok(weatherList).build();
+            } else {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+        } catch (Exception e) {
+            LOG.error("Error while getting weather: ", e);
+            return Response
+                    .status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Error while getting weather")
                     .build();
         }
     }
