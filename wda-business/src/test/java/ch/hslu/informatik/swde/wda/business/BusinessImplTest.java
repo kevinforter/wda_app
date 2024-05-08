@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.TreeMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -97,7 +98,7 @@ class BusinessImplTest {
 
     @Tag("integration")
     @Test
-    void getCurrentWeatherOfCity() {
+    void getLatestWeatherOfCity() {
 
         final BusinessAPI serviceAPI = new BusinessImpl();
 
@@ -120,7 +121,7 @@ class BusinessImplTest {
 
         for (City c : cityList) {
             serviceAPI.addCurrentWeatherOfCity(c.getName());
-            List<LocalDateTime> restLDT = serviceAPI.getWeatherDateOfCityByYear(c.getId() ,2024);
+            TreeMap<LocalDateTime, Weather> restLDT = serviceAPI.getWeatherOfCityByYear(2024 ,c.getName());
             assertAll(
                     () -> assertNotNull(restLDT, "Liste sollte nicht null sein:")
             );
