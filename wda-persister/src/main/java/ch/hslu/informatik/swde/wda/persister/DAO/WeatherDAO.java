@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.TreeMap;
 
 /**
  * Diese Schnittstelle ergänzt die generische Persister-Schnittstelle
@@ -56,6 +57,15 @@ public interface WeatherDAO extends GenericDAO<Weather> {
      * @return Eine Liste von Weather-Objekten; leer, wenn keine Daten gefunden werden.
      */
     List<LocalDateTime> findWeatherDateFromCityByYear(int year, int cityId);
+
+    /**
+     * Holt Wetterdaten für eine bestimmte Ortschaft zu ein bestimmtes Jahr.
+     *
+     * @param year Das spezifische Jahr.
+     * @param cityId Die ID der Ortschaft.
+     * @return Eine Liste von Weather-Objekten; leer, wenn keine Daten gefunden werden.
+     */
+    TreeMap<LocalDateTime, Weather> findWeatherFromCityByYear(int year, int cityId);
 
     /**
      * Holt Wetterdaten für eine bestimmte Ortschaft innerhalb eines bestimmten Zeitraums.
