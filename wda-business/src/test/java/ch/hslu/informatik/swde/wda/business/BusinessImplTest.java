@@ -120,7 +120,7 @@ class BusinessImplTest {
 
         for (City c : cityList) {
             serviceAPI.addCurrentWeatherOfCity(c.getName());
-            List<LocalDateTime> restLDT = serviceAPI.getWeatherOfCityByYear(c.getId() ,2024);
+            List<LocalDateTime> restLDT = serviceAPI.getWeatherDateOfCityByYear(c.getId() ,2024);
             assertAll(
                     () -> assertNotNull(restLDT, "Liste sollte nicht null sein:")
             );
