@@ -95,6 +95,12 @@ public class BusinessImpl implements BusinessAPI {
     }
 
     @Override
+    public City getCityByName(String name) {
+
+        return daoC.findCityByName(name);
+    }
+
+    @Override
     public List<City> getAllCities() {
 
         return daoC.alle();

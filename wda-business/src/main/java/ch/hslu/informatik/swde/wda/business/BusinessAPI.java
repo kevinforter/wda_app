@@ -16,6 +16,8 @@ public interface BusinessAPI {
 
     void addWeatherOfCityByYear(String city, int year);
 
+    City getCityByName(String name);
+
     List<City> getAllCities();
 
     Weather getLatestWeatherOfCity(int cityId);
