@@ -178,11 +178,10 @@ public class WdaResource {
      * @param year The year of the weather data to be added
      */
 
-    /*
     @POST
-    @Path("weather/2024")
+    @Path("weather/{year}/{name}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response addWetterJahr(@QueryParam("name") String name, @QueryParam("year") int year) {
+    public Response addWetterJahr(@PathParam("year") int year, @PathParam("name") String name) {
 
         try {
             service.addWeatherOfCityByYear(name, year);
@@ -195,7 +194,7 @@ public class WdaResource {
                     .entity("Error while adding weather")
                     .build();
         }
-    }*/
+    }
 
     @POST
     @Path("weather/{year}")
