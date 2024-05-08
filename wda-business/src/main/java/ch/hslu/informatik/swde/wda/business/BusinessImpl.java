@@ -24,12 +24,11 @@ public class BusinessImpl implements BusinessAPI {
     public void addAllCities() {
 
         LinkedHashMap<Integer, City> cityRes = reader.readCityDetailsList(reader.readCityNames());
-        LinkedList<City> cityList = new LinkedList<>();
 
         if (cityRes.size() != daoC.getNumberOfCities()) {
 
             // cityRes als Batch speichern
-            cityList = daoC.saveAllCities(cityRes);
+            daoC.saveAllCities(cityRes);
         }
 
     }
