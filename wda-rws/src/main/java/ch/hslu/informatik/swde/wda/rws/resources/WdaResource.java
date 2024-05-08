@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 
 import java.net.URI;
 import java.time.LocalDateTime;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -66,7 +67,7 @@ public class WdaResource {
         try {
             service.addAllCities();
 
-            return Response.ok().build();
+            return Response.noContent().build();
         } catch (Exception e) {
             LOG.error("Error while adding cities: ", e);
             return Response
@@ -88,13 +89,32 @@ public class WdaResource {
 
         try {
             List<City> cityList = service.getAllCities();
-            return Response.ok(cityList).build();
+            if (!cityList.isEmpty()) {
+                return Response.ok(cityList).build();
+            } else {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+
         } catch (Exception e) {
             LOG.error("Error while getting cities: ", e);
             return Response
                     .status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("Error while getting cities")
                     .build();
+        }
+    }
+
+    @GET
+    @Path("cities/{name}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getCityByName(@PathParam("name") String name) {
+
+        City cityByName = service.getCityByName(name);
+
+        if(cityByName != null) {
+            return Response.ok(cityByName).build();
+        } else {
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
     }
 
@@ -138,7 +158,11 @@ public class WdaResource {
 
         try {
             Weather latestWeather = service.getLatestWeatherOfCity(name);
-            return Response.ok(latestWeather).build();
+            if (latestWeather != null) {
+                return Response.ok(latestWeather).build();
+            } else {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
         } catch (Exception e) {
             LOG.error("Error while getting weather: ", e);
             return Response
