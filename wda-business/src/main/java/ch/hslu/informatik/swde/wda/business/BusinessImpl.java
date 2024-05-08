@@ -132,7 +132,7 @@ public class BusinessImpl implements BusinessAPI {
     }
 
     @Override
-    public List<LocalDateTime> getWeatherOfCityByYear(String cityName, int year) {
+    public List<LocalDateTime> getWeatherOfCityByYear(int year, String cityName) {
 
         int cityId = daoC.findCityIdByName(cityName);
         return getWeatherOfCityByYear(year, cityId);

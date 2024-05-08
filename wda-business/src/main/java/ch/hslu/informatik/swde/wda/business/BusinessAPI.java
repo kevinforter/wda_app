@@ -26,7 +26,7 @@ public interface BusinessAPI {
 
     Weather getOldestWeatherOfCity(String cityName);
 
-    List<LocalDateTime> getWeatherOfCityByYear(int cityId, int year);
+    List<LocalDateTime> getWeatherOfCityByYear(int year, int cityId);
 
-    List<LocalDateTime> getWeatherOfCityByYear(String cityName, int year);
+    List<LocalDateTime> getWeatherOfCityByYear(int year, String cityName);
 }

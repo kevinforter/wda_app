@@ -202,7 +202,7 @@ public class WdaResource {
     public Response getWeatherOfCityByYear(@PathParam("year") int year, @QueryParam("name") String name) {
 
         try {
-            List<LocalDateTime> weatherList = service.getWeatherOfCityByYear(name, year);
+            List<LocalDateTime> weatherList = service.getWeatherOfCityByYear(year, name);
             if (!weatherList.isEmpty()) {
                 return Response.ok(weatherList).build();
             } else {
