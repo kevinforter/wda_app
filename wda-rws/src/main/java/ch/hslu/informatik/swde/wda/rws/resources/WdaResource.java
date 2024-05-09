@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
+import java.util.Iterator;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -143,6 +144,20 @@ public class WdaResource {
     public Response getCityByName(@PathParam("name") String name) {
 
         try {
+
+            /*
+            List<City> cityList = service.getAllCities();
+
+            for (Iterator<City> it = cityList.iterator(); it.hasNext();) {
+                City c = it.next();
+
+                if (!c.getName().contains(name)) {
+                    it.remove();
+                }
+            }
+
+             */
+
             City cityByName = service.getCityByName(name);
 
             if (cityByName != null) {
