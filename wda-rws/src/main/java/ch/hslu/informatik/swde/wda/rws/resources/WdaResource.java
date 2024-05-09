@@ -176,7 +176,6 @@ public class WdaResource {
      * @return A Response object containing the latest weather data for the specified city. The weather data is represented as a JSON object in the response body.
      * If the operation is successful, the HTTP status code of the response is 200 (OK).
      * If an error occurs during the operation, the HTTP status code of the response is 500 (Internal Server Error), and the response body contains a message describing the error.
-     * @throws Exception If an error occurs while retrieving the weather data. The exception is logged and a response with status code 500 is returned.
      */
     @GET
     @Path("weather/latest")
