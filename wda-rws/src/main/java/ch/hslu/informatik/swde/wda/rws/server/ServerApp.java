@@ -23,14 +23,6 @@ import org.glassfish.jersey.server.ResourceConfig;
 
 import java.io.IOException;
 import java.net.URI;
-
-/**
- * Diese Klasse stellt einen HttpServer zur Verfügung, der zum Publizieren des
- * Web Services verwendet wird.
- *
- * @author Kevin Forter
- * @version 1.0
- */
 public class ServerApp {
 
 	private static String URI_BASE = "http://localhost:8080/";

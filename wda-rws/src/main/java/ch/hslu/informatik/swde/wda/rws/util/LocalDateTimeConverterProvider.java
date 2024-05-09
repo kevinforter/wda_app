@@ -3,6 +3,7 @@
  * Link: https://chat.openai.com/share/0b0bb792-e8f8-42b1-a813-5776ac7cde55
  * Version: 1.0.0
  */
+
 package ch.hslu.informatik.swde.wda.rws.util;
 
 import jakarta.ws.rs.ext.ParamConverter;

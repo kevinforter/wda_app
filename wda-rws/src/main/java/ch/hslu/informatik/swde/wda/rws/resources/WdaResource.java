@@ -6,8 +6,8 @@
  * The endpoints are implemented as JAX-RS resource methods using annotations like @Path, @GET, @POST, @PUT, @DELETE, etc.
  * Each method corresponds to a specific operation or query related to the WDA functionality.
  * <p>
- * This class utilizes the WdaService interface to interact with the business logic of the WDA application.
- * It handles requests, performs necessary operations, and returns appropriate responses.
+ * This class uses the WdaService interface to interact with the business logic of the WDA application.
+ * It handles requests, performs the necessary operations, and returns appropriate responses.
  *
  * @author Kevin Forter
  * @version 1.0
@@ -49,9 +49,18 @@ public class WdaResource {
 
 
     /**
-     * This method is used to add a city to the WDA application.
+     * Adds all cities to the Weather Data Application (WDA).
+     * <p>
+     * This method calls the addAllCities method of the service object,
+     * which is an instance of the BusinessAPI interface.
+     * If the operation is successful, it returns a Response object with an HTTP status code of 200 (OK).
+     * If an exception occurs during the operation,
+     * it logs an error message and returns a Response object with an HTTP status code of 500
+     * (Internal Server Error) and an entity containing a message describing the error.
      *
-     * @return A simple string message.
+     * @return a Response object with an HTTP status code of 200 (OK) if the operation is successful,
+     * or a Response object with an HTTP status code of 500 (Internal Server Error)
+     * and an entity containing a message describing the error if an exception occurs
      */
     @POST
     @Path("cities")
@@ -72,9 +81,20 @@ public class WdaResource {
     }
 
     /**
-     * This method is used to get all cities from the WDA application.
+     * Retrieves all cities from the Weather Data Application (WDA).
+     * <p>
+     * This method calls the getAllCities method of the service object,
+     * which is an instance of the BusinessAPI interface.
+     * If the operation is successful and the list of cities is not empty,
+     * it returns a Response object with an HTTP status code of 200 (OK) and the list of cities as the entity.
+     * If the list of cities is empty, it returns a Response object with an HTTP status code of 404 (Not Found).
+     * If an exception occurs during the operation,
+     * it logs an error message and returns a Response object with an HTTP status code of 500
+     * (Internal Server Error) and an entity containing a message describing the error.
      *
-     * @return A simple string message.
+     * @return a Response object with an HTTP status code of 200 (OK) and the list of cities as the entity if the operation is successful and the list of cities is not empty,
+     * a Response object with an HTTP status code of 404 (Not Found) if the list of cities is empty,
+     * or a Response object with an HTTP status code of 500 (Internal Server Error) and an entity containing a message describing the error if an exception occurs
      */
     @GET
     @Path("cities")
@@ -99,6 +119,24 @@ public class WdaResource {
         }
     }
 
+    /**
+     * Retrieves a city by its name from the Weather Data Application (WDA).
+     * <p>
+     * This method calls the getCityByName method of the service object,
+     * which is an instance of the BusinessAPI interface, with the provided city name.
+     * If the operation is successful and a city with the provided name is found,
+     * it returns a Response object with an HTTP status code of 200 (OK) and the city as the entity.
+     * If no city with the provided name is found, it returns a Response object with an HTTP status code of 404
+     * (Not Found).
+     * If an exception occurs during the operation,
+     * it logs an error message and returns a Response object with an HTTP status code of 500
+     * (Internal Server Error) and an entity containing a message describing the error.
+     *
+     * @param name the name of the city to retrieve
+     * @return a Response object with an HTTP status code of 200 (OK) and the city as the entity if the operation is successful and a city with the provided name is found,
+     * a Response object with an HTTP status code of 404 (Not Found) if no city with the provided name is found,
+     * or a Response object with an HTTP status code of 500 (Internal Server Error) and an entity containing a message describing the error if an exception occurs
+     */
     @GET
     @Path("cities/{name}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -122,9 +160,19 @@ public class WdaResource {
     }
 
     /**
-     * This method is used to add thre current weather data to the WDA application.
+     * Adds the current weather of a specific city to the Weather Data Application (WDA).
+     * <p>
+     * This method calls the addCurrentWeatherOfCity method of the service object,
+     * which is an instance of the BusinessAPI interface, with the provided city name.
+     * If the operation is successful, it returns a Response object with an HTTP status code of 200 (OK).
+     * If an exception occurs during the operation,
+     * it logs an error message and returns a Response object with an HTTP status code of 500
+     * (Internal Server Error) and an entity containing a message describing the error.
      *
-     * @param name The name of the city to be added
+     * @param name the name of the city for which to add the current weather
+     * @return a Response object with an HTTP status code of 200 (OK) if the operation is successful,
+     * or a Response object with an HTTP status code of 500 (Internal Server Error)
+     * and an entity containing a message describing the error if an exception occurs
      */
     @POST
     @Path("weather/current")
@@ -144,6 +192,24 @@ public class WdaResource {
         }
     }
 
+    /**
+     * Retrieves the current weather of a specific city from the Weather Data Application (WDA).
+     * <p>
+     * This method calls the getCurrentWeatherOfCity method of the service object,
+     * which is an instance of the BusinessAPI interface, with the provided city name.
+     * If the operation is successful and the current weather of the city is found,
+     * it returns a Response object with an HTTP status code of 200 (OK) and the current weather as the entity.
+     * If no current weather of the city is found, it returns a Response object with an HTTP status code of 404
+     * (Not Found).
+     * If an exception occurs during the operation,
+     * it logs an error message and returns a Response object with an HTTP status code of 500
+     * (Internal Server Error) and an entity containing a message describing the error.
+     *
+     * @param name the name of the city for which to retrieve the current weather
+     * @return a Response object with an HTTP status code of 200 (OK) and the current weather as the entity if the operation is successful and the current weather of the city is found,
+     * a Response object with an HTTP status code of 404 (Not Found) if no current weather of the city is found,
+     * or a Response object with an HTTP status code of 500 (Internal Server Error) and an entity containing a message describing the error if an exception occurs
+     */
     @GET
     @Path("weather/current")
     @Produces(MediaType.APPLICATION_JSON)
@@ -168,7 +234,7 @@ public class WdaResource {
 
     /**
      * This method is a RESTful web service endpoint that retrieves the latest weather data for a specific city.
-     * The city is specified by the client through a query parameter in the request.
+     * The client specifies the city through a query parameter in the request.
      *
      * @param name The name of the city for which the latest weather data is to be retrieved. This is passed as a query parameter in the request.
      * @return A Response object containing the latest weather data for the specified city. The weather data is represented as a JSON object in the response body.
@@ -198,9 +264,20 @@ public class WdaResource {
     }
 
     /**
-     * This method is used to add weather data to the WDA application.
+     * Adds weather data for a specific city and year to the Weather Data Application (WDA).
+     * <p>
+     * This method calls the addWeatherOfCityByYear method of the service object,
+     * which is an instance of the BusinessAPI interface, with the provided city name and year.
+     * If the operation is successful, it returns a Response object with an HTTP status code of 200 (OK).
+     * If an exception occurs during the operation,
+     * it logs an error message and returns a Response object with an HTTP status code of 500
+     * (Internal Server Error) and an entity containing a message describing the error.
      *
-     * @param year The year of the weather data to be added
+     * @param year the year for which to add the weather data
+     * @param name the name of the city for which to add the weather data
+     * @return a Response object with an HTTP status code of 200 (OK) if the operation is successful,
+     * or a Response object with an HTTP status code of 500 (Internal Server Error)
+     * and an entity containing a message describing the error if an exception occurs
      */
     @POST
     @Path("weather/{year}/{name}")
@@ -220,6 +297,24 @@ public class WdaResource {
         }
     }
 
+    /**
+     * Retrieves weather data for a specific city and year from the Weather Data Application (WDA).
+     * <p>
+     * This method calls the getWeatherOfCityByYear method of the service object,
+     * which is an instance of the BusinessAPI interface, with the provided city name and year.
+     * If the operation is successful and the weather data is found,
+     * it returns a Response object with an HTTP status code of 200 (OK) and the weather data as the entity.
+     * If no weather data is found, it returns a Response object with an HTTP status code of 404 (Not Found).
+     * If an exception occurs during the operation,
+     * it logs an error message and returns a Response object with an HTTP status code of 500
+     * (Internal Server Error) and an entity containing a message describing the error.
+     *
+     * @param year the year for which to retrieve the weather data
+     * @param name the name of the city for which to retrieve the weather data
+     * @return a Response object with an HTTP status code of 200 (OK) and the weather data as the entity if the operation is successful and the weather data is found,
+     * a Response object with an HTTP status code of 404 (Not Found) if no weather data is found,
+     * or a Response object with an HTTP status code of 500 (Internal Server Error) and an entity containing a message describing the error if an exception occurs
+     */
     @GET
     @Path("weather/{year}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -242,6 +337,22 @@ public class WdaResource {
         }
     }
 
+    /**
+     * Adds weather data for all cities and a specific year to the Weather Data Application (WDA).
+     * <p>
+     * This method retrieves a list of all cities from the service object,
+     * which is an instance of the BusinessAPI interface.
+     * It then calls the addWeatherOfCityByYear method of the service object for each city in the list with the provided year.
+     * If the operation is successful, it returns a Response object with an HTTP status code of 200 (OK).
+     * If an exception occurs during the operation,
+     * it logs an error message and returns a Response object with an HTTP status code of 500
+     * (Internal Server Error) and an entity containing a message describing the error.
+     *
+     * @param year the year for which to add the weather data
+     * @return a Response object with an HTTP status code of 200 (OK) if the operation is successful,
+     * or a Response object with an HTTP status code of 500 (Internal Server Error)
+     * and an entity containing a message describing the error if an exception occurs
+     */
     @POST
     @Path("weather/{year}")
     @Consumes(MediaType.APPLICATION_JSON)
