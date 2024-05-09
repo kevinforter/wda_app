@@ -3,7 +3,7 @@
  * Persistierung von Objekten benötigt werden.
  *
  * @author Kevin Forter
- * @version 1.0
+ * @version 1.1.1
  */
 
 package ch.hslu.informatik.swde.wda.business;

@@ -5,6 +5,7 @@
  * @author Kevin Forter
  * @version 1.0
  */
+
 package ch.hslu.informatik.swde.wda.persister.exception;
 
 public class CityPersistenceException extends RuntimeException {

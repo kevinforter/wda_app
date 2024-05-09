@@ -19,8 +19,6 @@ import ch.hslu.informatik.swde.wda.business.BusinessAPI;
 import ch.hslu.informatik.swde.wda.business.BusinessImpl;
 import ch.hslu.informatik.swde.wda.domain.City;
 import ch.hslu.informatik.swde.wda.domain.Weather;
-import ch.hslu.informatik.swde.wda.reader.ApiReader;
-import ch.hslu.informatik.swde.wda.reader.ApiReaderImpl;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;

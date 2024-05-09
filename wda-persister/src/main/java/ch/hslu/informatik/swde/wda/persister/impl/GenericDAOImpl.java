@@ -1,6 +1,9 @@
 /**
  * Diese Klasse stellt eine konkrete Implementierung der Schnittstelle
  * 'GenericDAO' dar. Die Persistierung wird dabei mithilfe von ORM realisiert.
+ *
+ * @author Kevin Forter
+ * @version 1.0
  */
 
 package ch.hslu.informatik.swde.wda.persister.impl;
@@ -25,6 +28,17 @@ public class GenericDAOImpl<T> implements GenericDAO<T> {
         this.entityClass = entityClass;
     }
 
+    /**
+     * Persists the provided entity into the database.
+     * <p>
+     * This method creates an EntityManager instance and starts a transaction.
+     * It then persists the provided entity into the database and commits the transaction.
+     * If an exception occurs during the execution of the method, it rolls back the transaction and rethrows the exception.
+     * The EntityManager is closed in the "finally" block to ensure that resources are always properly released.
+     *
+     * @param obj the entity to be persisted
+     * @throws RuntimeException if an exception occurs during the execution of the method
+     */
     @Override
     public void speichern(T obj) {
 
@@ -47,6 +61,16 @@ public class GenericDAOImpl<T> implements GenericDAO<T> {
 
     }
 
+    /**
+     * Deletes the entity with the provided id from the database.
+     * <p>
+     * This method creates an EntityManager instance and retrieves the entity with the provided id.
+     * If the entity exists, it starts a transaction, removes the entity from the database, and commits the transaction.
+     * If an exception occurs during the execution of the method, it rolls back the transaction.
+     * The EntityManager is closed in the "finally" block to ensure that resources are always properly released.
+     *
+     * @param id the id of the entity to be deleted
+     */
     @Override
     public void loeschen(int id) {
 
@@ -73,6 +97,16 @@ public class GenericDAOImpl<T> implements GenericDAO<T> {
 
     }
 
+    /**
+     * Updates the provided entity in the database.
+     * <p>
+     * This method creates an EntityManager instance and checks if the provided entity is not null.
+     * If the entity is not null, it starts a transaction, merges the provided entity with the existing one in the database, and commits the transaction.
+     * If an exception occurs during the execution of the method, it rolls back the transaction.
+     * The EntityManager is closed in the "finally" block to ensure that resources are always properly released.
+     *
+     * @param obj the entity to be updated
+     */
     @Override
     public void aktualisieren(T obj) {
 
@@ -97,6 +131,16 @@ public class GenericDAOImpl<T> implements GenericDAO<T> {
 
     }
 
+    /**
+     * Retrieves the entity with the provided id from the database.
+     * <p>
+     * This method creates an EntityManager instance and retrieves the entity with the provided id.
+     * The EntityManager is closed after the entity is retrieved to ensure that resources are always properly released.
+     * The retrieved entity is then returned.
+     *
+     * @param id the id of the entity to be retrieved
+     * @return the entity with the provided id, or null if no such entity exists
+     */
     @Override
     public T findById(int id) {
 
@@ -109,6 +153,19 @@ public class GenericDAOImpl<T> implements GenericDAO<T> {
         return objFromDb;
     }
 
+    /**
+     * Retrieves the entity based on the provided field name and value.
+     * <p>
+     * This method creates an EntityManager instance and constructs a query to retrieve the entity where the field matches the provided value.
+     * The query is then executed and the result is stored.
+     * If no entity is found, a log message is generated.
+     * The EntityManager is closed in the "finally" block to ensure that resources are always properly released.
+     * The retrieved entity is then returned.
+     *
+     * @param fieldName the name of the field to be matched
+     * @param value     the value to be matched against the field
+     * @return the entity that matches the field and value, or null if no such entity exists
+     */
     @Override
     public T findEntityByFieldAndString(String fieldName, String value) {
         EntityManager em = JpaUtil.createEntityManager();
@@ -129,6 +186,16 @@ public class GenericDAOImpl<T> implements GenericDAO<T> {
         return objFromDb;
     }
 
+    /**
+     * Retrieves all entities from the database.
+     * <p>
+     * This method creates an EntityManager instance and constructs a query to retrieve all entities.
+     * The query is then executed and the result is stored in a list.
+     * The EntityManager is closed after the entities are retrieved to ensure that resources are always properly released.
+     * The retrieved list of entities is then returned. If no entities are found, an empty list is returned.
+     *
+     * @return a list of all entities, or an empty list if no entities exist
+     */
     @Override
     public List<T> alle() {
 
@@ -140,6 +207,4 @@ public class GenericDAOImpl<T> implements GenericDAO<T> {
         em.close();
         return objListe != null ? objListe : new ArrayList<>();
     }
-
-
 }

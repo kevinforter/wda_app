@@ -1,3 +1,11 @@
+/**
+ * Diese Schnittstelle ergänzt die generische Persister-Schnittstelle
+ * mit zusätzlichen Funktionalitäten für die Persistierung von Ortschaften.
+ *
+ * @author Kevin Forter
+ * @version 1.0
+ */
+
 package ch.hslu.informatik.swde.wda.persister.impl;
 
 import ch.hslu.informatik.swde.wda.domain.City;
@@ -15,16 +23,21 @@ public class CityDAOImpl extends GenericDAOImpl<City> implements CityDAO {
 
     private static final Logger LOG = LoggerFactory.getLogger(CityDAOImpl.class);
 
-    /**
-     * Constructor for the CityDAOImpl class.
-     * <p>
-     * This constructor calls the superclass constructor with the City class as a parameter.
-     * This is used to set the type of the entity for the generic DAO implementation.
-     */
     public CityDAOImpl() {
         super(City.class);
     }
 
+    /**
+     * Retrieves the total number of cities in the database.
+     * <p>
+     * This method creates an EntityManager instance and a TypedQuery to count the number of cities in the database.
+     * It executes the query and returns the count.
+     * If an exception occurs during the execution of the query, it throws a RuntimeException.
+     * The EntityManager is closed in the "finally" block to ensure that resources are always properly released.
+     *
+     * @return the total number of cities in the database
+     * @throws RuntimeException if an exception occurs during the execution of the query
+     */
     @Override
     public long getNumberOfCities() {
 
@@ -44,6 +57,17 @@ public class CityDAOImpl extends GenericDAOImpl<City> implements CityDAO {
         return count;
     }
 
+    /**
+     * Retrieves the ID of a city by its name.
+     * <p>
+     * This method creates an EntityManager instance and a TypedQuery to find the ID of a city by its name in the database.
+     * It executes the query and returns the ID.
+     * If an exception occurs during the execution of the query, it logs an info message and returns 0.
+     * The EntityManager is closed after the execution of the query.
+     *
+     * @param cityName the name of the city for which the ID is to be retrieved
+     * @return the ID of the city if found, otherwise 0
+     */
     @Override
     public int findCityIdByName(String cityName) {
 
@@ -64,6 +88,17 @@ public class CityDAOImpl extends GenericDAOImpl<City> implements CityDAO {
         return cityId;
     }
 
+    /**
+     * Retrieves a city by its name.
+     * <p>
+     * This method creates an EntityManager instance and a TypedQuery to find a city by its name in the database.
+     * It executes the query and returns the city.
+     * If an exception occurs during the execution of the query, it logs an info message and returns null.
+     * The EntityManager is closed after the execution of the query.
+     *
+     * @param cityName the name of the city to be retrieved
+     * @return the city if found, otherwise null
+     */
     @Override
     public City findCityByName(String cityName) {
 
@@ -85,6 +120,17 @@ public class CityDAOImpl extends GenericDAOImpl<City> implements CityDAO {
     }
 
 
+    /**
+     * Checks if a city exists in the database by its name.
+     * <p>
+     * This method creates an EntityManager instance and a TypedQuery to count the number of cities with the given name in the database.
+     * It executes the query and returns true if the count is greater than 0, otherwise false.
+     * If an exception occurs during the execution of the query, it logs an error message.
+     * The EntityManager is closed in the "finally" block to ensure that resources are always properly released.
+     *
+     * @param cityName the name of the city to be checked
+     * @return true if the city exists, otherwise false
+     */
     @Override
     public boolean cityExists(String cityName) {
 
@@ -104,10 +150,19 @@ public class CityDAOImpl extends GenericDAOImpl<City> implements CityDAO {
             em.close();
         }
 
-        // If count is greater than 0, the city exists
+        // If the count is greater than 0, the city exists
         return count > 0;
     }
 
+    /**
+     * Retrieves all city names in the database.
+     * <p>
+     * This method creates an EntityManager instance and a TypedQuery to find all city names in the database.
+     * It executes the query and returns the list of city names.
+     * The EntityManager is closed after the execution of the query.
+     *
+     * @return a list of all city names in the database, or an empty list if no city names are found
+     */
     @Override
     public List<String> allCityNames() {
         EntityManager em = JpaUtil.createEntityManager();
@@ -119,6 +174,22 @@ public class CityDAOImpl extends GenericDAOImpl<City> implements CityDAO {
         return objListe != null ? objListe : new ArrayList<>();
     }
 
+    /**
+     * Saves all cities from the provided map into the database.
+     * <p>
+     * This method creates an EntityManager instance and starts a transaction.
+     * It retrieves all existing city names from the database and stores them in a set for quick lookup.
+     * Then it iterates over the provided map of cities. If a city's name is not in the set of existing names,
+     * it persists the city into the database.
+     * To optimize performance, the EntityManager is flushed and cleared every 10 iterations.
+     * After all cities have been processed, the transaction is committed.
+     * If an exception occurs during the execution of the method, it rolls back the transaction, logs an error message,
+     * and throws a CityPersistenceException.
+     * The EntityManager is closed in the "finally" block to ensure that resources are always properly released.
+     *
+     * @param cityMap a map of cities to be saved into the database
+     * @throws CityPersistenceException if an exception occurs during the execution of the method
+     */
     @Override
     public void saveAllCities(LinkedHashMap<Integer, City> cityMap) {
 
@@ -136,7 +207,7 @@ public class CityDAOImpl extends GenericDAOImpl<City> implements CityDAO {
                 if (!existingNames.contains(city.getName())) {
                     em.persist(city);
                     i++;
-                    // Flushen und leeren Sie den EntityManager alle 50 Wetterdaten
+                    // Flush and clear the EntityManager every 10 cities
                     if (i % 10 == 0) {
                         em.flush();
                         em.clear();
@@ -156,6 +227,17 @@ public class CityDAOImpl extends GenericDAOImpl<City> implements CityDAO {
         }
     }
 
+    /**
+     * Checks if the City table exists in the database.
+     * <p>
+     * This method creates an EntityManager instance and a TypedQuery to count the number of cities in the database.
+     * It executes the query and returns true if the count is greater than 0, indicating that the City table exists, otherwise false.
+     * If an exception occurs during the execution of the query, it throws a RuntimeException.
+     * The EntityManager is closed in the "finally" block to ensure that resources are always properly released.
+     *
+     * @return true if the City table exists, otherwise false
+     * @throws RuntimeException if an exception occurs during the execution of the query
+     */
     @Override
     public boolean ifTableExist() {
 

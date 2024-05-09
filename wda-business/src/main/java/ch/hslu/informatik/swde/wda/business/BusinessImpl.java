@@ -3,7 +3,7 @@
  * Persistierung von Objekten benötigt werden.
  *
  * @author Kevin Forter
- * @version 1.0
+ * @version 1.1.1
  */
 
 package ch.hslu.informatik.swde.wda.business;
@@ -100,7 +100,7 @@ public class BusinessImpl implements BusinessAPI {
      * Adds the weather data of a specified city for a specific year to the database.
      * <p>
      * This method first checks if there are any existing weather data in the database for the specified city.
-     * If there are no existing weather data, it adds the current weather data of the city to the database.
+     * If there is no existing weather data, it adds the current weather data of the city to the database.
      * It then retrieves the weather data of the city for the specified year from an external API and the latest weather data of the city from the database.
      * If the size of the weather data retrieved from the API is different from the number of weather data in the database for the city, it means there are new weather data to be added.
      * So, it sets the city ID for each of the new weather data and saves them all to the database as a batch.

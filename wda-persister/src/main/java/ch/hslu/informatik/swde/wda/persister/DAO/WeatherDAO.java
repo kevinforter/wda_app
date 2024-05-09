@@ -1,3 +1,11 @@
+/**
+ * Diese Schnittstelle ergänzt die generische Persister-Schnittstelle
+ * mit zusätzlichen Funktionalitäten für die Persistierung von Wetterdaten.
+ *
+ * @author Kevin
+ * @version 1.0
+ */
+
 package ch.hslu.informatik.swde.wda.persister.DAO;
 
 import ch.hslu.informatik.swde.wda.domain.Weather;
@@ -7,14 +15,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.TreeMap;
-
-/**
- * Diese Schnittstelle ergänzt die generische Persister-Schnittstelle
- * mit zusätzlichen Funktionalitäten für die Persistierung von Wetterdaten.
- *
- * @author Kevin
- * @version 1.0
- */
 
 public interface WeatherDAO extends GenericDAO<Weather> {
 
@@ -67,39 +67,39 @@ public interface WeatherDAO extends GenericDAO<Weather> {
      */
     TreeMap<LocalDateTime, Weather> findWeatherFromCityByYear(int year, int cityId);
 
-    /**
-     * Holt Wetterdaten für eine bestimmte Ortschaft innerhalb eines bestimmten Zeitraums.
-     *
-     * @param ortschaftId Die ID der Ortschaft.
-     * @param von Anfangsdatum des Zeitraums.
-     * @param bis Enddatum des Zeitraums.
-     * @return Eine Liste von Weather-Objekten; leer, wenn keine Daten gefunden werden.
-     */
-    List<Weather> findWeatherFromCityByTimeSpan(int ortschaftId, LocalDateTime von, LocalDateTime bis);
-
-    /**
-     * Holt die minimale und maximale Temperatur für einen bestimmten Zeitpunkt.
-     *
-     * @param dateTime Der Zeitpunkt für die Abfrage.
-     * @return Eine Liste von Weather-Objekten mit minimalen und maximalen Temperaturen; leer, wenn keine Daten gefunden werden.
-     */
-    List<Weather> findMinMaxTemperatureByDateTime(LocalDateTime dateTime);
-
-    /**
-     * Holt die minimale und maximale Luftfeuchtigkeit für einen bestimmten Zeitpunkt.
-     *
-     * @param dateTime Der Zeitpunkt für die Abfrage.
-     * @return Eine Liste von Weather-Objekten mit minimalen und maximalen Luftfeuchtigkeitswerten; leer, wenn keine Daten gefunden werden.
-     */
-    List<Weather> findMinMaxHumidityByDateTime(LocalDateTime dateTime);
-
-    /**
-     * Holt den minimalen und maximalen Luftdruck für einen bestimmten Zeitpunkt.
-     *
-     * @param dateTime Der Zeitpunkt für die Abfrage.
-     * @return Eine Liste von Weather-Objekten mit minimalen und maximalen Luftdruckwerten; leer, wenn keine Daten gefunden werden.
-     */
-    List<Weather> findMinMaxPressureByDateTime(LocalDateTime dateTime);
+//    /**
+//     * Holt Wetterdaten für eine bestimmte Ortschaft innerhalb eines bestimmten Zeitraums.
+//     *
+//     * @param ortschaftId Die ID der Ortschaft.
+//     * @param von Anfangsdatum des Zeitraums.
+//     * @param bis Enddatum des Zeitraums.
+//     * @return Eine Liste von Weather-Objekten; leer, wenn keine Daten gefunden werden.
+//     */
+//    List<Weather> findWeatherFromCityByTimeSpan(int ortschaftId, LocalDateTime von, LocalDateTime bis);
+//
+//    /**
+//     * Holt die minimale und maximale Temperatur für einen bestimmten Zeitpunkt.
+//     *
+//     * @param dateTime Der Zeitpunkt für die Abfrage.
+//     * @return Eine Liste von Weather-Objekten mit minimalen und maximalen Temperaturen; leer, wenn keine Daten gefunden werden.
+//     */
+//    List<Weather> findMinMaxTemperatureByDateTime(LocalDateTime dateTime);
+//
+//    /**
+//     * Holt die minimale und maximale Luftfeuchtigkeit für einen bestimmten Zeitpunkt.
+//     *
+//     * @param dateTime Der Zeitpunkt für die Abfrage.
+//     * @return Eine Liste von Weather-Objekten mit minimalen und maximalen Luftfeuchtigkeitswerten; leer, wenn keine Daten gefunden werden.
+//     */
+//    List<Weather> findMinMaxHumidityByDateTime(LocalDateTime dateTime);
+//
+//    /**
+//     * Holt den minimalen und maximalen Luftdruck für einen bestimmten Zeitpunkt.
+//     *
+//     * @param dateTime Der Zeitpunkt für die Abfrage.
+//     * @return Eine Liste von Weather-Objekten mit minimalen und maximalen Luftdruckwerten; leer, wenn keine Daten gefunden werden.
+//     */
+//    List<Weather> findMinMaxPressureByDateTime(LocalDateTime dateTime);
 
     /**
      * Speichert alle Städte in der Map ab

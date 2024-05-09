@@ -1,3 +1,10 @@
+/**
+ * Helferklasse zur Erzeugung eines EntityManagers.
+ *
+ * @author Kevin Forter
+ * @version 1.0
+ */
+
 package ch.hslu.informatik.swde.wda.persister.util;
 
 import jakarta.persistence.EntityManager;
@@ -5,10 +12,6 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-/**
- * Helferklasse zur Erzeugung eines EntityManagers.
- */
 
 public class JpaUtil {
 
