@@ -2,8 +2,8 @@ package ch.hslu.informatik.swde.wda.business;
 
 import ch.hslu.informatik.swde.wda.domain.City;
 import ch.hslu.informatik.swde.wda.domain.Weather;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import ch.hslu.informatik.swde.wda.business.util.Util;
+import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,6 +16,22 @@ import static org.junit.jupiter.api.Assertions.*;
 class BusinessImplTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(BusinessImplTest.class);
+
+    @BeforeEach
+    void setUp() {
+        Util.cleanDatabase();
+    }
+
+    @AfterEach
+    void clearUp() {
+        Util.cleanDatabase();
+    }
+
+    @AfterAll
+    static void tearDown() {
+        Util.cleanDatabase();
+    }
+
 
     @Tag("integration")
     @Test
@@ -56,9 +72,10 @@ class BusinessImplTest {
     void addWeatherOfCityByYear() {
 
         final BusinessAPI serviceAPI = new BusinessImpl();
+        serviceAPI.addAllCities();
 
         long start = System.currentTimeMillis();
-        serviceAPI.addWeatherOfCityByYear("Davos",2024);
+        serviceAPI.addWeatherOfCityByYear("Davos", 2024);
         long end = System.currentTimeMillis();
 
         long time = end - start;
@@ -76,7 +93,7 @@ class BusinessImplTest {
         for (City c : resCity) {
 
             long start = System.currentTimeMillis();
-            serviceAPI.addWeatherOfCityByYear(c.getName(),2024);
+            serviceAPI.addWeatherOfCityByYear(c.getName(), 2024);
             long end = System.currentTimeMillis();
 
             long time = end - start;
@@ -121,7 +138,7 @@ class BusinessImplTest {
 
         for (City c : cityList) {
             serviceAPI.addCurrentWeatherOfCity(c.getName());
-            TreeMap<LocalDateTime, Weather> restLDT = serviceAPI.getWeatherOfCityByYear(2024 ,c.getName());
+            TreeMap<LocalDateTime, Weather> restLDT = serviceAPI.getWeatherOfCityByYear(2024, c.getName());
             assertAll(
                     () -> assertNotNull(restLDT, "Liste sollte nicht null sein:")
             );
