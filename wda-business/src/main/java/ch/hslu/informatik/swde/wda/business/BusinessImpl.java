@@ -16,6 +16,8 @@ import ch.hslu.informatik.swde.wda.persister.impl.CityDAOImpl;
 import ch.hslu.informatik.swde.wda.persister.impl.WeatherDAOImpl;
 import ch.hslu.informatik.swde.wda.reader.ApiReader;
 import ch.hslu.informatik.swde.wda.reader.ApiReaderImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -23,6 +25,8 @@ import java.time.Year;
 import java.util.*;
 
 public class BusinessImpl implements BusinessAPI {
+
+    private static final Logger LOG = LoggerFactory.getLogger(BusinessImpl.class);
 
     private static final CityDAO daoC = new CityDAOImpl();
     private static final WeatherDAO daoW = new WeatherDAOImpl();
@@ -37,15 +41,18 @@ public class BusinessImpl implements BusinessAPI {
      */
     @Override
     public void addAllCities() {
+        try {
+            // Read city details from an external source
+            LinkedHashMap<Integer, City> cityRes = reader.readCityDetailsList(reader.readCityNames());
 
-        // Read city details from an external source
-        LinkedHashMap<Integer, City> cityRes = reader.readCityDetailsList(reader.readCityNames());
-
-        // Check if the number of cities read is different from the number of cities currently in the database
-        if (cityRes.size() != daoC.getNumberOfCities()) {
-
-            // If there are new cities, save all the cities read into the database
-            daoC.saveAllCities(cityRes);
+            // Check if the number of cities read is different from the number of cities currently in the database
+            if (cityRes.size() != daoC.getNumberOfCities()) {
+                // If there are new cities, save all the cities read into the database
+                daoC.saveAllCities(cityRes);
+            }
+        } catch (Exception e) {
+            // Log the exception and handle it appropriately
+            LOG.error("Error while adding cities: ", e);
         }
     }
 
