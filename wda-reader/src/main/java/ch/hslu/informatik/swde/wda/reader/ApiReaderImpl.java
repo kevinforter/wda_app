@@ -1,3 +1,11 @@
+/**
+ * Diese Schnittstelle gibt die Implementierung vor, welche für die Abfrage
+ * von Wetterdaten und Ortschaften benötigt werden.
+ *
+ * @author Kevin
+ * @version 1.0
+ */
+
 package ch.hslu.informatik.swde.wda.reader;
 
 import ch.hslu.informatik.swde.wda.domain.City;
@@ -30,6 +38,22 @@ public class ApiReaderImpl implements ApiReader {
     private static final String format = "application/json";
 
     /*-----------------------------------------------CITY API REQUEST-----------------------------------------------*/
+
+    /**
+     * Retrieves a list of city names from the weather data provider.
+     * <p>
+     * This method sends a GET request to the weather data provider's API endpoint for cities.
+     * If the response status code is 200, it reads the JSON response body and extracts the city names.
+     * The city names are then URL-encoded and added to a LinkedList.
+     * If the response status code is not 200, it logs an error message and returns an empty LinkedList.
+     * If the LinkedList of city names is empty after processing the JSON response,
+     * it logs a message and returns the empty LinkedList.
+     * If an exception occurs during the execution of the method,
+     * it logs an error message and throws a RuntimeException.
+     *
+     * @return a LinkedList of URL-encoded city names, or an empty LinkedList if no city names are found or an error occurs
+     * @throws RuntimeException if an exception occurs during the execution of the method
+     */
     @Override
     public LinkedList<String> readCityNames() {
         try {
@@ -71,6 +95,23 @@ public class ApiReaderImpl implements ApiReader {
         }
     }
 
+    /**
+     * Retrieves detailed information about a specific city from the weather data provider.
+     * <p>
+     * This method sends a GET request to the weather data provider's API endpoint for the provided city name.
+     * If the response status code is 200, it reads the JSON response body and extracts the city details.
+     * The city details are then used to create a new City object.
+     * If the response status code is not 200,
+     * it logs an error message and returns a new City object with default values.
+     * If the created City object is null after processing the JSON response,
+     * it logs a message and returns a new City object with default values.
+     * If an exception occurs during the execution of the method,
+     * it logs an error message and throws a RuntimeException.
+     *
+     * @param cityName the name of the city for which to retrieve the details
+     * @return a City object containing the details of the city, or a new City object with default values if no details are found or an error occurs
+     * @throws RuntimeException if an exception occurs during the execution of the method
+     */
     @Override
     public City readCityDetails(String cityName) {
         try {
@@ -114,6 +155,26 @@ public class ApiReaderImpl implements ApiReader {
         }
     }
 
+    /**
+     * Retrieves detailed information about a list of cities from the weather data provider.
+     * <p>
+     * This method iterates over the provided list of city names
+     * and sends a GET request to the weather data provider's API endpoint for each city name.
+     * If the response status code is 200 for a city name,
+     * it reads the JSON response body and extracts the city details.
+     * The city details are then used to create a new City object,
+     * which is added to a LinkedHashMap with the city's zip code as the key.
+     * If the response status code is not 200 for a city name,
+     * it logs an error message and returns an empty LinkedHashMap.
+     * If the created LinkedHashMap is empty after processing all city names,
+     * it logs a message and returns an empty LinkedHashMap.
+     * If an exception occurs during the execution of the method,
+     * it logs an error message and throws a RuntimeException.
+     *
+     * @param cityNames a LinkedList of city names for which to retrieve the details
+     * @return a LinkedHashMap of City objects containing the details of the cities, with the city's zip code as the key, or an empty LinkedHashMap if no details are found or an error occurs
+     * @throws RuntimeException if an exception occurs during the execution of the method
+     */
     @Override
     public LinkedHashMap<Integer, City> readCityDetailsList(LinkedList<String> cityNames) {
         try {
@@ -164,6 +225,24 @@ public class ApiReaderImpl implements ApiReader {
         }
     }
 
+    /**
+     * Retrieves detailed information about all cities from the weather data provider.
+     * <p>
+     * This method sends a GET request to the weather data provider's API endpoint for cities.
+     * If the response status code is 200, it reads the JSON response body and extracts the city names and zip codes.
+     * For each city, it sends another GET request to the weather data provider's API endpoint for the specific city.
+     * If the response status code is 200, it reads the JSON response body and extracts the city details.
+     * The city details are then used to create a new City object,
+     * which is added to a LinkedHashMap with the city's zip code as the key.
+     * If the response status code is not 200 for a city, it logs an error message and returns an empty LinkedHashMap.
+     * If the created LinkedHashMap is empty after processing all cities,
+     * it logs a message and returns an empty LinkedHashMap.
+     * If an exception occurs during the execution of the method,
+     * it logs an error message and throws a RuntimeException.
+     *
+     * @return a LinkedHashMap of City objects containing the details of the cities, with the city's zip code as the key, or an empty LinkedHashMap if no details are found or an error occurs
+     * @throws RuntimeException if an exception occurs during the execution of the method
+     */
     @Override
     public LinkedHashMap<Integer, City> readCities() {
         try {
@@ -230,6 +309,21 @@ public class ApiReaderImpl implements ApiReader {
 
     /*----------------------------------------------WEATHER API REQUEST---------------------------------------------*/
 
+    /**
+     * Retrieves the current weather for a specific city from the weather data provider.
+     * <p>
+     * This method sends a GET request to the weather data provider's API endpoint for the provided city name.
+     * If the response status code is 200, it reads the JSON response body and extracts the weather details.
+     * The weather details are then used to create a new Weather object.
+     * If the response status code is not 200,
+     * it logs an error message and returns a new Weather object with default values.
+     * If an exception occurs during the execution of the method,
+     * it logs an error message and throws a RuntimeException.
+     *
+     * @param cityName the name of the city for which to retrieve the current weather
+     * @return a Weather object containing the current weather of the city, or a new Weather object with default values if no details are found or an error occurs
+     * @throws RuntimeException if an exception occurs during the execution of the method
+     */
     @Override
     public Weather readCurrentWeatherByCity(String cityName) {
         try {
@@ -292,6 +386,21 @@ public class ApiReaderImpl implements ApiReader {
         }
     }
 
+    /**
+     * Retrieves weather data for a specific city and year from the weather data provider.
+     * <p>
+     * This method sends a GET request to the weather data provider's API endpoint for the provided city name and year.
+     * If the response status code is 200, it reads the JSON response body and extracts the weather details.
+     * The weather details are then used to create a new Weather object, which is added to a TreeMap with the date and time as the key.
+     * If the response status code is not 200, it logs an error message and returns an empty TreeMap.
+     * If the created TreeMap is empty after processing the JSON response, it logs a message and returns the empty TreeMap.
+     * If an exception occurs during the execution of the method, it logs an error message and throws a RuntimeException.
+     *
+     * @param cityName the name of the city for which to retrieve the weather data
+     * @param jahr     the year for which to retrieve the weather data
+     * @return a TreeMap of Weather objects containing the weather data for the city and year, with the date and time as the key, or an empty TreeMap if no data is found or an error occurs
+     * @throws RuntimeException if an exception occurs during the execution of the method
+     */
     @Override
     public TreeMap<LocalDateTime, Weather> readWeatherByCityAndYear(String cityName, int jahr) {
         try {
@@ -340,7 +449,7 @@ public class ApiReaderImpl implements ApiReader {
                     double direction = Double.parseDouble(parts[13].substring(15));
                     weather.setWindDirection(direction);
 
-                    weatherMap.put(formatDateTime ,weather);
+                    weatherMap.put(formatDateTime, weather);
                 }
 
                 if (weatherMap.isEmpty()) {
@@ -364,5 +473,4 @@ public class ApiReaderImpl implements ApiReader {
             throw new RuntimeException(e);
         }
     }
-
 }

@@ -1,3 +1,11 @@
+/**
+ * Diese Schnittstelle gibt die Funktionalitäten vor, welche für die Abfrage
+ * von Wetterdaten und Ortschaften benötigt werden.
+ *
+ * @author Kevin
+ * @version 1.0
+ */
+
 package ch.hslu.informatik.swde.wda.reader;
 
 import ch.hslu.informatik.swde.wda.domain.City;
@@ -7,14 +15,6 @@ import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.TreeMap;
-
-/**
- * Diese Schnittstelle gibt die Funktionalitäten vor, welche für die Abfrage
- * von Wetterdaten und Ortschaften benötigt werden.
- *
- * @author Kevin
- * @version 1.0
- */
 
 public interface ApiReader {
 
