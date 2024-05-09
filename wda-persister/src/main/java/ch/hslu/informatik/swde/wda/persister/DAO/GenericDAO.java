@@ -1,8 +1,3 @@
-package ch.hslu.informatik.swde.wda.persister.DAO;
-
-
-import java.util.List;
-
 /**
  * Diese Schnittstelle gibt die Hauptfunktionalitäten vor, die für die
  * Persistierung von Objekten benötigt werden.
@@ -10,6 +5,10 @@ import java.util.List;
  * @author Kevin Forter
  * @version 1.0
  */
+
+package ch.hslu.informatik.swde.wda.persister.DAO;
+
+import java.util.List;
 
 public interface GenericDAO<T> {
 

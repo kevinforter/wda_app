@@ -1,3 +1,8 @@
+/**
+ * Diese Klasse stellt eine konkrete Implementierung der Schnittstelle
+ * 'GenericDAO' dar. Die Persistierung wird dabei mithilfe von ORM realisiert.
+ */
+
 package ch.hslu.informatik.swde.wda.persister.impl;
 
 import ch.hslu.informatik.swde.wda.persister.DAO.GenericDAO;
@@ -9,11 +14,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-
-/**
- * Diese Klasse stellt eine konkrete Implementierung der Schnittstelle
- * 'GenericDAO' dar. Die Persistierung wird dabei mithilfe von ORM realisiert.
- */
 
 public class GenericDAOImpl<T> implements GenericDAO<T> {
 

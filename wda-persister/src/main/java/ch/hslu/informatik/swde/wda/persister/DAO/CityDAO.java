@@ -1,10 +1,3 @@
-package ch.hslu.informatik.swde.wda.persister.DAO;
-
-import ch.hslu.informatik.swde.wda.domain.City;
-
-import java.util.LinkedHashMap;
-import java.util.List;
-
 /**
  * Diese Schnittstelle ergänzt die generische Persister-Schnittstelle
  * mit zusätzlichen Funktionalitäten für die Persistierung von Ortschaften.
@@ -12,6 +5,13 @@ import java.util.List;
  * @author Kevin Forter
  * @version 1.0
  */
+
+package ch.hslu.informatik.swde.wda.persister.DAO;
+
+import ch.hslu.informatik.swde.wda.domain.City;
+
+import java.util.LinkedHashMap;
+import java.util.List;
 
 public interface CityDAO extends GenericDAO<City> {
 

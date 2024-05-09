@@ -19,47 +19,49 @@ import java.util.TreeMap;
 public interface ApiReader {
 
     /**
-     * Liest eine Liste von Ortschaften von einem externen Webservice.
+     * Liest eine Liste von Städtenamen von einem externen Wetterdienst.
      *
-     * @return Eine Liste von Ortschaft-Namen, die aus der Antwort des Webservice extrahiert wurden.
+     * @return Eine LinkedList von Städtenamen, die aus der Antwort des Wetterdienstes extrahiert wurden.
      */
     LinkedList<String> readCityNames();
 
     /**
-     * Liest eine Liste von Ortschaften von einem externen Webservice.
+     * Liest die Details einer bestimmten Stadt von einem externen Wetterdienst.
      *
-     * @return Ortschaft-Objekt, die aus der Antwort des Webservice extrahiert wurde.
+     * @param cityName Der Name der Stadt.
+     * @return Ein City-Objekt, das aus der Antwort des Wetterdienstes extrahiert wurde.
      */
     City readCityDetails(String cityName);
 
     /**
-     * Liest eine Liste von Ortschaften von einem externen Webservice.
+     * Liest die Details einer Liste von Städten von einem externen Wetterdienst.
      *
-     * @return Eine LinkedHashMap von Ortschaft-Objekten, die aus der Antwort des Webservice extrahiert wurden.
+     * @param cityNames Eine LinkedList von Städtenamen.
+     * @return Eine LinkedHashMap von City-Objekten, mit der Stadt-ID als Schlüssel, die aus der Antwort des Wetterdienstes extrahiert wurden.
      */
     LinkedHashMap<Integer, City> readCityDetailsList(LinkedList<String> cityNames);
 
     /**
-     * Liest eine Liste von Ortschaften von einem externen Webservice.
+     * Liest die Details aller Städte von einem externen Wetterdienst.
      *
-     * @return Eine LinkedHashMap von Ortschaft-Objekten, die aus der Antwort des Webservice extrahiert wurden.
+     * @return Eine LinkedHashMap von City-Objekten, mit der Stadt-ID als Schlüssel, die aus der Antwort des Wetterdienstes extrahiert wurden.
      */
     LinkedHashMap<Integer, City> readCities();
 
     /**
-     * Liest Wetterdaten für eine spezifische Ortschaft von einem externen Webservice.
+     * Liest die aktuellen Wetterdaten für eine bestimmte Stadt von einem externen Wetterdienst.
      *
-     * @param cityName Der Name der Ortschaft.
-     * @return Ein Wetter-Objekt mit den Wetterdaten der angegebenen Ortschaft.
+     * @param cityName Der Name der Stadt.
+     * @return Ein Weather-Objekt, das die aktuellen Wetterdaten der angegebenen Stadt enthält.
      */
     Weather readCurrentWeatherByCity(String cityName);
 
     /**
-     * Liest Wetterdaten für eine spezifische Ortschaft und ein bestimmtes Jahr von einem externen Webservice.
+     * Liest die Wetterdaten für eine bestimmte Stadt und ein bestimmtes Jahr von einem externen Wetterdienst.
      *
-     * @param cityName Der Name der Ortschaft.
-     * @param jahr Das spezifizierte Jahr.
-     * @return Eine Liste von Wetter-Objekten, die den Wetterdaten für das angegebene Jahr und die Ortschaft entsprechen.
+     * @param cityName Der Name der Stadt.
+     * @param jahr     Das angegebene Jahr.
+     * @return Ein TreeMap von Weather-Objekten, mit dem Datum und der Uhrzeit als Schlüssel, die die Wetterdaten für das angegebene Jahr und die Stadt darstellen.
      */
     TreeMap<LocalDateTime, Weather> readWeatherByCityAndYear(String cityName, int jahr);
 }
