@@ -16,6 +16,7 @@ import java.util.List;
 public interface CityDAO extends GenericDAO<City> {
 
     /**
+     * Gibt alle Städte zurück
      *
      * @return Anzahl der Städte
      */

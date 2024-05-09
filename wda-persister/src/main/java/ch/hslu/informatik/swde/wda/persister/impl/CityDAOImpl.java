@@ -15,6 +15,12 @@ public class CityDAOImpl extends GenericDAOImpl<City> implements CityDAO {
 
     private static final Logger LOG = LoggerFactory.getLogger(CityDAOImpl.class);
 
+    /**
+     * Constructor for the CityDAOImpl class.
+     * <p>
+     * This constructor calls the superclass constructor with the City class as a parameter.
+     * This is used to set the type of the entity for the generic DAO implementation.
+     */
     public CityDAOImpl() {
         super(City.class);
     }
