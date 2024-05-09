@@ -58,6 +58,10 @@
         </developer>
     </developers>
 
+    <properties>
+        <jar.start.class>ch.hslu.informatik.swde.wda.rws.server.ServerApp</jar.start.class>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>ch.hslu.swde23hs.g01</groupId>
@@ -341,6 +345,8 @@
                         <manifest>
                             <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                             <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib</classpathPrefix>
                             <mainClass>${jar.start.class}</mainClass>
                         </manifest>
                     </archive>
