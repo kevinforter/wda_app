@@ -112,6 +112,7 @@ public interface WeatherDAO extends GenericDAO<Weather> {
      * Gibt an obe eine Tabelle leer oder voll ist
      *
      * @return true oder false
+     * @param cityId die id der Stadt
      */
-    boolean ifWeatherOfCityExist(String cityName);
+    boolean ifWeatherOfCityExist(int cityId);
 }

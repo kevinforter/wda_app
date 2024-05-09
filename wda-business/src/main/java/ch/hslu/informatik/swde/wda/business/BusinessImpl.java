@@ -56,6 +56,23 @@ public class BusinessImpl implements BusinessAPI {
         }
     }
 
+
+    /**
+     * Adds the current weather of a specified city to the database.
+     * <p>
+     * This method first finds the ID of the city by its name using the CityDAO.
+     * If the city ID is not 0, it calls the private method addCurrentWeatherOfCity with the city ID and city name as parameters.
+     * This private method retrieves the latest weather data of the city from both the database and an external API.
+     *
+     * @param cityName the name of the city for which the current weather data is to be added
+     */
+    @Override
+    public void addCurrentWeatherOfCity(String cityName) {
+
+        int cityId = daoC.findCityIdByName(cityName);
+        if (cityId != 0) addCurrentWeatherOfCity(cityId, cityName);
+    }
+
     /**
      * Adds the current weather of a specified city to the database.
      * <p>
@@ -66,19 +83,19 @@ public class BusinessImpl implements BusinessAPI {
      * If the time difference is less than 40 minutes, it saves the current weather data from the API to the database.
      * If the time difference is 40 minutes or more, it retrieves and saves the weather data of the city for the current year.
      *
+     * @param cityId   the id of the city for which the current weather data is to be added
      * @param cityName the name of the city for which the current weather data is to be added
      */
-    @Override
-    public void addCurrentWeatherOfCity(String cityName) {
+    private static void addCurrentWeatherOfCity(int cityId, String cityName) {
 
         // Retrieve the latest weather data of the specified city from both the database and an external API
-        Weather latestWeatherDAO = getLatestWeatherOfCity(cityName);
+        Weather latestWeatherDAO = getLatestWeatherOfCity(cityId);
         Weather currentWeatherREADER = reader.readCurrentWeatherByCity(cityName);
 
         if (latestWeatherDAO == null) {
 
             // If there is no existing weather data in the database for the city, save the current weather data from the API to the database
-            currentWeatherREADER.setCityId(daoC.findCityIdByName(cityName));
+            currentWeatherREADER.setCityId(cityId);
             daoW.speichern(currentWeatherREADER);
 
         } else if (currentWeatherREADER != null && !latestWeatherDAO.getDTstamp().isEqual(currentWeatherREADER.getDTstamp())) {
@@ -96,12 +113,30 @@ public class BusinessImpl implements BusinessAPI {
             } else {
 
                 // If the time difference is 40 minutes or more, retrieve and save the weather data of the city for the current year
-                addWeatherOfCityByYear(cityName, Year.now().getValue());
+                addWeatherOfCityByYear(cityId, cityName, Year.now().getValue());
 
             }
         }
     }
 
+    /**
+     * Adds the weather data of a specified city for a specific year to the database.
+     * <p>
+     * This method first finds the ID of the city by its name using the CityDAO.
+     * If the city ID is not 0, it calls the private method addWeatherOfCityByYear with the city ID, city name, and year as parameters.
+     * This private method retrieves the weather data of the city for the specified year from an external API and the latest weather data of the city from the database.
+     * If the size of the weather data retrieved from the API is different from the number of weather data in the database for the city, it means there are new weather data to be added.
+     * So, it sets the city ID for each of the new weather data and saves them all to the database as a batch.
+     *
+     * @param cityName the name of the city for which the weather data is to be added
+     * @param year     the year for which the weather data is to be added
+     */
+    @Override
+    public void addWeatherOfCityByYear(String cityName, int year) {
+
+        int cityId = daoC.findCityIdByName(cityName);
+        if (cityId != 0) addWeatherOfCityByYear(cityId, cityName, year);
+    }
 
     /**
      * Adds the weather data of a specified city for a specific year to the database.
@@ -113,21 +148,21 @@ public class BusinessImpl implements BusinessAPI {
      * So, it sets the city ID for each of the new weather data and saves them all to the database as a batch.
      *
      * @param cityName the name of the city for which the weather data is to be added
+     * @param cityId   the id of the city for which the weather data is to be added
      * @param year     the year for which the weather data is to be added
      */
-    @Override
-    public void addWeatherOfCityByYear(String cityName, int year) {
+    private static void addWeatherOfCityByYear(int cityId, String cityName, int year) {
 
         // Check if there are any existing weather data in the database for the specified city
-        if (!daoW.ifWeatherOfCityExist(cityName)) {
+        if (daoW.findLatestWeatherByCity(cityId) == null) {
             // If there are no existing weather data, add the current weather data of the city to the database
-            addCurrentWeatherOfCity(cityName);
+            addCurrentWeatherOfCity(cityId, cityName);
         }
 
         // Retrieve the weather data of the city for the specified year from an external API
         TreeMap<LocalDateTime, Weather> weatherMap = reader.readWeatherByCityAndYear(cityName, year);
         // Retrieve the latest weather data of the city from the database
-        Weather latestWeather = getLatestWeatherOfCity(cityName);
+        Weather latestWeather = getLatestWeatherOfCity(cityId);
 
         // If the size of the weather data retrieved from the API is different from the number of weather data in the database for the city
         if (weatherMap.size() != daoW.getNumberOfWeatherByCity(cityName)) {

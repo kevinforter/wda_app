@@ -410,19 +410,19 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
      * The method then returns a boolean indicating whether any Weather entities associated with the city exist in the database.
      * If an exception occurs during the execution of the query, a RuntimeException is thrown.
      *
-     * @param cityName the name of the city for which to check the existence of associated Weather entities
+     * @param cityId the id of the city for which to check the existence of associated Weather entities
      * @return true if any Weather entities associated with the city exist in the database, false otherwise
      * @throws RuntimeException if an exception occurs during the execution of the query
      */
     @Override
-    public boolean ifWeatherOfCityExist(String cityName) {
+    public boolean ifWeatherOfCityExist(int cityId) {
 
         EntityManager em = JpaUtil.createEntityManager();
 
         long count;
 
-        TypedQuery<Long> tQry = em.createQuery("SELECT COUNT(w) FROM Weather w WHERE w.city.name = :cityName", Long.class);
-        tQry.setParameter("cityName", cityName);
+        TypedQuery<Long> tQry = em.createQuery("SELECT COUNT(w) FROM Weather w WHERE w.city.id = :cityId", Long.class);
+        tQry.setParameter("cityId", cityId);
 
         try {
             count = tQry.getSingleResult();

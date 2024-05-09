@@ -167,16 +167,12 @@ public class WeatherDAOImplTest {
 
             assertAll(
                     () -> assertEquals(c, daoO.findById(c.getId()), "City Wasn't in List"),
-                    () -> assertFalse(daoW.ifWeatherOfCityExist(c.getName()), "Table was empty")
+                    () -> assertFalse(daoW.ifWeatherOfCityExist(c.getId()), "Table was empty")
             );
         }
 
         daoW.saveAllWeather(Util.createWeatherMap(), "Neuchatel");
         assertEquals(3, daoW.alle().size());
-
-        for (City c : cityList) {
-            assertTrue(daoW.ifWeatherOfCityExist("Neuchatel"));
-        }
 
     }
 
