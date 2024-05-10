@@ -259,6 +259,47 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
         return weatherMap;
     }
 
+    /**
+     * Retrieves a map of Weather entities associated with a year.
+     * <p>
+     * This method creates an EntityManager instance and constructs a query to find the Weather entities
+     * associated with the provided year.
+     * The query is then executed and the result is stored in a list.
+     * The EntityManager is closed after the list is retrieved to ensure that resources are always properly released.
+     * The retrieved list of Weather entities is then converted into a TreeMap
+     * where the key is the timestamp and the value is the Weather entity.
+     * The TreeMap is sorted in ascending order of the timestamp.
+     * The TreeMap is then returned.
+     *
+     * @param year   the year for which the Weather entities are to be retrieved
+     * @return a TreeMap of Weather entities associated with the provided city ID and year, sorted in ascending order of the timestamp
+     */
+    @Override
+    public TreeMap<LocalDateTime, Weather> findWeatherByYear(int year) {
+
+        EntityManager em = JpaUtil.createEntityManager();
+
+        LocalDateTime startOfYear = LocalDateTime.of(year, 1, 1, 0, 0, 0);
+
+        TypedQuery<Weather> query = em.createQuery(
+                "SELECT w FROM Weather w WHERE w.DTstamp >= :startOfYear",
+                Weather.class
+        );
+
+        query.setParameter("startOfYear", startOfYear);
+
+        List<Weather> weatherList = query.getResultList();
+        em.close();
+
+        TreeMap<LocalDateTime, Weather> weatherMap = new TreeMap<>();
+
+        for (Weather w : weatherList) {
+            weatherMap.put(w.getDTstamp(), w);
+        }
+
+        return weatherMap;
+    }
+
 
 //    @Override
 //    public List<Weather> findWeatherFromCityByTimeSpan(int cityId, LocalDateTime von, LocalDateTime bis) {
