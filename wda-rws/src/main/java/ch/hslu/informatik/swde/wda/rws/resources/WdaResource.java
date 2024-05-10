@@ -351,6 +351,45 @@ public class WdaResource {
     }
 
     /**
+     * Retrieves weather data for a specific year from the Weather Data Application (WDA).
+     * <p>
+     * This method calls the getWeatherOfCityByYear method of the service object,
+     * which is an instance of the BusinessAPI interface, with the provided city name and year.
+     * If the operation is successful and the weather data is found,
+     * it returns a Response object with an HTTP status code of 200 (OK) and the weather data as the entity.
+     * If no weather data is found, it returns a Response object with an HTTP status code of 404 (Not Found).
+     * If an exception occurs during the operation,
+     * it logs an error message and returns a Response object with an HTTP status code of 500
+     * (Internal Server Error) and an entity containing a message describing the error.
+     *
+     * @param year the year for which to retrieve the weather data
+     * @return a Response object with an HTTP status code of 200 (OK) and the weather data as the entity if the operation is successful and the weather data is found,
+     * a Response object with an HTTP status code of 404 (Not Found) if no weather data is found,
+     * or a Response object with an HTTP status code of 500 (Internal Server Error) and an entity containing a message describing the error if an exception occurs
+     */
+    @GET
+    @Path("weather")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getWeatherByYear(@QueryParam("year") int year) {
+
+        try {
+            TreeMap<LocalDateTime, Weather> weatherMap = service.getWeatherByYear(year);
+
+            if (!weatherMap.isEmpty()) {
+                return Response.ok(weatherMap).build();
+            } else {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+        } catch (Exception e) {
+            LOG.error("Error while getting weather: ", e);
+            return Response
+                    .status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Error while getting weather")
+                    .build();
+        }
+    }
+
+    /**
      * Adds weather data for all cities and a specific year to the Weather Data Application (WDA).
      * <p>
      * This method retrieves a list of all cities from the service object,
