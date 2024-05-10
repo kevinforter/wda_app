@@ -12,6 +12,7 @@ import ch.hslu.informatik.swde.wda.domain.City;
 import ch.hslu.informatik.swde.wda.domain.Weather;
 
 import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -20,7 +21,7 @@ public interface BusinessAPI {
     /**
      * Fügt alle Städte zur Datenbank hinzu.
      */
-    void addAllCities();
+    LinkedHashMap<Integer, City> addAllCities();
 
     /**
      * Fügt das aktuelle Wetter einer bestimmten Stadt zur Datenbank hinzu.

@@ -27,9 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
-import java.util.Iterator;
-import java.util.List;
-import java.util.TreeMap;
+import java.util.*;
 
 
 /**
@@ -69,9 +67,9 @@ public class WdaResource {
     public Response addAllCities() {
 
         try {
-            service.addAllCities();
+            LinkedHashMap<Integer, City> savedCities = service.addAllCities();
 
-            return Response.ok().build();
+            return Response.ok(savedCities).build();
         } catch (Exception e) {
             LOG.error("Error while adding cities: ", e);
             return Response

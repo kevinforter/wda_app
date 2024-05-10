@@ -40,20 +40,26 @@ public class BusinessImpl implements BusinessAPI {
      * If the numbers are different, it means there are new cities to be added, so it saves all the cities read into the database.
      */
     @Override
-    public void addAllCities() {
+    public LinkedHashMap<Integer, City> addAllCities() {
         try {
             // Read city details from an external source
             LinkedHashMap<Integer, City> cityRes = reader.readCityDetailsList(reader.readCityNames());
+            Set<String> existingCities = daoC.allCityNames();
 
-            // Check if the number of cities read is different from the number of cities currently in the database
-            if (cityRes.size() != daoC.getNumberOfCities()) {
-                // If there are new cities, save all the cities read into the database
-                daoC.saveAllCities(cityRes);
+            // Check if the City already exist
+            LinkedHashMap<Integer, City> citiesToSave = new LinkedHashMap<>();
+            for (City c : cityRes.values()) {
+                if (!existingCities.contains(c.getName())) citiesToSave.put(c.getZip(), c);
             }
+
+            daoC.saveAllCities(citiesToSave);
+            return citiesToSave;
+
         } catch (Exception e) {
             // Log the exception and handle it appropriately
             LOG.error("Error while adding cities: ", e);
         }
+        return new LinkedHashMap<>();
     }
 
 
@@ -147,7 +153,7 @@ public class BusinessImpl implements BusinessAPI {
      * If the size of the weather data retrieved from the API is different from the number of weather data in the database for the city, it means there are new weather data to be added.
      * So, it sets the city ID for each of the new weather data and saves them all to the database as a batch.
      *
-     * @param cityId   the id of the city for which the weather data is to be added
+     * @param cityId the id of the city for which the weather data is to be added
      */
     private static void addWeatherOfCityByYear(int cityId, TreeMap<LocalDateTime, Weather> weatherMap) {
 

@@ -12,6 +12,7 @@ import ch.hslu.informatik.swde.wda.domain.City;
 
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Set;
 
 public interface CityDAO extends GenericDAO<City> {
 
@@ -53,7 +54,7 @@ public interface CityDAO extends GenericDAO<City> {
      *
      * @return eine Liste aller City Namen
      */
-    List<String> allCityNames();
+    Set<String> allCityNames();
 
     /**
      * Speichert alle Städte in der Map ab

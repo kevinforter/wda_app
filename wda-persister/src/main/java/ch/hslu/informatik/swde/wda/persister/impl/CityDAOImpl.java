@@ -164,14 +164,18 @@ public class CityDAOImpl extends GenericDAOImpl<City> implements CityDAO {
      * @return a list of all city names in the database, or an empty list if no city names are found
      */
     @Override
-    public List<String> allCityNames() {
+    public Set<String> allCityNames() {
         EntityManager em = JpaUtil.createEntityManager();
 
+        Set<String> existingNames = new HashSet<>(em.createQuery("SELECT c.name FROM City c", String.class).getResultList());
+        /*
         TypedQuery<String> tQry = em.createQuery("SELECT c.name FROM City c", String.class);
         List<String> objListe = tQry.getResultList();
 
+         */
+
         em.close();
-        return objListe != null ? objListe : new ArrayList<>();
+        return existingNames;
     }
 
     /**
@@ -198,20 +202,13 @@ public class CityDAOImpl extends GenericDAOImpl<City> implements CityDAO {
         try {
             em.getTransaction().begin();
 
-            // Get all city names from the database
-            Set<String> existingNames = new HashSet<>(em.createQuery("SELECT c.name FROM City c", String.class).getResultList());
-
             int i = 0;
             for (City city : cityMap.values()) {
-                // Check if the city is already in the database
-                if (!existingNames.contains(city.getName())) {
-                    em.persist(city);
-                    i++;
-                    // Flush and clear the EntityManager every 10 cities
-                    if (i % 10 == 0) {
-                        em.flush();
-                        em.clear();
-                    }
+                em.persist(city);
+                i++;
+                if (i % 10 == 0) {
+                    em.flush();
+                    em.clear();
                 }
             }
 
