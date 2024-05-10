@@ -43,7 +43,7 @@ public class BusinessImpl implements BusinessAPI {
     public LinkedHashMap<Integer, City> addAllCities() {
         try {
             // Read city details from an external source
-            LinkedHashMap<Integer, City> cityRes = reader.readCityDetailsList(reader.readCityNames());
+            LinkedHashMap<Integer, City> cityRes = reader.readCities();
             Set<String> existingCities = daoC.allCityNames();
 
             // Check if the City already exist

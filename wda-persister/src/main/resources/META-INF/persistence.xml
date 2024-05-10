@@ -28,6 +28,9 @@
 			<property name="eclipselink.ddl-generation"
 					  value="create-tables" />
 
+			<property name="eclipselink.jdbc.batch-writing" value="JDBC"/>
+			<property name="eclipselink.jdbc.batch-writing.size" value="500"/>
+
 			<!-- SQL-Statements ausgeben (JPA-Provider spezifisch, nur während der
 				Entwicklungszeit sinnvoll!) -->
 			<property name="eclipselink.logging.level.sql" value="off" />
