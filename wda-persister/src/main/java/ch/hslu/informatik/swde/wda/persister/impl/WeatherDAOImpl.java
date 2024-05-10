@@ -413,21 +413,16 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
         try {
             em.getTransaction().begin();
 
-            TypedQuery<LocalDateTime> tQry = em.createQuery("SELECT w.DTstamp FROM Weather w WHERE w.city.id = :cityId", LocalDateTime.class);
-            tQry.setParameter("cityId", cityId);
-
-            Set<LocalDateTime> existingWeatherDates = new HashSet<>(tQry.getResultList());
-
             int i = 0;
             for (Weather weather : weatherMap.values()) {
-                if (!existingWeatherDates.contains(weather.getDTstamp())) {
+
                     em.persist(weather);
                     i++;
                     if (i % 50 == 0) {
                         em.flush();
                         em.clear();
                     }
-                }
+
             }
 
             em.getTransaction().commit();

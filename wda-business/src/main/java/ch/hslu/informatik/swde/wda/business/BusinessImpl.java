@@ -89,7 +89,7 @@ public class BusinessImpl implements BusinessAPI {
      * If the time difference is less than 40 minutes, it saves the current weather data from the API to the database.
      * If the time difference is 40 minutes or more, it retrieves and saves the weather data of the city for the current year.
      *
-     * @param cityId   the id of the city for which the current weather data is to be added
+     * @param cityId the id of the city for which the current weather data is to be added
      */
     private static void addCurrentWeatherOfCity(int cityId, Weather currentWeatherREADER) {
 
@@ -158,13 +158,20 @@ public class BusinessImpl implements BusinessAPI {
         // If the size of the weather data retrieved from the API is different from the number of weather data in the database for the city
         if (weatherMap.size() != daoW.getNumberOfWeatherByCity(cityId)) {
 
+            TreeMap<LocalDateTime, Weather> weatherToSave = new TreeMap<>();
+            Weather latestWeather = getLatestWeatherOfCity(cityId);
+
             // Set the city ID for each of the new weather data
             for (Weather weather : weatherMap.values()) {
+
+                // If later than latest Weather break loop
+                if (latestWeather != null) if (!weather.getDTstamp().isAfter(latestWeather.getDTstamp())) break;
                 weather.setCityId(cityId);
+                weatherToSave.put(weather.getDTstamp(), weather);
             }
 
             // Save all the new weather data to the database as a batch
-            daoW.saveAllWeather(weatherMap, cityId);
+            daoW.saveAllWeather(weatherToSave, cityId);
         }
     }
 
