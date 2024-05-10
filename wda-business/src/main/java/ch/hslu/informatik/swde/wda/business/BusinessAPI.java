@@ -21,7 +21,7 @@ public interface BusinessAPI {
     /**
      * Fügt alle Städte zur Datenbank hinzu.
      */
-    LinkedHashMap<Integer, City> addAllCities();
+    void addAllCities();
 
     /**
      * Fügt das aktuelle Wetter einer bestimmten Stadt zur Datenbank hinzu.

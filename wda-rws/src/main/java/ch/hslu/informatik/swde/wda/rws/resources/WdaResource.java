@@ -67,9 +67,9 @@ public class WdaResource {
     public Response addAllCities() {
 
         try {
-            LinkedHashMap<Integer, City> savedCities = service.addAllCities();
+            service.addAllCities();
 
-            return Response.ok(savedCities).build();
+            return Response.ok().build();
         } catch (Exception e) {
             LOG.error("Error while adding cities: ", e);
             return Response

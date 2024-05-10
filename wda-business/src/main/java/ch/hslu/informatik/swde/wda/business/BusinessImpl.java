@@ -40,7 +40,7 @@ public class BusinessImpl implements BusinessAPI {
      * If the numbers are different, it means there are new cities to be added, so it saves all the cities read into the database.
      */
     @Override
-    public LinkedHashMap<Integer, City> addAllCities() {
+    public void addAllCities() {
         try {
             // Read city details from an external source
             LinkedHashMap<Integer, City> cityRes = reader.readCities();
@@ -53,13 +53,11 @@ public class BusinessImpl implements BusinessAPI {
             }
 
             daoC.saveAllCities(citiesToSave);
-            return citiesToSave;
 
         } catch (Exception e) {
             // Log the exception and handle it appropriately
             LOG.error("Error while adding cities: ", e);
         }
-        return new LinkedHashMap<>();
     }
 
 
