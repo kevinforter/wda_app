@@ -22,6 +22,8 @@ import org.slf4j.LoggerFactory;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.Year;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.*;
 
 public class BusinessImpl implements BusinessAPI {
@@ -293,5 +295,25 @@ public class BusinessImpl implements BusinessAPI {
      */
     private static TreeMap<LocalDateTime, Weather> getWeatherOfCityByYear(int year, int cityId) {
         return daoW.findWeatherFromCityByYear(year, cityId);
+    }
+
+    /**
+     * Retrieves the weather of a specified year
+     * <p>
+     * This method first finds the ID of the city by its name using the CityDAO.
+     * If the city ID is not 0, it retrieves the weather of the city for the specified year by its ID.
+     * If the city ID is 0, it returns an empty TreeMap.
+     *
+     * @param year the year for which the weather is to be retrieved
+     * @return a TreeMap of the weather of the city for the specified year if the city ID is not 0, otherwise an empty TreeMap
+     */
+    @Override
+    public TreeMap<LocalDateTime, Weather> getWeatherByYear(int year) {
+        return isValidYear(year) ? daoW.findWeatherByYear(year) : new TreeMap<>();
+    }
+
+    private static boolean isValidYear(int year) {
+        int currentYear = new GregorianCalendar().get(Calendar.YEAR);
+        return year >= 1 && year <= currentYear;
     }
 }
