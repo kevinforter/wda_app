@@ -113,7 +113,7 @@ public class BusinessImpl implements BusinessAPI {
             } else {
 
                 // If the time difference is 40 minutes or more, retrieve and save the weather data of the city for the current year
-                addWeatherOfCityByYear(cityId, cityName, Year.now().getValue());
+                addWeatherOfCityByYear(cityId, reader.readWeatherByCityAndYear(cityName, Year.now().getValue()));
 
             }
         }
@@ -135,7 +135,7 @@ public class BusinessImpl implements BusinessAPI {
     public void addWeatherOfCityByYear(String cityName, int year) {
 
         int cityId = daoC.findCityIdByName(cityName);
-        if (cityId != 0) addWeatherOfCityByYear(cityId, cityName, year);
+        if (cityId != 0) addWeatherOfCityByYear(cityId, reader.readWeatherByCityAndYear(cityName, year));
     }
 
     /**
@@ -147,14 +147,9 @@ public class BusinessImpl implements BusinessAPI {
      * If the size of the weather data retrieved from the API is different from the number of weather data in the database for the city, it means there are new weather data to be added.
      * So, it sets the city ID for each of the new weather data and saves them all to the database as a batch.
      *
-     * @param cityName the name of the city for which the weather data is to be added
      * @param cityId   the id of the city for which the weather data is to be added
-     * @param year     the year for which the weather data is to be added
      */
-    private static void addWeatherOfCityByYear(int cityId, String cityName, int year) {
-
-        // Retrieve the weather data of the city for the specified year from an external API
-        TreeMap<LocalDateTime, Weather> weatherMap = reader.readWeatherByCityAndYear(cityName, year);
+    private static void addWeatherOfCityByYear(int cityId, TreeMap<LocalDateTime, Weather> weatherMap) {
 
         // If the size of the weather data retrieved from the API is different from the number of weather data in the database for the city
         if (weatherMap.size() != daoW.getNumberOfWeatherByCity(cityId)) {
