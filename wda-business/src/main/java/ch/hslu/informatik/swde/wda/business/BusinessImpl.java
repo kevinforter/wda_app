@@ -107,7 +107,7 @@ public class BusinessImpl implements BusinessAPI {
             if (diff.toMinutes() < 40) {
 
                 // If the time difference is less than 40 minutes, save the current weather data from the API to the database
-                currentWeatherREADER.setCityId(latestWeatherDAO.getCityId());
+                currentWeatherREADER.setCityId(cityId);
                 daoW.speichern(currentWeatherREADER);
 
             } else {
@@ -153,27 +153,19 @@ public class BusinessImpl implements BusinessAPI {
      */
     private static void addWeatherOfCityByYear(int cityId, String cityName, int year) {
 
-        // Check if there are any existing weather data in the database for the specified city
-        if (daoW.findLatestWeatherByCity(cityId) == null) {
-            // If there are no existing weather data, add the current weather data of the city to the database
-            addCurrentWeatherOfCity(cityId, cityName);
-        }
-
         // Retrieve the weather data of the city for the specified year from an external API
         TreeMap<LocalDateTime, Weather> weatherMap = reader.readWeatherByCityAndYear(cityName, year);
-        // Retrieve the latest weather data of the city from the database
-        Weather latestWeather = getLatestWeatherOfCity(cityId);
 
         // If the size of the weather data retrieved from the API is different from the number of weather data in the database for the city
-        if (weatherMap.size() != daoW.getNumberOfWeatherByCity(cityName)) {
+        if (weatherMap.size() != daoW.getNumberOfWeatherByCity(cityId)) {
 
             // Set the city ID for each of the new weather data
             for (Weather weather : weatherMap.values()) {
-                weather.setCityId(latestWeather.getCityId());
+                weather.setCityId(cityId);
             }
 
             // Save all the new weather data to the database as a batch
-            daoW.saveAllWeather(weatherMap, cityName);
+            daoW.saveAllWeather(weatherMap, cityId);
         }
     }
 

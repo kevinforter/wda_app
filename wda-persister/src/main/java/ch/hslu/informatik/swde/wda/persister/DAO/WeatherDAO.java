@@ -22,7 +22,7 @@ public interface WeatherDAO extends GenericDAO<Weather> {
      *
      * @return Anzahl der Wetterdaten pro Stadt
      */
-    long getNumberOfWeatherByCity(String cityName);
+    long getNumberOfWeatherByCity(int cityId);
 
     /**
      * Holt das neueste Weather für eine bestimmte Ortschaft basierend auf der Ortschafts-ID.
@@ -106,7 +106,7 @@ public interface WeatherDAO extends GenericDAO<Weather> {
      *
      * @param weatherMap mit allen Wetterdaten
      */
-    void saveAllWeather(TreeMap<LocalDateTime, Weather> weatherMap, String cityName);
+    void saveAllWeather(TreeMap<LocalDateTime, Weather> weatherMap, int cityId);
 
     /**
      * Gibt an obe eine Tabelle leer oder voll ist

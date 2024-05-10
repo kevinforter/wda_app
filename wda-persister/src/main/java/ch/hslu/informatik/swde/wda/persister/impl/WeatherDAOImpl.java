@@ -39,19 +39,19 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
      * If an exception occurs during the execution of the query,
      * a RuntimeException is thrown.
      *
-     * @param cityName the name of the city for which the count of Weather entities is to be retrieved
+     * @param cityId the id of the city for which the count of Weather entities is to be retrieved
      * @return the count of Weather entities associated with the provided city name
      * @throws RuntimeException if an exception occurs during the execution of the query
      */
     @Override
-    public long getNumberOfWeatherByCity(String cityName) {
+    public long getNumberOfWeatherByCity(int cityId) {
 
         EntityManager em = JpaUtil.createEntityManager();
 
         long count;
 
-        TypedQuery<Long> tQry = em.createQuery("SELECT COUNT(w) FROM Weather w WHERE w.city.name = :cityName", Long.class);
-        tQry.setParameter("cityName", cityName);
+        TypedQuery<Long> tQry = em.createQuery("SELECT COUNT(w) FROM Weather w WHERE w.city.id = :cityId", Long.class);
+        tQry.setParameter("cityId", cityId);
 
         try {
             count = tQry.getSingleResult();
@@ -362,18 +362,18 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
      * The EntityManager is closed after the operation is completed.
      *
      * @param weatherMap a TreeMap of Weather entities to be saved, where the key is the timestamp and the value is the Weather entity
-     * @param cityName   the name of the city associated with the Weather entities
+     * @param cityId   the id of the city associated with the Weather entities
      */
     @Override
-    public void saveAllWeather(TreeMap<LocalDateTime, Weather> weatherMap, String cityName) {
+    public void saveAllWeather(TreeMap<LocalDateTime, Weather> weatherMap, int cityId) {
 
         EntityManager em = JpaUtil.createEntityManager();
 
         try {
             em.getTransaction().begin();
 
-            TypedQuery<LocalDateTime> tQry = em.createQuery("SELECT w.DTstamp FROM Weather w WHERE w.city.name = :cityName", LocalDateTime.class);
-            tQry.setParameter("cityName", cityName);
+            TypedQuery<LocalDateTime> tQry = em.createQuery("SELECT w.DTstamp FROM Weather w WHERE w.city.id = :cityId", LocalDateTime.class);
+            tQry.setParameter("cityId", cityId);
 
             Set<LocalDateTime> existingWeatherDates = new HashSet<>(tQry.getResultList());
 

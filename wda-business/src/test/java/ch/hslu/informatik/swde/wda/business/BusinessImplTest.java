@@ -90,6 +90,7 @@ class BusinessImplTest {
 
         final BusinessAPI serviceAPI = new BusinessImpl();
 
+        serviceAPI.addAllCities();
         List<City> resCity = serviceAPI.getAllCities();
         for (City c : resCity) {
 
