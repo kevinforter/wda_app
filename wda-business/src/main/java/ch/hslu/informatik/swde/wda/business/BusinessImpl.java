@@ -76,7 +76,7 @@ public class BusinessImpl implements BusinessAPI {
     public void addCurrentWeatherOfCity(String cityName) {
 
         int cityId = daoC.findCityIdByName(cityName);
-        if (cityId != 0) addCurrentWeatherOfCity(cityId, cityName);
+        if (cityId != 0) addCurrentWeatherOfCity(cityId, reader.readCurrentWeatherByCity(cityName));
     }
 
     /**
@@ -90,13 +90,11 @@ public class BusinessImpl implements BusinessAPI {
      * If the time difference is 40 minutes or more, it retrieves and saves the weather data of the city for the current year.
      *
      * @param cityId   the id of the city for which the current weather data is to be added
-     * @param cityName the name of the city for which the current weather data is to be added
      */
-    private static void addCurrentWeatherOfCity(int cityId, String cityName) {
+    private static void addCurrentWeatherOfCity(int cityId, Weather currentWeatherREADER) {
 
         // Retrieve the latest weather data of the specified city from both the database and an external API
         Weather latestWeatherDAO = getLatestWeatherOfCity(cityId);
-        Weather currentWeatherREADER = reader.readCurrentWeatherByCity(cityName);
 
         if (latestWeatherDAO == null) {
 
@@ -119,7 +117,7 @@ public class BusinessImpl implements BusinessAPI {
             } else {
 
                 // If the time difference is 40 minutes or more, retrieve and save the weather data of the city for the current year
-                addWeatherOfCityByYear(cityId, reader.readWeatherByCityAndYear(cityName, Year.now().getValue()));
+                addWeatherOfCityByYear(cityId, reader.readWeatherByCityAndYear(currentWeatherREADER.getCity().getName(), Year.now().getValue()));
 
             }
         }
