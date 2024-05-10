@@ -26,7 +26,7 @@
         <file>${LOG_DIR}/${LOG_FILE}.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- daily rollover -->
-            <fileNamePattern>${LOG_DIR}/${LOG_FILE}-%d{yyyy/MM}-%i.log</fileNamePattern>
+            <fileNamePattern>${LOG_DIR}/${LOG_FILE}-%d{yyyy/MM}.log</fileNamePattern>
 
             <!-- keep 30 days' worth of history capped at 3GB total size -->
             <maxHistory>30</maxHistory>
@@ -36,7 +36,7 @@
             <pattern>%-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
         </encoder>
     </appender>
-    <logger level="WARN" additivity="false" >
+    <logger name="FileLogging" level="WARN" additivity="false" >
         <appender-ref ref="FILE" />
     </logger>
     <root level="INFO">
