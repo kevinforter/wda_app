@@ -82,7 +82,7 @@ public class CityDAOImpl extends GenericDAOImpl<City> implements CityDAO {
             cityId = tQry.getSingleResult();
         } catch (Exception e) {
             // No entity found in the database
-            LOG.info("No found for City: " + cityName);
+            LOG.debug("No found for City: " + cityName);
         }
         em.close();
         return cityId;
@@ -113,7 +113,7 @@ public class CityDAOImpl extends GenericDAOImpl<City> implements CityDAO {
             objFromDb = tQry.getSingleResult();
         } catch (Exception e) {
             // No entity found in the database
-            LOG.info("No found for City: " + cityName);
+            LOG.debug("No found for City: " + cityName);
         }
         em.close();
         return objFromDb;

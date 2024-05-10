@@ -95,7 +95,7 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
             objFromDb = tQry.getSingleResult();
         } catch (Exception e) {
             // No entities found in the database
-            LOG.info("No Weather found for City ID: " + cityId);
+            LOG.debug("No Weather found for City ID: " + cityId);
         }
         em.close();
         return objFromDb;
@@ -133,7 +133,7 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
             objFromDb = tQry.getSingleResult();
         } catch (Exception e) {
             // No entities found in the database
-            LOG.info("No Weather found for City ID: " + cityId);
+            LOG.debug("No Weather found for City ID: " + cityId);
         }
         em.close();
         return objFromDb;
@@ -174,7 +174,7 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
             objFromDb = tQry.getSingleResult();
         } catch (Exception e) {
             // No entities found in the database
-            LOG.info("No Weather found for City ID: " + cityId);
+            LOG.debug("No Weather found for City ID: " + cityId);
         }
         em.close();
         return objFromDb;
@@ -430,7 +430,7 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
             if (em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
             }
-            LOG.info(e.getMessage());
+            LOG.debug(e.getMessage());
         } finally {
             em.close();
         }
