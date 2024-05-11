@@ -81,8 +81,20 @@ public interface BusinessAPI {
     /**
      * Ruft das Wetter für ein bestimmtes Jahr ab.
      *
-     * @param year     Das Jahr, für das die Wetterdaten abgerufen werden sollen.
+     * @param year Das Jahr, für das die Wetterdaten abgerufen werden sollen.
      * @return Ein TreeMap, bei dem die Schlüssel die Daten und Zeiten der Wetterdaten sind und die Werte die entsprechenden Weather-Objekte.
      */
     TreeMap<LocalDateTime, Weather> getWeatherByYear(int year);
+
+    /**
+     * Retrieves a map of Weather entities within a specific number of days from the current date.
+     * <p>
+     * This method is used to fetch weather data for a specific number of days from the current date.
+     * The returned map contains the timestamp of the weather data as the key and the corresponding Weather entity as the value.
+     * The map is sorted in ascending order of the timestamp.
+     *
+     * @param days the number of days from the current date for which the Weather entities are to be retrieved
+     * @return a TreeMap of Weather entities within the specified number of days from the current date, sorted in ascending order of the timestamp
+     */
+    TreeMap<LocalDateTime, Weather> getWeatherByDayDifference(int days);
 }

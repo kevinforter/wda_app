@@ -321,4 +321,25 @@ public class BusinessImpl implements BusinessAPI {
         int currentYear = new GregorianCalendar().get(Calendar.YEAR);
         return year >= 1 && year <= currentYear;
     }
+
+    /**
+     * Retrieves the weather data of a specified number of days from the current date.
+     * <p>
+     * This method checks if the number of days is valid by calling the isValidDay method.
+     * If the number of days is valid,
+     * it uses the WeatherDAO to retrieve the weather data of the specified number of days from the current date.
+     * If the number of days is not valid, it returns an empty TreeMap.
+     *
+     * @param days the number of days from the current date for which the weather data is to be retrieved
+     * @return a TreeMap of the weather data within the specified number of days from the current date if the number of days is valid,
+     * otherwise an empty TreeMap
+     */
+    @Override
+    public TreeMap<LocalDateTime, Weather> getWeatherByDayDifference(int days) {
+        return isValidDay(days) ? daoW.findWeatherByDayDifference(days) : new TreeMap<>();
+    }
+
+    private static boolean isValidDay(int day) {
+        return day >= 1 && day <= 365;
+    }
 }
