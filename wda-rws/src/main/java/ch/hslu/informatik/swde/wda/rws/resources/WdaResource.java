@@ -36,6 +36,8 @@ import java.util.*;
 @Path("wda")
 public class WdaResource {
 
+    private static boolean init = false;
+
     private static final String BASE_URI = "http://localhost:8080/wda/";
 
     private static final Logger LOG = LoggerFactory.getLogger(WdaResource.class);
@@ -389,6 +391,46 @@ public class WdaResource {
         }
     }
 
+
+    /**
+     * Retrieves weather data for a specific number of days in the past from the Weather Data Application (WDA).
+     * <p>
+     * This method calls the getWeatherByDayDifference method of the service object,
+     * which is an instance of the BusinessAPI interface, with the provided number of days.
+     * If the operation is successful and the weather data is found,
+     * it returns a Response object with an HTTP status code of 200 (OK) and the weather data as the entity.
+     * If no weather data is found, it returns a Response object with an HTTP status code of 404 (Not Found).
+     * If an exception occurs during the operation,
+     * it logs an error message and returns a Response object with an HTTP status code of 500
+     * (Internal Server Error) and an entity containing a message describing the error.
+     *
+     * @param days the number of days in the past for which to retrieve the weather data
+     * @return a Response object with an HTTP status code of 200 (OK) and the weather data as the entity if the operation is successful and the weather data is found,
+     * a Response object with an HTTP status code of 404 (Not Found) if no weather data is found,
+     * or a Response object with an HTTP status code of 500 (Internal Server Error) and an entity containing a message describing the error if an exception occurs
+     */
+    @GET
+    @Path("weather/past")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getWeatherByDayDifference(@QueryParam("days") int days) {
+
+        try {
+            TreeMap<LocalDateTime, Weather> weatherMap = service.getWeatherByDayDifference(days);
+
+            if (!weatherMap.isEmpty()) {
+                return Response.ok(weatherMap).build();
+            } else {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+        } catch (Exception e) {
+            LOG.error("Error while adding weather: ", e);
+            return Response
+                    .status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Error while adding weather")
+                    .build();
+        }
+    }
+
     /**
      * Adds weather data for all cities and a specific year to the Weather Data Application (WDA).
      * <p>
@@ -427,27 +469,52 @@ public class WdaResource {
         }
     }
 
-    @GET
-    @Path("weather/past")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getWeatherByDayDifference(@QueryParam("days") int days) {
+    /**
+     * Initializes the Weather Data Application (WDA) by adding all cities and their current year's weather data.
+     * <p>
+     * This method first calls the addAllCities method of the service object,
+     * which is an instance of the BusinessAPI interface, to add all cities to the WDA.
+     * It then retrieves a list of all cities from the service object,
+     * and for each city in the list,
+     * it calls the addWeatherOfCityByYear method of the service object with the city's name and the current year.
+     * If the operation is successful, it returns a Response object with an HTTP status code of 200 (OK).
+     * If an exception occurs during the operation,
+     * it logs an error message and returns a Response object with an HTTP status code of 500
+     * (Internal Server Error) and an entity containing a message describing the error.
+     *
+     * @return a Response object with an HTTP status code of 200 (OK) if the operation is successful,
+     * or a Response object with an HTTP status code of 500 (Internal Server Error)
+     * and an entity containing a message describing the error if an exception occurs
+     */
+    @POST
+    @Path("init")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response initApp() {
 
-        try {
-            TreeMap<LocalDateTime, Weather> weatherMap = service.getWeatherByDayDifference(days);
+        if (!init) {
+            try {
+                service.addAllCities();
 
-            if (!weatherMap.isEmpty()) {
-                return Response.ok(weatherMap).build();
-            } else {
-                return Response.status(Response.Status.NOT_FOUND).build();
+                List<City> cityList = service.getAllCities();
+
+                for (City c : cityList) {
+                    service.addWeatherOfCityByYear(c.getName(), LocalDateTime.now().getYear());
+                }
+
+                init = true;
+                return Response.ok().build();
+            } catch (Exception e) {
+                LOG.error("Error while processing init: ", e);
+                return Response
+                        .status(Response.Status.INTERNAL_SERVER_ERROR)
+                        .entity("Error while adding weather")
+                        .build();
             }
-        } catch (Exception e) {
-            LOG.error("Error while adding weather: ", e);
-            return Response
-                    .status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("Error while adding weather")
-                    .build();
+        } else {
+            return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("Init already used once").build();
         }
     }
+
 
 //    /**
 //     * This method is used to find a city by its name.
