@@ -20,6 +20,7 @@ import ch.hslu.informatik.swde.wda.business.BusinessImpl;
 import ch.hslu.informatik.swde.wda.domain.City;
 import ch.hslu.informatik.swde.wda.domain.Weather;
 
+import ch.hslu.informatik.swde.wda.rws.util.ConfigLoader;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -36,7 +37,12 @@ import java.util.*;
 @Path("wda")
 public class WdaResource {
 
-    private static boolean init = false;
+    private static boolean init;
+
+    static {
+        ConfigLoader configLoader = new ConfigLoader();
+        init = configLoader.getInit();
+    }
 
     private static final String BASE_URI = "http://localhost:8080/wda/";
 
@@ -501,7 +507,7 @@ public class WdaResource {
                     service.addWeatherOfCityByYear(c.getName(), LocalDateTime.now().getYear());
                 }
 
-                init = true;
+                setInitTrue();
                 return Response.ok().build();
             } catch (Exception e) {
                 LOG.error("Error while processing init: ", e);
@@ -511,10 +517,15 @@ public class WdaResource {
                         .build();
             }
         } else {
-            return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity("Init already used once").build();
+            return Response.status(418).entity("Init already used once").build();
         }
     }
 
+    public void setInitTrue() {
+        ConfigLoader configLoader = new ConfigLoader();
+        configLoader.setInit(true);
+        init = true;
+    }
 
 //    /**
 //     * This method is used to find a city by its name.
