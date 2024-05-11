@@ -14,6 +14,7 @@ import ch.hslu.informatik.swde.wda.persister.DAO.WeatherDAO;
 import ch.hslu.informatik.swde.wda.persister.util.JpaUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
+import org.eclipse.persistence.internal.jpa.EntityManagerImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -271,7 +272,7 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
      * The TreeMap is sorted in ascending order of the timestamp.
      * The TreeMap is then returned.
      *
-     * @param year   the year for which the Weather entities are to be retrieved
+     * @param year the year for which the Weather entities are to be retrieved
      * @return a TreeMap of Weather entities associated with the provided city ID and year, sorted in ascending order of the timestamp
      */
     @Override
@@ -300,8 +301,55 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
         return weatherMap;
     }
 
+    /**
+     * Retrieves a map of Weather entities within a specific number of days from the current date.
+     * <p>
+     * This method creates an EntityManager instance and calculates the date difference from the current date.
+     * It then constructs a query
+     * to find the Weather entities that have a timestamp greater than or equal to the calculated date.
+     * The query is then executed and the result is stored in a list.
+     * The EntityManager is closed after the list is retrieved to ensure that resources are always properly released.
+     * The retrieved list of Weather entities is then converted into a TreeMap
+     * where the key is the timestamp and the value is the Weather entity.
+     * The TreeMap is sorted in ascending order of the timestamp.
+     * The TreeMap is then returned.
+     *
+     * @param days the number of days from the current date for which the Weather entities are to be retrieved
+     * @return a TreeMap of Weather entities within the specified number of days from the current date, sorted in ascending order of the timestamp
+     */
+    @Override
+    public TreeMap<LocalDateTime, Weather> findWeatherByDayDifference(int days) {
 
-//    @Override
+        // Create an EntityManager instance
+        EntityManager em = JpaUtil.createEntityManager();
+
+        // Calculate the date difference from the current date
+        LocalDateTime today = LocalDateTime.now();
+        LocalDateTime difference = today.minusDays(days);
+
+        // Construct a query to find the Weather entities that have a timestamp greater than or equal to the calculated date
+        TypedQuery<Weather> tQry = em.createQuery("SELECT w FROM Weather w WHERE w.DTstamp >= :difference", Weather.class);
+        tQry.setParameter("difference", difference);
+
+        // Execute the query and store the result in a list
+        List<Weather> weatherList = tQry.getResultList();
+
+        // Close the EntityManager to ensure that resources are always properly released
+        em.close();
+
+        // Initialize a TreeMap to store the Weather entities
+        TreeMap<LocalDateTime, Weather> weatherMap = new TreeMap<>();
+
+        // Convert the list of Weather entities into a TreeMap where the key is the timestamp and the value is the Weather entity
+        for (Weather w : weatherList) {
+            weatherMap.put(w.getDTstamp(), w);
+        }
+
+        // Return the TreeMap of Weather entities
+        return weatherMap;
+    }
+
+    //    @Override
 //    public List<Weather> findWeatherFromCityByTimeSpan(int cityId, LocalDateTime von, LocalDateTime bis) {
 //
 //        EntityManager em = JpaUtil.createEntityManager();
@@ -403,7 +451,7 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
      * The EntityManager is closed after the operation is completed.
      *
      * @param weatherMap a TreeMap of Weather entities to be saved, where the key is the timestamp and the value is the Weather entity
-     * @param cityId   the id of the city associated with the Weather entities
+     * @param cityId     the id of the city associated with the Weather entities
      */
     @Override
     public void saveAllWeather(TreeMap<LocalDateTime, Weather> weatherMap, int cityId) {
@@ -416,12 +464,12 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
             int i = 0;
             for (Weather weather : weatherMap.values()) {
 
-                    em.persist(weather);
-                    i++;
-                    if (i % 50 == 0) {
-                        em.flush();
-                        em.clear();
-                    }
+                em.persist(weather);
+                i++;
+                if (i % 50 == 0) {
+                    em.flush();
+                    em.clear();
+                }
 
             }
 
