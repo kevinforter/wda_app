@@ -427,6 +427,28 @@ public class WdaResource {
         }
     }
 
+    @GET
+    @Path("weather/past")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getWeatherByDayDifference(@QueryParam("days") int days) {
+
+        try {
+            TreeMap<LocalDateTime, Weather> weatherMap = service.getWeatherByDayDifference(days);
+
+            if (!weatherMap.isEmpty()) {
+                return Response.ok(weatherMap).build();
+            } else {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+        } catch (Exception e) {
+            LOG.error("Error while adding weather: ", e);
+            return Response
+                    .status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Error while adding weather")
+                    .build();
+        }
+    }
+
 //    /**
 //     * This method is used to find a city by its name.
 //     *
