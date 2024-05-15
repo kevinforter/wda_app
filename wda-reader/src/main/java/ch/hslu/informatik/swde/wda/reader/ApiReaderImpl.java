@@ -336,9 +336,6 @@ public class ApiReaderImpl implements ApiReader {
 
             LocalDateTime formatDateTime;
             if (res.statusCode() == 200) {
-
-                Weather wetter = new Weather();
-
                 JsonNode node = mapper.readTree(res.body());
 
                 String data = node.get("data").asText();
@@ -347,30 +344,8 @@ public class ApiReaderImpl implements ApiReader {
                 String dateTime = parts[0].substring(17);
                 DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                 formatDateTime = LocalDateTime.parse(dateTime, format);
-                wetter.setDTstamp(formatDateTime);
 
-                String summery = parts[7].substring(16);
-                wetter.setWeatherSummery(summery);
-
-                String description = parts[8].substring(20);
-                wetter.setWeatherDescription(description);
-
-                double temp = Double.parseDouble(parts[9].substring(28));
-                wetter.setCurrTempCelsius(temp);
-
-                double pressure = Double.parseDouble(parts[10].substring(9));
-                wetter.setPressure(pressure);
-
-                double humidity = Double.parseDouble(parts[11].substring(9));
-                wetter.setHumidity(humidity);
-
-                double wind = Double.parseDouble(parts[12].substring(11));
-                wetter.setWindSpeed(wind);
-
-                double direction = Double.parseDouble(parts[13].substring(15));
-                wetter.setWindDirection(direction);
-
-                return wetter;
+                return getWeather(formatDateTime, parts);
 
             } else {
                 // Log-Eintrag machen
@@ -418,37 +393,17 @@ public class ApiReaderImpl implements ApiReader {
                 JsonNode node = mapper.readTree(res.body());
                 for (JsonNode n : node) {
 
-                    Weather weather = new Weather();
-
                     String data = n.get("data").asText();
                     String[] parts = data.split("#");
 
                     String dateTime = parts[0].substring(17);
                     DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                     formatDateTime = LocalDateTime.parse(dateTime, format);
-                    weather.setDTstamp(formatDateTime);
 
-                    String summery = parts[7].substring(16);
-                    weather.setWeatherSummery(summery);
+                    // Create a new Weather object
+                    Weather weather = getWeather(formatDateTime, parts);
 
-                    String description = parts[8].substring(20);
-                    weather.setWeatherDescription(description);
-
-                    double temp = Double.parseDouble(parts[9].substring(28));
-                    weather.setCurrTempCelsius(temp);
-
-                    double pressure = Double.parseDouble(parts[10].substring(9));
-                    weather.setPressure(pressure);
-
-                    double humidity = Double.parseDouble(parts[11].substring(9));
-                    weather.setHumidity(humidity);
-
-                    double wind = Double.parseDouble(parts[12].substring(11));
-                    weather.setWindSpeed(wind);
-
-                    double direction = Double.parseDouble(parts[13].substring(15));
-                    weather.setWindDirection(direction);
-
+                    // Add the Weather object to the TreeMap
                     weatherMap.put(formatDateTime, weather);
                 }
 
@@ -515,9 +470,6 @@ public class ApiReaderImpl implements ApiReader {
 
                 // Iterate over each node in the JSON response
                 for (JsonNode n : node) {
-                    // Create a new Weather object
-                    Weather weather = new Weather();
-
                     // Extract the weather data from the node
                     String data = n.get("data").asText();
                     String[] parts = data.split("#");
@@ -529,36 +481,8 @@ public class ApiReaderImpl implements ApiReader {
 
                     // If the date and time is after the provided latest weather data, add the weather data to the TreeMap
                     if (formatDateTime.isAfter(latestWeather)) {
-                        // Set the date and time
-                        weather.setDTstamp(formatDateTime);
-
-                        // Set the weather summary
-                        String summery = parts[7].substring(16);
-                        weather.setWeatherSummery(summery);
-
-                        // Set the weather description
-                        String description = parts[8].substring(20);
-                        weather.setWeatherDescription(description);
-
-                        // Set the temperature
-                        double temp = Double.parseDouble(parts[9].substring(28));
-                        weather.setCurrTempCelsius(temp);
-
-                        // Set the pressure
-                        double pressure = Double.parseDouble(parts[10].substring(9));
-                        weather.setPressure(pressure);
-
-                        // Set the humidity
-                        double humidity = Double.parseDouble(parts[11].substring(9));
-                        weather.setHumidity(humidity);
-
-                        // Set the wind speed
-                        double wind = Double.parseDouble(parts[12].substring(11));
-                        weather.setWindSpeed(wind);
-
-                        // Set the wind direction
-                        double direction = Double.parseDouble(parts[13].substring(15));
-                        weather.setWindDirection(direction);
+                        // Create a new Weather object
+                        Weather weather = getWeather(formatDateTime, parts);
 
                         // Add the Weather object to the TreeMap
                         weatherMap.put(formatDateTime, weather);
@@ -585,5 +509,41 @@ public class ApiReaderImpl implements ApiReader {
             LOG.error("Error occurred");
             throw new RuntimeException(e);
         }
+    }
+
+    private static Weather getWeather(LocalDateTime formatDateTime, String[] parts) {
+        Weather weather = new Weather();
+
+        // Set the date and time
+        weather.setDTstamp(formatDateTime);
+
+        // Set the weather summary
+        String summery = parts[7].substring(16);
+        weather.setWeatherSummery(summery);
+
+        // Set the weather description
+        String description = parts[8].substring(20);
+        weather.setWeatherDescription(description);
+
+        // Set the temperature
+        double temp = Double.parseDouble(parts[9].substring(28));
+        weather.setCurrTempCelsius(temp);
+
+        // Set the pressure
+        double pressure = Double.parseDouble(parts[10].substring(9));
+        weather.setPressure(pressure);
+
+        // Set the humidity
+        double humidity = Double.parseDouble(parts[11].substring(9));
+        weather.setHumidity(humidity);
+
+        // Set the wind speed
+        double wind = Double.parseDouble(parts[12].substring(11));
+        weather.setWindSpeed(wind);
+
+        // Set the wind direction
+        double direction = Double.parseDouble(parts[13].substring(15));
+        weather.setWindDirection(direction);
+        return weather;
     }
 }

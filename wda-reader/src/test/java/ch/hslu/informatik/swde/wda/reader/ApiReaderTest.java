@@ -10,6 +10,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDateTime;
+import java.time.Year;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.TreeMap;
@@ -128,6 +129,20 @@ class ApiReaderTest {
                 assertNotNull(resWeather, "Liste ist leer");
             }
         }
+
+        @Tag("unittest")
+        @ParameterizedTest
+        @MethodSource("cityListProvider")
+        void test_GetWeatherByCityAndFilterByLatestWeather_ShouldReturnShortListAfterLatestWeather(LinkedList<String> cityList) {
+
+            ApiReader proxy = new ApiReaderImpl();
+
+            for (String cityName : cityList) {
+                TreeMap<LocalDateTime, Weather> resWeather = proxy.readWeatherByCityAndFilterByLatestWeather(cityName, Year.now().getValue(), LocalDateTime.now().minusDays(1));
+                assertNotNull(resWeather, "Liste ist leer");
+            }
+        }
+
 
         static Stream<LinkedList<String>> cityListProvider() {
             LinkedList<String> cities = Util.createCities();
