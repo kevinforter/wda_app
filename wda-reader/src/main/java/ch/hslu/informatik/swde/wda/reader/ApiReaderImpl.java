@@ -461,7 +461,6 @@ public class ApiReaderImpl implements ApiReader {
 
             // Initialize the TreeMap to store the weather data
             TreeMap<LocalDateTime, Weather> weatherMap = new TreeMap<>();
-            LocalDateTime formatDateTime;
 
             // If the response status code is 200, process the JSON response
             if (res.statusCode() == 200) {
@@ -477,7 +476,7 @@ public class ApiReaderImpl implements ApiReader {
                     // Parse the date and time
                     String dateTime = parts[0].substring(17);
                     DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-                    formatDateTime = LocalDateTime.parse(dateTime, format);
+                    LocalDateTime formatDateTime = LocalDateTime.parse(dateTime, format);
 
                     // If the date and time is after the provided latest weather data, add the weather data to the TreeMap
                     if (formatDateTime.isAfter(latestWeather)) {
