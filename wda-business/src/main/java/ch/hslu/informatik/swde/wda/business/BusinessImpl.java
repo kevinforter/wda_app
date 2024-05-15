@@ -117,7 +117,7 @@ public class BusinessImpl implements BusinessAPI {
             } else {
 
                 // If the time difference is 40 minutes or more, retrieve and save the weather data of the city for the current year
-                addWeatherOfCityByYear(cityId, reader.readWeatherByCityAndYear(currentWeatherREADER.getCity().getName(), Year.now().getValue()));
+                addWeatherOfCityByYear(cityId, reader.readWeatherByCityAndFilterByLatestWeather(daoC.findById(cityId).getName(), Year.now().getValue(), latestWeatherDAO.getDTstamp()));
 
             }
         }

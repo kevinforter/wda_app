@@ -45,7 +45,7 @@ class BusinessImplTest {
 
         long time = end - start;
         System.out.println(time);
-        //LOG.info("Time used to save all Cities: " + time + " ms");
+        LOG.info("Time used to save all Cities: " + time + " ms");
     }
 
     @Tag("integration")
@@ -56,6 +56,27 @@ class BusinessImplTest {
 
         serviceAPI.addAllCities();
         List<City> resCityList = serviceAPI.getAllCities();
+
+        for (City c : resCityList) {
+
+            long start = System.currentTimeMillis();
+            serviceAPI.addCurrentWeatherOfCity(c.getName());
+            long end = System.currentTimeMillis();
+
+            long time = end - start;
+            LOG.info("Time used to save current Weather: " + time + " ms");
+        }
+    }
+
+    @Tag("integration")
+    @Test
+    void addCurrentWeatherOfCity_butLatestIsOneDayOlder() {
+
+        final BusinessAPI serviceAPI = new BusinessImpl();
+
+        Util.saveDummyWeather();
+        List<City> resCityList = serviceAPI.getAllCities();
+        assertEquals(1, resCityList.size());
 
         for (City c : resCityList) {
 
