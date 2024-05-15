@@ -342,4 +342,38 @@ public class BusinessImpl implements BusinessAPI {
     private static boolean isValidDay(int day) {
         return day >= 1 && day <= 365;
     }
+
+    /**
+     * Retrieves the weather data of a specified city within a specific time span.
+     * <p>
+     * This method first finds the ID of the city by its name using the CityDAO.
+     * If the city ID is not 0, it retrieves the weather data of the city within the specified time span by its ID.
+     * If the city ID is 0, it returns an empty TreeMap.
+     *
+     * @param cityName the name of the city for which the weather data is to be retrieved
+     * @param von      the start of the time span for which the weather data is to be retrieved
+     * @param bis      the end of the time span for which the weather data is to be retrieved
+     * @return a TreeMap of the weather data of the city within the specified time span if the city ID is not 0, otherwise an empty TreeMap
+     */
+    @Override
+    public TreeMap<LocalDateTime, Weather> getWeatherByCityAndTimeSpan(String cityName, LocalDateTime von, LocalDateTime bis) {
+        int cityId = daoC.findCityIdByName(cityName);
+        return cityId != 0 ? getWeatherByCityAndTimeSpan(cityId, von, bis) : new TreeMap<>();
+    }
+
+    /**
+     * Retrieves the weather data of a specified city within a specific time span by its ID.
+     * <p>
+     * This method uses the WeatherDAO
+     * to find the weather data of a city within a specific time span by its ID in the database.
+     * It returns a TreeMap of the weather data if found.
+     *
+     * @param cityId the ID of the city for which the weather data is to be retrieved
+     * @param von    the start of the time span for which the weather data is to be retrieved
+     * @param bis    the end of the time span for which the weather data is to be retrieved
+     * @return a TreeMap of the weather data of the city within the specified time span
+     */
+    private static TreeMap<LocalDateTime, Weather> getWeatherByCityAndTimeSpan(int cityId, LocalDateTime von, LocalDateTime bis) {
+        return daoW.findWeatherFromCityByTimeSpan(cityId, von, bis);
+    }
 }
