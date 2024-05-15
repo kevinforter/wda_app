@@ -64,4 +64,14 @@ public interface ApiReader {
      * @return Ein TreeMap von Weather-Objekten, mit dem Datum und der Uhrzeit als Schlüssel, die die Wetterdaten für das angegebene Jahr und die Stadt darstellen.
      */
     TreeMap<LocalDateTime, Weather> readWeatherByCityAndYear(String cityName, int jahr);
+
+    /**
+     * Liest die Wetterdaten für eine bestimmte Stadt und ein bestimmtes Jahr von einem externen Wetterdienst.
+     *
+     * @param cityName Der Name der Stadt.
+     * @param jahr     Das angegebene Jahr.
+     * @param latestWeather das datum des zuletzt gespeicherten Wetters
+     * @return Ein TreeMap von Weather-Objekten, mit dem Datum und der Uhrzeit als Schlüssel, die die Wetterdaten für das angegebene Jahr und die Stadt darstellen.
+     */
+    TreeMap<LocalDateTime, Weather> readWeatherByCityAndFilterByLatestWeather(String cityName, int jahr, LocalDateTime latestWeather);
 }

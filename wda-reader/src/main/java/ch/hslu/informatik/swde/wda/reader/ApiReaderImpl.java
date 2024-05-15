@@ -473,4 +473,117 @@ public class ApiReaderImpl implements ApiReader {
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     * Retrieves weather data for a specific city and year from the weather data provider, filtered by the latest weather data.
+     * <p>
+     * This method sends a GET request to the weather data provider's API endpoint for the provided city name and year.
+     * If the response status code is 200, it reads the JSON response body and extracts the weather details.
+     * The weather details are then used to create a new Weather object, which is added to a TreeMap with the date and time as the key.
+     * The TreeMap is then filtered to only include weather data after the provided latest weather data.
+     * If the response status code is not 200, it logs an error message and returns an empty TreeMap.
+     * If the created TreeMap is empty after processing the JSON response, it logs a message and returns the empty TreeMap.
+     * If an exception occurs during the execution of the method, it logs an error message and throws a RuntimeException.
+     *
+     * @param cityName      the name of the city for which to retrieve the weather data
+     * @param jahr          the year for which to retrieve the weather data
+     * @param latestWeather the latest weather data to filter by
+     * @return              a TreeMap of Weather objects containing the weather data for the city and year, filtered by the latest weather data, with the date and time as the key, or an empty TreeMap if no data is found or an error occurs
+     * @throws RuntimeException if an exception occurs during the execution of the method
+     */
+    @Override
+    public TreeMap<LocalDateTime, Weather> readWeatherByCityAndFilterByLatestWeather(String cityName, int jahr, LocalDateTime latestWeather) {
+        try {
+            // Encode the city name to be URL-friendly
+            String encodedCityName = cityName.replace(" ", "+");
+
+            // Create the URI for the GET request
+            URI uri = URI.create(BASE_URI + "weatherdata-provider/rest/weatherdata/cityandyear?city=" + encodedCityName + "&year=" + jahr);
+
+            // Build and send the GET request
+            HttpRequest req = HttpRequest.newBuilder(uri).header("Accept", format).build();
+            HttpResponse<String> res = client.send(req, HttpResponse.BodyHandlers.ofString());
+
+            // Initialize the TreeMap to store the weather data
+            TreeMap<LocalDateTime, Weather> weatherMap = new TreeMap<>();
+            LocalDateTime formatDateTime;
+
+            // If the response status code is 200, process the JSON response
+            if (res.statusCode() == 200) {
+                // Parse the JSON response
+                JsonNode node = mapper.readTree(res.body());
+
+                // Iterate over each node in the JSON response
+                for (JsonNode n : node) {
+                    // Create a new Weather object
+                    Weather weather = new Weather();
+
+                    // Extract the weather data from the node
+                    String data = n.get("data").asText();
+                    String[] parts = data.split("#");
+
+                    // Parse the date and time
+                    String dateTime = parts[0].substring(17);
+                    DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                    formatDateTime = LocalDateTime.parse(dateTime, format);
+
+                    // If the date and time is after the provided latest weather data, add the weather data to the TreeMap
+                    if (formatDateTime.isAfter(latestWeather)) {
+                        // Set the date and time
+                        weather.setDTstamp(formatDateTime);
+
+                        // Set the weather summary
+                        String summery = parts[7].substring(16);
+                        weather.setWeatherSummery(summery);
+
+                        // Set the weather description
+                        String description = parts[8].substring(20);
+                        weather.setWeatherDescription(description);
+
+                        // Set the temperature
+                        double temp = Double.parseDouble(parts[9].substring(28));
+                        weather.setCurrTempCelsius(temp);
+
+                        // Set the pressure
+                        double pressure = Double.parseDouble(parts[10].substring(9));
+                        weather.setPressure(pressure);
+
+                        // Set the humidity
+                        double humidity = Double.parseDouble(parts[11].substring(9));
+                        weather.setHumidity(humidity);
+
+                        // Set the wind speed
+                        double wind = Double.parseDouble(parts[12].substring(11));
+                        weather.setWindSpeed(wind);
+
+                        // Set the wind direction
+                        double direction = Double.parseDouble(parts[13].substring(15));
+                        weather.setWindDirection(direction);
+
+                        // Add the Weather object to the TreeMap
+                        weatherMap.put(formatDateTime, weather);
+                    }
+                }
+
+                // If the TreeMap is empty after processing the JSON response, log a message and return the empty TreeMap
+                if (weatherMap.isEmpty()) {
+                    LOG.info("No data found for" + uri);
+                    return new TreeMap<>();
+                }
+
+                // Return the TreeMap
+                return weatherMap;
+
+            } else {
+                // If the response status code is not 200, log an error message and return an empty TreeMap
+                LOG.info("Error occurred, Status code: " + res.statusCode());
+                return new TreeMap<>();
+            }
+
+        } catch (Exception e) {
+            // If an exception occurs during the execution of the method, log an error message and throw a RuntimeException
+            LOG.error("Error occurred");
+            throw new RuntimeException(e);
+        }
+    }
 }
