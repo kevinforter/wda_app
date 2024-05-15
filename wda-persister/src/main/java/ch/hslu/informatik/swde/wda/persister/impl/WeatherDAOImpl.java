@@ -349,20 +349,41 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
         return weatherMap != null ? weatherMap : new TreeMap<>();
     }
 
+    /**
+     * Retrieves a map of Weather entities associated with a specific city and within a specific time span.
+     * <p>
+     * This method creates an EntityManager instance and constructs a query to find the Weather entities
+     * associated with the provided city ID and within the time span defined by the 'von' and 'bis' parameters.
+     * The query is then executed and the result is stored in a list.
+     * The EntityManager is closed after the list is retrieved to ensure that resources are always properly released.
+     * The retrieved list of Weather entities is then converted into a TreeMap
+     * where the key is the timestamp and the value is the Weather entity.
+     * The TreeMap is sorted in ascending order of the timestamp.
+     * The TreeMap is then returned.
+     *
+     * @param cityId the ID of the city for which the Weather entities are to be retrieved
+     * @param von    the start of the time span for which the Weather entities are to be retrieved
+     * @param bis    the end of the time span for which the Weather entities are to be retrieved
+     * @return a TreeMap of Weather entities associated with the provided city ID and within the specified time span, sorted in ascending order of the timestamp
+     */
     @Override
     public TreeMap<LocalDateTime, Weather> findWeatherFromCityByTimeSpan(int cityId, LocalDateTime von, LocalDateTime bis) {
 
+        // Create an EntityManager instance
         EntityManager em = JpaUtil.createEntityManager();
 
+        // Construct a query to find the Weather entities associated with the provided city ID and within the specified time span
         TypedQuery<Weather> tQry = em.createQuery(
                 "SELECT w FROM Weather" + " w " +
                         "WHERE w.cityId = :cityId " +
                         "AND w.DTstamp BETWEEN :von AND :bis", Weather.class);
 
+        // Set the parameters for the query
         tQry.setParameter("cityId", cityId);
         tQry.setParameter("von", von);
         tQry.setParameter("bis", bis);
 
+        // Execute the query and store the result in a list
         List<Weather> weatherList = tQry.getResultList();
 
         // Close the EntityManager to ensure that resources are always properly released
