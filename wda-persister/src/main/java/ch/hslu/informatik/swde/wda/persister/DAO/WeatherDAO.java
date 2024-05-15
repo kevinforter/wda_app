@@ -19,7 +19,6 @@ import java.util.TreeMap;
 public interface WeatherDAO extends GenericDAO<Weather> {
 
     /**
-     *
      * @return Anzahl der Wetterdaten pro Stadt
      */
     long getNumberOfWeatherByCity(int cityId);
@@ -43,7 +42,7 @@ public interface WeatherDAO extends GenericDAO<Weather> {
     /**
      * Holt Wetterdaten für eine bestimmte Ortschaft zu einem bestimmten Zeitpunkt.
      *
-     * @param date Der spezifische Zeitpunkt.
+     * @param date   Der spezifische Zeitpunkt.
      * @param cityId Die ID der Ortschaft.
      * @return Eine Liste von Weather-Objekten; leer, wenn keine Daten gefunden werden.
      */
@@ -52,7 +51,7 @@ public interface WeatherDAO extends GenericDAO<Weather> {
     /**
      * Holt Wetterdaten für eine bestimmte Ortschaft zu ein bestimmtes Jahr.
      *
-     * @param year Das spezifische Jahr.
+     * @param year   Das spezifische Jahr.
      * @param cityId Die ID der Ortschaft.
      * @return Eine Liste von Weather-Objekten; leer, wenn keine Daten gefunden werden.
      */
@@ -61,7 +60,7 @@ public interface WeatherDAO extends GenericDAO<Weather> {
     /**
      * Holt Wetterdaten für eine bestimmte Ortschaft zu ein bestimmtes Jahr.
      *
-     * @param year Das spezifische Jahr.
+     * @param year   Das spezifische Jahr.
      * @param cityId Die ID der Ortschaft.
      * @return Eine Liste von Weather-Objekten; leer, wenn keine Daten gefunden werden.
      */
@@ -83,15 +82,15 @@ public interface WeatherDAO extends GenericDAO<Weather> {
      */
     TreeMap<LocalDateTime, Weather> findWeatherByDayDifference(int days);
 
-//    /**
-//     * Holt Wetterdaten für eine bestimmte Ortschaft innerhalb eines bestimmten Zeitraums.
-//     *
-//     * @param ortschaftId Die ID der Ortschaft.
-//     * @param von Anfangsdatum des Zeitraums.
-//     * @param bis Enddatum des Zeitraums.
-//     * @return Eine Liste von Weather-Objekten; leer, wenn keine Daten gefunden werden.
-//     */
-//    List<Weather> findWeatherFromCityByTimeSpan(int ortschaftId, LocalDateTime von, LocalDateTime bis);
+    /**
+     * Holt Wetterdaten für eine bestimmte Ortschaft innerhalb eines bestimmten Zeitraums.
+     *
+     * @param ortschaftId Die ID der Ortschaft.
+     * @param von         Anfangsdatum des Zeitraums.
+     * @param bis         Enddatum des Zeitraums.
+     * @return Eine Liste von Weather-Objekten; leer, wenn keine Daten gefunden werden.
+     */
+    TreeMap<LocalDateTime, Weather> findWeatherFromCityByTimeSpan(int ortschaftId, LocalDateTime von, LocalDateTime bis);
 //
 //    /**
 //     * Holt die minimale und maximale Temperatur für einen bestimmten Zeitpunkt.
@@ -127,8 +126,8 @@ public interface WeatherDAO extends GenericDAO<Weather> {
     /**
      * Gibt an obe eine Tabelle leer oder voll ist
      *
-     * @return true oder false
      * @param cityId die id der Stadt
+     * @return true oder false
      */
     boolean ifWeatherOfCityExist(int cityId);
 }

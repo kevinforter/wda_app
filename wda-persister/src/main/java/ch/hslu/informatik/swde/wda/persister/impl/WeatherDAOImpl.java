@@ -257,7 +257,7 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
             weatherMap.put(w.getDTstamp(), w);
         }
 
-        return weatherMap;
+        return weatherMap != null ? weatherMap : new TreeMap<>();
     }
 
     /**
@@ -298,7 +298,7 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
             weatherMap.put(w.getDTstamp(), w);
         }
 
-        return weatherMap;
+        return weatherMap != null ? weatherMap : new TreeMap<>();
     }
 
     /**
@@ -346,29 +346,39 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
         }
 
         // Return the TreeMap of Weather entities
-        return weatherMap;
+        return weatherMap != null ? weatherMap : new TreeMap<>();
     }
 
-    //    @Override
-//    public List<Weather> findWeatherFromCityByTimeSpan(int cityId, LocalDateTime von, LocalDateTime bis) {
-//
-//        EntityManager em = JpaUtil.createEntityManager();
-//
-//        TypedQuery<Weather> tQry = em.createQuery(
-//                "SELECT w FROM Weather" + " w " +
-//                        "WHERE w.cityId = :cityId " +
-//                        "AND w.DTstamp BETWEEN :von AND :bis", Weather.class);
-//
-//        tQry.setParameter("cityId", cityId);
-//        tQry.setParameter("von", von);
-//        tQry.setParameter("bis", bis);
-//
-//        List<Weather> objListe = tQry.getResultList();
-//
-//        em.close();
-//
-//        return objListe != null ? objListe : new ArrayList<>();
-//    }
+    @Override
+    public TreeMap<LocalDateTime, Weather> findWeatherFromCityByTimeSpan(int cityId, LocalDateTime von, LocalDateTime bis) {
+
+        EntityManager em = JpaUtil.createEntityManager();
+
+        TypedQuery<Weather> tQry = em.createQuery(
+                "SELECT w FROM Weather" + " w " +
+                        "WHERE w.cityId = :cityId " +
+                        "AND w.DTstamp BETWEEN :von AND :bis", Weather.class);
+
+        tQry.setParameter("cityId", cityId);
+        tQry.setParameter("von", von);
+        tQry.setParameter("bis", bis);
+
+        List<Weather> weatherList = tQry.getResultList();
+
+        // Close the EntityManager to ensure that resources are always properly released
+        em.close();
+
+        // Initialize a TreeMap to store the Weather entities
+        TreeMap<LocalDateTime, Weather> weatherMap = new TreeMap<>();
+
+        // Convert the list of Weather entities into a TreeMap where the key is the timestamp and the value is the Weather entity
+        for (Weather w : weatherList) {
+            weatherMap.put(w.getDTstamp(), w);
+        }
+
+        // Return the TreeMap of Weather entities
+        return weatherMap != null ? weatherMap : new TreeMap<>();
+    }
 //
 //    @Override
 //    public List<Weather> findMinMaxTemperatureByDateTime(LocalDateTime DTstamp) {
