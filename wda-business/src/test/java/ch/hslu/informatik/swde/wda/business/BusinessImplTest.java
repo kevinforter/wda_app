@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
+import java.time.Year;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -166,5 +167,22 @@ class BusinessImplTest {
                     () -> assertNotNull(restLDT, "Liste sollte nicht null sein:")
             );
         }
+    }
+
+    @Tag("integration")
+    @Test
+    void getWeatherOfCityByTimespan() {
+
+        final BusinessAPI serviceAPI = new BusinessImpl();
+
+        serviceAPI.addAllCities();
+        serviceAPI.addWeatherOfCityByYear("Davos", Year.now().getValue());
+        TreeMap<LocalDateTime, Weather> resWeather = serviceAPI.getWeatherByCityAndTimeSpan("Davos" ,LocalDateTime.now().minusMonths(1), LocalDateTime.now());
+
+        assertAll(
+                () -> assertNotNull(resWeather, "Liste sollte nicht null sein:"),
+                () -> assertEquals(resWeather.lastEntry().getValue().getDTstamp(), serviceAPI.getCurrentWeatherOfCity("Davos").getDTstamp(), "Datum sollte das gleiche sein")
+        );
+
     }
 }
