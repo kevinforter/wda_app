@@ -207,4 +207,34 @@ public class GenericDAOImpl<T> implements GenericDAO<T> {
         em.close();
         return objListe != null ? objListe : new ArrayList<>();
     }
+
+    /**
+     * Checks if the City table exists in the database.
+     * <p>
+     * This method creates an EntityManager instance and a TypedQuery to count the number of cities in the database.
+     * It executes the query and returns true if the count is greater than 0, indicating that the City table exists, otherwise false.
+     * If an exception occurs during the execution of the query, it throws a RuntimeException.
+     * The EntityManager is closed in the "finally" block to ensure that resources are always properly released.
+     *
+     * @return true if the City table exists, otherwise false
+     * @throws RuntimeException if an exception occurs during the execution of the query
+     */
+    @Override
+    public boolean ifTableExist() {
+
+        EntityManager em = JpaUtil.createEntityManager();
+
+        long count;
+
+        TypedQuery<Long> tQry = em.createQuery("SELECT COUNT(e) FROM " + entityClass.getSimpleName() + " e", Long.class);
+
+        try {
+            count = tQry.getSingleResult();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            em.close();
+        }
+        return count > 0;
+    }
 }

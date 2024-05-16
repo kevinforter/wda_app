@@ -60,4 +60,10 @@ public interface GenericDAO<T> {
      */
     List<T> alle();
 
+    /**
+     * Gibt an obe eine Tabelle leer oder voll ist
+     *
+     * @return true oder false
+     */
+    boolean ifTableExist();
 }
