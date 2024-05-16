@@ -50,7 +50,7 @@ public interface GenericDAO<T> {
      * @return Das gefundene Objekt vom Typ T, oder ein leeres Objekt,
      * falls kein Objekt mit der angegebenen Parameter gefunden wurde.
      */
-    T findEntityByFieldAndString(String fieldName, String value);
+    T findEntityByFieldAndString(String fieldName, Object value);
 
     /**
      * Holt alle Objekte vom Typ T aus dem Datenbestand.

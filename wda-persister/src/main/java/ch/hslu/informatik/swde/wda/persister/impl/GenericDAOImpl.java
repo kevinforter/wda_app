@@ -167,7 +167,7 @@ public class GenericDAOImpl<T> implements GenericDAO<T> {
      * @return the entity that matches the field and value, or null if no such entity exists
      */
     @Override
-    public T findEntityByFieldAndString(String fieldName, String value) {
+    public T findEntityByFieldAndString(String fieldName, Object value) {
         EntityManager em = JpaUtil.createEntityManager();
 
         T objFromDb = null;
