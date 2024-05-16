@@ -319,6 +319,43 @@ public class WdaResource {
     }
 
     /**
+     * This method is a RESTful web service endpoint that retrieves weather data for a specific city within a given timespan.
+     * The client specifies the city and the timespan through path and query parameters in the request.
+     *
+     * @param name The name of the city for which the weather data is to be retrieved. This is passed as a path parameter in the request.
+     * @param von  The start of the timespan for which the weather data is to be retrieved. This is passed as a query parameter in the request.
+     * @param bis  The end of the timespan for which the weather data is to be retrieved. This is passed as a query parameter in the request.
+     * @return A Response object containing the weather data for the specified city within the given timespan. The weather data is represented as a TreeMap object in the response body.
+     * If the operation is successful and weather data exists for the specified city and timespan, the HTTP status code of the response is 200 (OK).
+     * If no weather data exists for the specified city and timespan, the HTTP status code of the response is 503 (Service Unavailable).
+     * If an error occurs during the operation, the HTTP status code of the response is 500 (Internal Server Error), and the response body contains a message describing the error.
+     */
+    @GET
+    @Path("weather/timespan/{name}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getWeatherByCityAndTimeSpan(@PathParam("name") String name,
+                                                @QueryParam("von") LocalDateTime von,
+                                                @QueryParam("bis") LocalDateTime bis) {
+
+        try {
+            TreeMap<LocalDateTime, Weather> weatherRes = service.getWeatherByCityAndTimeSpan(name, von, bis);
+
+            if (!weatherRes.isEmpty()) {
+                return Response.ok(weatherRes).build();
+            } else {
+                return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
+            }
+
+        } catch (Exception e) {
+            LOG.error("Error while getting weather: ", e);
+            return Response
+                    .status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Error while getting weather")
+                    .build();
+        }
+    }
+
+    /**
      * Retrieves weather data for a specific city and year from the Weather Data Application (WDA).
      * <p>
      * This method calls the getWeatherOfCityByYear method of the service object,
