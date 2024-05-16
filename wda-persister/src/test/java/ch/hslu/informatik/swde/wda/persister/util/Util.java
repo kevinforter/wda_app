@@ -25,6 +25,7 @@ public class Util {
 
         em.createQuery("DELETE FROM Weather e").executeUpdate();
         em.createQuery("DELETE FROM City e").executeUpdate();
+        em.createQuery("DELETE FROM Init e").executeUpdate();
 
         em.getTransaction().commit();
 
