@@ -111,4 +111,15 @@ public interface BusinessAPI {
      * @return          a TreeMap of Weather entities associated with the provided city ID and within the specified time span, sorted in ascending order of the timestamp
      */
     TreeMap<LocalDateTime, Weather> getWeatherByCityAndTimeSpan(String cityName, LocalDateTime von, LocalDateTime bis);
+
+    /**
+     * Initializes the Weather Data Application (WDA) by adding all cities and their current year's weather data.
+     * <p>
+     * This method first calls the addAllCities method of the service object,
+     * which is an instance of the BusinessAPI interface, to add all cities to the WDA.
+     * It then retrieves a list of all cities from the service object,
+     * and for each city in the list,
+     * it calls the addWeatherOfCityByYear method of the service object with the city's name and the current year.
+     */
+    void init();
 }

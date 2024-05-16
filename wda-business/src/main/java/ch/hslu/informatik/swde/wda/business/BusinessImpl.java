@@ -376,4 +376,24 @@ public class BusinessImpl implements BusinessAPI {
     private static TreeMap<LocalDateTime, Weather> getWeatherByCityAndTimeSpan(int cityId, LocalDateTime von, LocalDateTime bis) {
         return daoW.findWeatherFromCityByTimeSpan(cityId, von, bis);
     }
+
+    /**
+     * Initializes the Weather Data Application (WDA) by adding all cities and their current year's weather data.
+     * <p>
+     * This method first calls the addAllCities method of the service object,
+     * which is an instance of the BusinessAPI interface, to add all cities to the WDA.
+     * It then retrieves a list of all cities from the service object,
+     * and for each city in the list,
+     * it calls the addWeatherOfCityByYear method of the service object with the city's name and the current year.
+     */
+    @Override
+    public void init() {
+        addAllCities();
+
+        List<City> cityList = getAllCities();
+
+        for (City c : cityList) {
+            addWeatherOfCityByYear(c.getName(), LocalDateTime.now().getYear());
+        }
+    }
 }

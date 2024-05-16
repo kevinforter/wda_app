@@ -536,13 +536,7 @@ public class WdaResource {
 
         if (!init) {
             try {
-                service.addAllCities();
-
-                List<City> cityList = service.getAllCities();
-
-                for (City c : cityList) {
-                    service.addWeatherOfCityByYear(c.getName(), LocalDateTime.now().getYear());
-                }
+                service.init();
 
                 setInitTrue();
                 return Response.ok().build();
