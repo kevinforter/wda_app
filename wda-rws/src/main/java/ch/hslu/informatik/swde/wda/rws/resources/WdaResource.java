@@ -20,7 +20,6 @@ import ch.hslu.informatik.swde.wda.business.BusinessImpl;
 import ch.hslu.informatik.swde.wda.domain.City;
 import ch.hslu.informatik.swde.wda.domain.Weather;
 
-import ch.hslu.informatik.swde.wda.rws.util.ConfigLoader;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;

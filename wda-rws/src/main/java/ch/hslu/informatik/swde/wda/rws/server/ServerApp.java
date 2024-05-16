@@ -16,8 +16,6 @@
 
 package ch.hslu.informatik.swde.wda.rws.server;
 
-import ch.hslu.informatik.swde.wda.business.BusinessAPI;
-import ch.hslu.informatik.swde.wda.business.BusinessImpl;
 import ch.hslu.informatik.swde.wda.rws.resources.WdaResource;
 import ch.hslu.informatik.swde.wda.rws.util.LocalDateTimeConverterProvider;
 import com.sun.net.httpserver.HttpServer;
