@@ -37,13 +37,6 @@ import java.util.*;
 @Path("wda")
 public class WdaResource {
 
-    private static boolean init;
-
-    static {
-        ConfigLoader configLoader = new ConfigLoader();
-        init = configLoader.getInit();
-    }
-
     private static final String BASE_URI = "http://localhost:8080/wda/";
 
     private static final Logger LOG = LoggerFactory.getLogger(WdaResource.class);
@@ -534,29 +527,23 @@ public class WdaResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response initApp() {
 
-        if (!init) {
-            try {
-                service.init();
+        try {
+            boolean status = service.init();
 
-                setInitTrue();
-                return Response.ok().build();
-            } catch (Exception e) {
-                LOG.error("Error while processing init: ", e);
-                return Response
-                        .status(Response.Status.INTERNAL_SERVER_ERROR)
-                        .entity("Error while adding weather")
-                        .build();
+            if (!status) {
+                return Response.ok().entity("Init executed").build();
+            } else {
+                return Response.status(418).entity("Init already used once 🥳").build();
             }
-        } else {
-            return Response.status(418).entity("Init already used once").build();
+        } catch (Exception e) {
+            LOG.error("Error while processing init: ", e);
+            return Response
+                    .status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Error while adding weather")
+                    .build();
         }
     }
 
-    public void setInitTrue() {
-        ConfigLoader configLoader = new ConfigLoader();
-        configLoader.setInit(true);
-        init = true;
-    }
 
 //    /**
 //     * This method is used to find a city by its name.

@@ -47,23 +47,18 @@ public class BusinessImpl implements BusinessAPI {
      */
     @Override
     public void addAllCities() {
-        try {
-            // Read city details from an external source
-            LinkedHashMap<Integer, City> cityRes = reader.readCities();
-            Set<String> existingCities = daoC.allCityNames();
 
-            // Check if the City already exist
-            LinkedHashMap<Integer, City> citiesToSave = new LinkedHashMap<>();
-            for (City c : cityRes.values()) {
-                if (!existingCities.contains(c.getName())) citiesToSave.put(c.getZip(), c);
-            }
+        // Read city details from an external source
+        LinkedHashMap<Integer, City> cityRes = reader.readCities();
+        Set<String> existingCities = daoC.allCityNames();
 
-            daoC.saveAllCities(citiesToSave);
-
-        } catch (Exception e) {
-            // Log the exception and handle it appropriately
-            LOG.error("Error while adding cities: ", e);
+        // Check if the City already exist
+        LinkedHashMap<Integer, City> citiesToSave = new LinkedHashMap<>();
+        for (City c : cityRes.values()) {
+            if (!existingCities.contains(c.getName())) citiesToSave.put(c.getZip(), c);
         }
+
+        daoC.saveAllCities(citiesToSave);
     }
 
 
@@ -391,24 +386,29 @@ public class BusinessImpl implements BusinessAPI {
      * it calls the addWeatherOfCityByYear method of the service object with the city's name and the current year.
      */
     @Override
-    public void init() {
+    public boolean init() {
 
-        boolean status = daoI.findEntityByFieldAndString("status", true).getStatus();
+        boolean status = daoI.ifTableExist();
 
-        if(!status) {
+        if (!status) {
 
-            addAllCities();
+            try {
+                addAllCities();
 
-            List<City> cityList = getAllCities();
+                List<City> cityList = getAllCities();
 
-            for (City c : cityList) {
-                addWeatherOfCityByYear(c.getName(), LocalDateTime.now().getYear());
+                for (City c : cityList) {
+                    addWeatherOfCityByYear(c.getName(), LocalDateTime.now().getYear());
+                }
+
+                daoI.speichern(new Init());
+
+                return false;
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
-
-            daoI.speichern(new Init());
-
         } else {
-            LOG.info("Init already used once 🥳: " + daoI.alle().getFirst().getLastInit());
+            return true;
         }
     }
 }

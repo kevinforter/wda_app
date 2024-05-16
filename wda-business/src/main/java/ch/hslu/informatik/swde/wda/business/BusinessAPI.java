@@ -121,5 +121,5 @@ public interface BusinessAPI {
      * and for each city in the list,
      * it calls the addWeatherOfCityByYear method of the service object with the city's name and the current year.
      */
-    void init();
+    boolean init();
 }
