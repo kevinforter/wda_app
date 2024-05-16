@@ -16,6 +16,8 @@
 
 package ch.hslu.informatik.swde.wda.rws.server;
 
+import ch.hslu.informatik.swde.wda.business.BusinessAPI;
+import ch.hslu.informatik.swde.wda.business.BusinessImpl;
 import ch.hslu.informatik.swde.wda.rws.resources.WdaResource;
 import ch.hslu.informatik.swde.wda.rws.util.LocalDateTimeConverterProvider;
 import com.sun.net.httpserver.HttpServer;
@@ -27,12 +29,19 @@ import java.net.URI;
 public class ServerApp {
 
 	private static String URI_BASE = "http://localhost:8080/";
+
+	private static final BusinessAPI serviceAPI = new BusinessImpl();
+
 	public static void main(String[] args) {
 
 		URI uri = URI.create(URI_BASE);
 		ResourceConfig resConf = new ResourceConfig(WdaResource.class);
 
 		resConf.register(LocalDateTimeConverterProvider.class);
+
+		System.out.println("Starting init ...");
+		serviceAPI.init();
+		System.out.println("Init finish");
 
 		HttpServer srv = JdkHttpServerFactory.createHttpServer(uri, resConf);
 

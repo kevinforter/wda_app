@@ -392,12 +392,23 @@ public class BusinessImpl implements BusinessAPI {
      */
     @Override
     public void init() {
-        addAllCities();
 
-        List<City> cityList = getAllCities();
+        boolean status = daoI.findEntityByFieldAndString("status", true).getStatus();
 
-        for (City c : cityList) {
-            addWeatherOfCityByYear(c.getName(), LocalDateTime.now().getYear());
+        if(!status) {
+
+            addAllCities();
+
+            List<City> cityList = getAllCities();
+
+            for (City c : cityList) {
+                addWeatherOfCityByYear(c.getName(), LocalDateTime.now().getYear());
+            }
+
+            daoI.speichern(new Init());
+
+        } else {
+            LOG.info("Init already used once 🥳: " + daoI.alle().getFirst().getLastInit());
         }
     }
 }
