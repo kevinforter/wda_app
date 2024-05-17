@@ -15,8 +15,8 @@ public class Util {
 
     private static final String puTEST = "testPU";
 
-    private static final CityDAO daoC = new CityDAOImpl();
-    private static final WeatherDAO daoW = new WeatherDAOImpl();
+    private static final CityDAO daoC = new CityDAOImpl(puTEST);
+    private static final WeatherDAO daoW = new WeatherDAOImpl(puTEST);
 
     private Util() {
 
@@ -40,9 +40,9 @@ public class Util {
     public static void saveDummyWeather() {
 
         City dummyCity = new City(7270, "Davos", "CH");
-        daoC.speichern(dummyCity, puTEST);
+        daoC.speichern(dummyCity);
 
-        Weather dummyWeather = new Weather(daoC.findCityIdByName("Davos", puTEST), LocalDateTime.now().minusDays(1), "DUMMY", "DUMMY", 69.69, 69.69, 69.69, 69.69, 69.69);
-        daoW.speichern(dummyWeather, puTEST);
+        Weather dummyWeather = new Weather(daoC.findCityIdByName("Davos"), LocalDateTime.now().minusDays(1), "DUMMY", "DUMMY", 69.69, 69.69, 69.69, 69.69, 69.69);
+        daoW.speichern(dummyWeather);
     }
 }
