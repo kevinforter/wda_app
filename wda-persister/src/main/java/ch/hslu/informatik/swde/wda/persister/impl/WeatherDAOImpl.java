@@ -361,6 +361,55 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
     }
 
     /**
+     * Retrieves a map of Weather entities associated with a month.
+     * <p>
+     * This method creates an EntityManager instance and constructs a query to find the Weather entities
+     * associated with the provided year.
+     * The query is then executed and the result is stored in a list.
+     * The EntityManager is closed after the list is retrieved to ensure that resources are always properly released.
+     * The retrieved list of Weather entities is then converted into a TreeMap
+     * where the key is the timestamp and the value is the Weather entity.
+     * The TreeMap is sorted in ascending order of the timestamp.
+     * The TreeMap is then returned.
+     *
+     * @param week the year for which the Weather entities are to be retrieved
+     * @return a TreeMap of Weather entities associated with the provided city ID and year, sorted in ascending order of the timestamp
+     */
+    @Override
+    public TreeMap<LocalDateTime, Weather> findWeatherFromCityByWeek(int week, int cityId) {
+        EntityManager em = JpaUtil.createEntityManager(persistenceUnitName);
+
+        // Calculate the start and end dates of the week
+        LocalDate startOfWeek = LocalDate.of(Year.now().getValue(), 1, 1).plusWeeks(week - 1);
+        LocalDate endOfWeek = startOfWeek.plusDays(6);
+
+        // Convert LocalDate to LocalDateTime at start and end of day
+        LocalDateTime startDateTime = startOfWeek.atStartOfDay();
+        LocalDateTime endDateTime = endOfWeek.atTime(23, 59, 59);
+
+        // Query the weather data from the database
+        TypedQuery<Weather> query = em.createQuery(
+                "SELECT w FROM Weather w WHERE w.cityId = :cityId AND w.DTstamp BETWEEN :startOfWeek AND :endOfWeek",
+                Weather.class
+        );
+
+        query.setParameter("startOfWeek", startDateTime);
+        query.setParameter("endOfWeek", endDateTime);
+        query.setParameter("cityId", cityId);
+
+        List<Weather> weatherList = query.getResultList();
+        em.close();
+
+        TreeMap<LocalDateTime, Weather> weatherMap = new TreeMap<>();
+
+        for (Weather w : weatherList) {
+            weatherMap.put(w.getDTstamp(), w);
+        }
+
+        return weatherMap != null ? weatherMap : new TreeMap<>();
+    }
+
+    /**
      * Retrieves a map of Weather entities within a specific number of days from the current date.
      * <p>
      * This method creates an EntityManager instance and calculates the date difference from the current date.

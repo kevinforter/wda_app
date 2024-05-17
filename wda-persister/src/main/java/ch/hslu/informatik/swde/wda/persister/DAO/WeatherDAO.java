@@ -84,6 +84,15 @@ public interface WeatherDAO extends GenericDAO<Weather> {
     TreeMap<LocalDateTime, Weather> findWeatherFromCityByMonth(int month, int cityId);
 
     /**
+     * Holt Wetterdaten für eine bestimmte Ortschaft zu ein bestimmtes Jahr.
+     *
+     * @param week  Der spezifische Monat.
+     * @param cityId Die ID der Ortschaft.
+     * @return Eine Liste von Weather-Objekten; leer, wenn keine Daten gefunden werden.
+     */
+    TreeMap<LocalDateTime, Weather> findWeatherFromCityByWeek(int week, int cityId);
+
+    /**
      * Holt Wetterdaten für ein bestimmtes Jahr.
      *
      * @param days die spezifischen Tage.
