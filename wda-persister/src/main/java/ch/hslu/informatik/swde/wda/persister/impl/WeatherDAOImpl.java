@@ -20,8 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.Timestamp;
-import java.time.Duration;
-import java.time.LocalDateTime;
+import java.time.*;
 import java.util.*;
 
 public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDAO {
@@ -294,6 +293,53 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
         );
 
         query.setParameter("startOfYear", startOfYear);
+
+        List<Weather> weatherList = query.getResultList();
+        em.close();
+
+        TreeMap<LocalDateTime, Weather> weatherMap = new TreeMap<>();
+
+        for (Weather w : weatherList) {
+            weatherMap.put(w.getDTstamp(), w);
+        }
+
+        return weatherMap != null ? weatherMap : new TreeMap<>();
+    }
+
+    /**
+     * Retrieves a map of Weather entities associated with a month.
+     * <p>
+     * This method creates an EntityManager instance and constructs a query to find the Weather entities
+     * associated with the provided year.
+     * The query is then executed and the result is stored in a list.
+     * The EntityManager is closed after the list is retrieved to ensure that resources are always properly released.
+     * The retrieved list of Weather entities is then converted into a TreeMap
+     * where the key is the timestamp and the value is the Weather entity.
+     * The TreeMap is sorted in ascending order of the timestamp.
+     * The TreeMap is then returned.
+     *
+     * @param month the year for which the Weather entities are to be retrieved
+     * @return a TreeMap of Weather entities associated with the provided city ID and year, sorted in ascending order of the timestamp
+     */
+    @Override
+    public TreeMap<LocalDateTime, Weather> findWeatherFromCityByMonth(int month, int cityId) {
+
+        EntityManager em = JpaUtil.createEntityManager();
+
+        int yearNow = Year.now().getValue();
+        LocalDateTime startOfMonth = LocalDateTime.of(yearNow, month, 1, 0, 0);
+
+        int lastDayOfMonth = YearMonth.of(yearNow, month).atEndOfMonth().getDayOfMonth();
+        LocalDateTime endOfMonth = LocalDateTime.of(Year.now().getValue(), month, lastDayOfMonth, 0, 0);
+
+        TypedQuery<Weather> query = em.createQuery(
+                "SELECT w FROM Weather w WHERE w.cityId = :cityId AND w.DTstamp BETWEEN :startOfMonth AND :endOfMonth",
+                Weather.class
+        );
+
+        query.setParameter("startOfMonth", startOfMonth);
+        query.setParameter("endOfMonth", endOfMonth);
+        query.setParameter("cityId", cityId);
 
         List<Weather> weatherList = query.getResultList();
         em.close();
