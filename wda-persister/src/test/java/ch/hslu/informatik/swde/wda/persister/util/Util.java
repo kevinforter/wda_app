@@ -69,14 +69,14 @@ public class Util {
 
     public static List<Weather> createWetterList() {
 
-        CityDAO daoO = new CityDAOImpl();
+        CityDAO daoO = new CityDAOImpl(puTEST);
         List<Weather> list = new ArrayList<>();
 
         List<City> cityList = createCityList();
 
         for (City city : cityList) {
 
-            City ort = daoO.findCityByName(city.getName(),puTEST);
+            City ort = daoO.findCityByName(city.getName());
 
             Weather weather1 = new Weather(ort.getId(), LocalDateTime.of(2023, 12, 3, 22, 30, 19), "foggy", "fog", 23.0, 982.0, 91.0, 43.0, 10.0);
             Weather weather2 = new Weather(ort.getId(), LocalDateTime.of(2023, 12, 3, 23, 30, 19), "foggy", "fog", 23.0, 982.0, 91.0, 43.0, 10.0);
@@ -92,14 +92,14 @@ public class Util {
 
     public static TreeMap<LocalDateTime, Weather> createWeatherMap() {
 
-        CityDAO daoO = new CityDAOImpl();
+        CityDAO daoO = new CityDAOImpl(puTEST);
         TreeMap<LocalDateTime, Weather> weatherMap = new TreeMap<>();
 
         List<City> cityList = createCityList();
 
         for (City city : cityList) {
 
-            City ort = daoO.findCityByName(city.getName(), puTEST);
+            City ort = daoO.findCityByName(city.getName());
 
             Weather weather1 = new Weather(ort.getId(), LocalDateTime.of(2023, 12, 3, 21, 30, 19), "foggy", "fog", 23.0, 982.0, 91.0, 43.0, 10.0);
             Weather weather2 = new Weather(ort.getId(), LocalDateTime.of(2023, 12, 3, 22, 30, 19), "foggy", "fog", 23.0, 982.0, 91.0, 43.0, 10.0);
