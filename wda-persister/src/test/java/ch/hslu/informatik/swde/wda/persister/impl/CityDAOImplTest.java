@@ -37,11 +37,11 @@ public class CityDAOImplTest {
     @MethodSource("cityListProvider")
     void test_SavingCity_ShouldBeSameAsFoundByID(List<City> listFromUtil) {
 
-        CityDAO dao = new CityDAOImpl();
+        CityDAO dao = new CityDAOImpl(puTEST);
 
         for (City c : listFromUtil) {
-            dao.speichern(c, puTEST);
-            assertEquals(c, dao.findById(c.getId(), puTEST), "Objekte stimmen nicht überein");
+            dao.speichern(c);
+            assertEquals(c, dao.findById(c.getId()), "Objekte stimmen nicht überein");
         }
 
     }
@@ -51,11 +51,11 @@ public class CityDAOImplTest {
     @MethodSource("cityListProvider")
     void test_FindCityIdByName_ShouldBeSameAsSaved(List<City> listFromUtil) {
 
-        CityDAO dao = new CityDAOImpl();
+        CityDAO dao = new CityDAOImpl(puTEST);
 
         for (City c : listFromUtil) {
-            dao.speichern(c, puTEST);
-            assertEquals(c.getId(), dao.findCityIdByName(c.getName(), puTEST), "Objekte stimmen nicht überein");
+            dao.speichern(c);
+            assertEquals(c.getId(), dao.findCityIdByName(c.getName()), "Objekte stimmen nicht überein");
         }
 
     }
@@ -65,11 +65,11 @@ public class CityDAOImplTest {
     @MethodSource("cityListProvider")
     void test_SavingCity_ShouldBeSameAsFoundByName(List<City> listFromUtil) {
 
-        CityDAO dao = new CityDAOImpl();
+        CityDAO dao = new CityDAOImpl(puTEST);
 
         for (City c : listFromUtil) {
-            dao.speichern(c, puTEST);
-            assertEquals(c, dao.findCityByName(c.getName(), puTEST), "Objekte stimmen nicht überein");
+            dao.speichern(c);
+            assertEquals(c, dao.findCityByName(c.getName()), "Objekte stimmen nicht überein");
         }
     }
 
@@ -78,11 +78,11 @@ public class CityDAOImplTest {
     @MethodSource("cityListProvider")
     void test_SavingCity_ShouldBeSameAsFoundByFieldNameAndValue(List<City> listFromUtil) {
 
-        CityDAO dao = new CityDAOImpl();
+        CityDAO dao = new CityDAOImpl(puTEST);
 
         for (City c : listFromUtil) {
-            dao.speichern(c, puTEST);
-            assertEquals(c, dao.findEntityByFieldAndString("name", c.getName(), puTEST), "Objekte stimmen nicht überein");
+            dao.speichern(c);
+            assertEquals(c, dao.findEntityByFieldAndString("name", c.getName()), "Objekte stimmen nicht überein");
         }
     }
 
@@ -91,15 +91,15 @@ public class CityDAOImplTest {
     @MethodSource("cityListProvider")
     void test_getAllCitiesFormDB_ShouldBeTheSameAsSavedList(List<City> listFromUtil) {
 
-        CityDAO dao = new CityDAOImpl();
+        CityDAO dao = new CityDAOImpl(puTEST);
         List<City> listFromDB;
 
         for (City c : listFromUtil) {
-            dao.speichern(c, puTEST);
-            assertEquals(c, dao.findById(c.getId(), puTEST));
+            dao.speichern(c);
+            assertEquals(c, dao.findById(c.getId()));
         }
 
-        listFromDB = dao.alle(puTEST);
+        listFromDB = dao.alle();
         assertEquals(listFromUtil, listFromDB, "DB ist nicht kongruent zur Liste");
     }
 
@@ -108,10 +108,10 @@ public class CityDAOImplTest {
     @MethodSource("cityMapProvider")
     void test_saveAllCities_ShouldMakeABulkSave(LinkedHashMap<Integer, City> mapFromUtil) {
 
-        CityDAO dao = new CityDAOImpl();
+        CityDAO dao = new CityDAOImpl(puTEST);
 
-        dao.saveAllCities(mapFromUtil, puTEST);
-        assertEquals(mapFromUtil.size(), dao.alle(puTEST).size(), "Array not the Same");
+        dao.saveAllCities(mapFromUtil);
+        assertEquals(mapFromUtil.size(), dao.alle().size(), "Array not the Same");
 
     }
 
@@ -120,14 +120,14 @@ public class CityDAOImplTest {
     @MethodSource("cityListProvider")
     void test_checkIfTableExist_ShouldReturnBoolean(List<City> listFromUtil) {
 
-        CityDAO dao = new CityDAOImpl();
+        CityDAO dao = new CityDAOImpl(puTEST);
 
         for (City c : listFromUtil) {
-            dao.speichern(c, puTEST);
-            assertEquals(c, dao.findById(c.getId(), puTEST), "Objekte stimmen nicht überein");
+            dao.speichern(c);
+            assertEquals(c, dao.findById(c.getId()), "Objekte stimmen nicht überein");
         }
 
-        boolean status = dao.ifTableExist(puTEST);
+        boolean status = dao.ifTableExist();
         assertTrue(status, "Table was empty");
 
     }
