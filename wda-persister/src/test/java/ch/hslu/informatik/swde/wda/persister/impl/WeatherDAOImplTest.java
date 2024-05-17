@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.TreeMap;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -127,9 +128,34 @@ public class WeatherDAOImplTest {
         List<LocalDateTime> weatherRes = daoW.findWeatherDateFromCityByYear(2024, daoO.findCityByName("Davos").getId());
         List<LocalDateTime> weatherResNull = daoW.findWeatherDateFromCityByYear(2025, daoO.findCityByName("Davos").getId());
 
-        for (LocalDateTime ldt : weatherRes) {
-            LOG.info("LDT: " + ldt);
+        assertAll(
+                () -> assertNotNull(weatherRes, "2024 sollte nicht eine leere Liste ergeben"),
+                () -> assertTrue(weatherResNull.isEmpty(), "2025 sollte leer sein")
+        );
+    }
+
+    @Tag("unittest")
+    @ParameterizedTest
+    @MethodSource("cityListProvider")
+    void test_GetWeatherFromCityByMonth_ShouldReturnMultibleWeather(List<City> cityList) {
+
+        WeatherDAO daoW = new WeatherDAOImpl();
+        CityDAO daoO = new CityDAOImpl();
+
+        for (City c : cityList) {
+            daoO.speichern(c);
+            assertEquals(c, daoO.findById(c.getId()));
         }
+
+        List<Weather> wetterList = Util.createWetterList();
+
+        for (Weather w : wetterList) {
+            daoW.speichern(w);
+            assertEquals(w, daoW.findById(w.getId()));
+        }
+
+        TreeMap<LocalDateTime, Weather> weatherRes = daoW.findWeatherFromCityByMonth(3, daoO.findCityByName("Davos").getId());
+        TreeMap<LocalDateTime, Weather> weatherResNull = daoW.findWeatherFromCityByMonth(12, daoO.findCityByName("Davos").getId());
 
         assertAll(
                 () -> assertNotNull(weatherRes, "2024 sollte nicht eine leere Liste ergeben"),
@@ -159,7 +185,6 @@ public class WeatherDAOImplTest {
 
         Weather resWeather = daoW.findWeatherFromCityByDateTime(LocalDateTime.now(), daoO.findCityIdByName("Davos"));
 
-        LOG.info("WEATHER: " + resWeather);
         assertNotNull(resWeather, "It should not be null");
 
     }
