@@ -18,7 +18,7 @@ class BusinessImplTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(BusinessImplTest.class);
 
-    private static final String puTEST = "testPU";
+    private static final String  puTEST = "testPU";
 
     @BeforeEach
     void setUp() {
@@ -40,10 +40,10 @@ class BusinessImplTest {
     @Test
     void addAllCities() {
 
-        final BusinessAPI serviceAPI = new BusinessImpl();
+        final BusinessAPI serviceAPI = new BusinessImpl(puTEST);
 
         long start = System.currentTimeMillis();
-        serviceAPI.addAllCities(puTEST);
+        serviceAPI.addAllCities();
         long end = System.currentTimeMillis();
 
         long time = end - start;
@@ -55,15 +55,15 @@ class BusinessImplTest {
     @Test
     void addCurrentWeatherOfCity() {
 
-        final BusinessAPI serviceAPI = new BusinessImpl();
+        final BusinessAPI serviceAPI = new BusinessImpl(puTEST);
 
-        serviceAPI.addAllCities(puTEST);
-        List<City> resCityList = serviceAPI.getAllCities(puTEST);
+        serviceAPI.addAllCities();
+        List<City> resCityList = serviceAPI.getAllCities();
 
         for (City c : resCityList) {
 
             long start = System.currentTimeMillis();
-            serviceAPI.addCurrentWeatherOfCity(c.getName(), puTEST);
+            serviceAPI.addCurrentWeatherOfCity(c.getName());
             long end = System.currentTimeMillis();
 
             long time = end - start;
@@ -75,16 +75,16 @@ class BusinessImplTest {
     @Test
     void addCurrentWeatherOfCity_butLatestIsOneDayOlder() {
 
-        final BusinessAPI serviceAPI = new BusinessImpl();
+        final BusinessAPI serviceAPI = new BusinessImpl(puTEST);
 
         Util.saveDummyWeather();
-        List<City> resCityList = serviceAPI.getAllCities(puTEST);
+        List<City> resCityList = serviceAPI.getAllCities();
         assertEquals(1, resCityList.size());
 
         for (City c : resCityList) {
 
             long start = System.currentTimeMillis();
-            serviceAPI.addCurrentWeatherOfCity(c.getName(), puTEST);
+            serviceAPI.addCurrentWeatherOfCity(c.getName());
             long end = System.currentTimeMillis();
 
             long time = end - start;
@@ -96,11 +96,11 @@ class BusinessImplTest {
     @Test
     void addWeatherOfCityByYear() {
 
-        final BusinessAPI serviceAPI = new BusinessImpl();
-        serviceAPI.addAllCities(puTEST);
+        final BusinessAPI serviceAPI = new BusinessImpl(puTEST);
+        serviceAPI.addAllCities();
 
         long start = System.currentTimeMillis();
-        serviceAPI.addWeatherOfCityByYear("Davos", 2024, puTEST);
+        serviceAPI.addWeatherOfCityByYear("Davos", 2024);
         long end = System.currentTimeMillis();
 
         long time = end - start;
@@ -112,14 +112,14 @@ class BusinessImplTest {
     @Test
     void addWeatherOfAllCitiesByYear() {
 
-        final BusinessAPI serviceAPI = new BusinessImpl();
+        final BusinessAPI serviceAPI = new BusinessImpl(puTEST);
 
-        serviceAPI.addAllCities(puTEST);
-        List<City> resCity = serviceAPI.getAllCities(puTEST);
+        serviceAPI.addAllCities();
+        List<City> resCity = serviceAPI.getAllCities();
         for (City c : resCity) {
 
             long start = System.currentTimeMillis();
-            serviceAPI.addWeatherOfCityByYear(c.getName(), 2024, puTEST);
+            serviceAPI.addWeatherOfCityByYear(c.getName(), 2024);
             long end = System.currentTimeMillis();
 
             long time = end - start;
@@ -131,9 +131,9 @@ class BusinessImplTest {
     @Test
     void getAllCities() {
 
-        final BusinessAPI serviceAPI = new BusinessImpl();
+        final BusinessAPI serviceAPI = new BusinessImpl(puTEST);
 
-        List<City> resCity = serviceAPI.getAllCities(puTEST);
+        List<City> resCity = serviceAPI.getAllCities();
         for (City c : resCity) {
             LOG.info("City : " + c);
         }
@@ -143,11 +143,11 @@ class BusinessImplTest {
     @Test
     void getLatestWeatherOfCity() {
 
-        final BusinessAPI serviceAPI = new BusinessImpl();
+        final BusinessAPI serviceAPI = new BusinessImpl(puTEST);
 
-        List<City> resCity = serviceAPI.getAllCities(puTEST);
+        List<City> resCity = serviceAPI.getAllCities();
         for (City c : resCity) {
-            Weather currentWeather = serviceAPI.getLatestWeatherOfCity(c.getName(), puTEST);
+            Weather currentWeather = serviceAPI.getLatestWeatherOfCity(c.getName());
             LOG.info("Current Weather: " + currentWeather);
         }
     }
@@ -156,15 +156,15 @@ class BusinessImplTest {
     @Test
     void getWeatherOfCityByYear() {
 
-        final BusinessAPI serviceAPI = new BusinessImpl();
+        final BusinessAPI serviceAPI = new BusinessImpl(puTEST);
 
-        serviceAPI.addAllCities(puTEST);
+        serviceAPI.addAllCities();
 
-        List<City> cityList = serviceAPI.getAllCities(puTEST);
+        List<City> cityList = serviceAPI.getAllCities();
 
         for (City c : cityList) {
-            serviceAPI.addCurrentWeatherOfCity(c.getName(), puTEST);
-            TreeMap<LocalDateTime, Weather> restLDT = serviceAPI.getWeatherOfCityByYear(2024, c.getName(), puTEST);
+            serviceAPI.addCurrentWeatherOfCity(c.getName());
+            TreeMap<LocalDateTime, Weather> restLDT = serviceAPI.getWeatherOfCityByYear(2024, c.getName());
             assertAll(
                     () -> assertNotNull(restLDT, "Liste sollte nicht null sein:")
             );
@@ -175,15 +175,15 @@ class BusinessImplTest {
     @Test
     void getWeatherOfCityByTimespan() {
 
-        final BusinessAPI serviceAPI = new BusinessImpl();
+        final BusinessAPI serviceAPI = new BusinessImpl(puTEST);
 
-        serviceAPI.addAllCities(puTEST);
-        serviceAPI.addWeatherOfCityByYear("Davos", Year.now().getValue(), puTEST);
-        TreeMap<LocalDateTime, Weather> resWeather = serviceAPI.getWeatherByCityAndTimeSpan("Davos" ,LocalDateTime.now().minusMonths(1), LocalDateTime.now(), puTEST);
+        serviceAPI.addAllCities();
+        serviceAPI.addWeatherOfCityByYear("Davos", Year.now().getValue());
+        TreeMap<LocalDateTime, Weather> resWeather = serviceAPI.getWeatherByCityAndTimeSpan("Davos" ,LocalDateTime.now().minusMonths(1), LocalDateTime.now());
 
         assertAll(
                 () -> assertNotNull(resWeather, "Liste sollte nicht null sein:"),
-                () -> assertEquals(resWeather.lastEntry().getValue().getDTstamp(), serviceAPI.getCurrentWeatherOfCity("Davos", puTEST).getDTstamp(), "Datum sollte das gleiche sein")
+                () -> assertEquals(resWeather.lastEntry().getValue().getDTstamp(), serviceAPI.getCurrentWeatherOfCity("Davos").getDTstamp(), "Datum sollte das gleiche sein")
         );
 
     }
