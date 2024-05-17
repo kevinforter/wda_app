@@ -137,7 +137,33 @@ public class WeatherDAOImplTest {
         );
     }
 
-    @Ignore
+    @Tag("unittest")
+    @ParameterizedTest
+    @MethodSource("cityListProvider")
+    void findWeatherFromCityByDateTime_ShouldReturnNull_WhenWeatherDoesNotExist(List<City> cityList) {
+
+        WeatherDAO daoW = new WeatherDAOImpl();
+        CityDAO daoO = new CityDAOImpl();
+
+        for (City c : cityList) {
+            daoO.speichern(c);
+            assertEquals(c, daoO.findById(c.getId()));
+        }
+
+        List<Weather> wetterList = Util.createWetterList();
+
+        for (Weather w : wetterList) {
+            daoW.speichern(w);
+            assertEquals(w, daoW.findById(w.getId()));
+        }
+
+        Weather resWeather = daoW.findWeatherFromCityByDateTime(LocalDateTime.now(), daoO.findCityIdByName("Davos"));
+
+        LOG.info("WEATHER: " + resWeather);
+        assertNotNull(resWeather, "It should not be null");
+
+    }
+
     @Tag("unittest")
     @ParameterizedTest
     @MethodSource("cityListProvider")

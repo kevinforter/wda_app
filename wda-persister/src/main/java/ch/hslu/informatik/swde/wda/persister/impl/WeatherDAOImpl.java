@@ -13,11 +13,14 @@ import ch.hslu.informatik.swde.wda.domain.Weather;
 import ch.hslu.informatik.swde.wda.persister.DAO.WeatherDAO;
 import ch.hslu.informatik.swde.wda.persister.util.JpaUtil;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import org.eclipse.persistence.internal.jpa.EntityManagerImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.Timestamp;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -161,24 +164,27 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
 
         EntityManager em = JpaUtil.createEntityManager();
 
-        Weather objFromDb = null;
-
         TypedQuery<Weather> tQry = em.createQuery(
-                "SELECT w FROM Weather" + " w " +
-                        "WHERE w.cityId = :cityId AND w.DTstamp = :DTstamp"
-                , Weather.class);
-
-        tQry.setParameter("DTstamp", DTstamp);
+                "SELECT w FROM Weather w WHERE w.cityId = :cityId ORDER BY w.DTstamp ASC"
+                , Weather.class
+        );
         tQry.setParameter("cityId", cityId);
+        tQry.setMaxResults(1);
 
-        try {
-            objFromDb = tQry.getSingleResult();
-        } catch (Exception e) {
-            // No entities found in the database
-            LOG.debug("No Weather found for City ID: " + cityId);
+        List<Weather> results = tQry.getResultList();
+
+        Weather closestWeather = null;
+        long closestDifference = Long.MAX_VALUE;
+
+        for (Weather weather : results) {
+            long difference = Math.abs(Duration.between(weather.getDTstamp(), DTstamp).getSeconds());
+            if (difference < closestDifference) {
+                closestDifference = difference;
+                closestWeather = weather;
+            }
         }
-        em.close();
-        return objFromDb;
+
+        return closestWeather;
     }
 
     /**
