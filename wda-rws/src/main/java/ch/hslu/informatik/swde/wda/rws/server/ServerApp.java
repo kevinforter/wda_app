@@ -18,6 +18,7 @@ package ch.hslu.informatik.swde.wda.rws.server;
 
 import ch.hslu.informatik.swde.wda.rws.resources.WdaResource;
 import ch.hslu.informatik.swde.wda.rws.util.LocalDateTimeConverterProvider;
+import ch.hslu.informatik.swde.wda.rws.util.SQLServerChecker;
 import ch.hslu.informatik.swde.wda.rws.util.ServerChecker;
 import com.sun.net.httpserver.HttpServer;
 import org.glassfish.jersey.jdkhttp.JdkHttpServerFactory;
@@ -38,6 +39,8 @@ public class ServerApp {
 
 		ServerChecker.checkServer("eee-03317.simple.eee.intern", 8080);
 		ServerChecker.checkServer("localhost", 5432);
+		SQLServerChecker.checkServer("jdbc:postgresql://localhost:5432/app_db", "postgres", "postgres");
+		SQLServerChecker.checkServer("jdbc:postgresql://localhost:5432/app_db_test", "postgres", "postgres");
 
 		HttpServer srv = JdkHttpServerFactory.createHttpServer(uri, resConf);
 
