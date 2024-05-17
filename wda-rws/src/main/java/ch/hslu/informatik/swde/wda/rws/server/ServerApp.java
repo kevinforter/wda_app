@@ -37,10 +37,7 @@ public class ServerApp {
 
 		resConf.register(LocalDateTimeConverterProvider.class);
 
-		ServerChecker.checkServer("eee-03317.simple.eee.intern", 8080);
-		ServerChecker.checkServer("localhost", 5432);
-		SQLServerChecker.checkServer("jdbc:postgresql://localhost:5432/app_db", "postgres", "postgres");
-		SQLServerChecker.checkServer("jdbc:postgresql://localhost:5432/app_db_test", "postgres", "postgres");
+		check();
 
 		HttpServer srv = JdkHttpServerFactory.createHttpServer(uri, resConf);
 
@@ -55,5 +52,12 @@ public class ServerApp {
 
 		srv.stop(1);
 		System.out.println("Execution stopped ...");
+	}
+
+	private static void check() {
+		ServerChecker.checkServer("eee-03317.simple.eee.intern", 8080);
+		ServerChecker.checkServer("localhost", 5432);
+		SQLServerChecker.checkServer("jdbc:postgresql://localhost:5432/app_db", "postgres", "postgres");
+		SQLServerChecker.checkServer("jdbc:postgresql://localhost:5432/app_db_test", "postgres", "postgres");
 	}
 }
