@@ -17,21 +17,21 @@ public interface GenericDAO<T> {
      *
      * @param obj Das zu speichernde Objekt vom Typ T.
      */
-    void speichern(T obj);
+    void speichern(T obj, String persistenceUnitName);
 
     /**
      * Entfernt das übergebene Objekt aus dem Datenbestand.
      *
      * @param id Die eindeutige ID des zu löschenden Objekts.
      */
-    void loeschen(int id);
+    void loeschen(int id, String persistenceUnitName);
 
     /**
      * Aktualisiert das übergebene Objekt im Datenbestand.
      *
      * @param obj Das zu aktualisierende Objekt vom Typ T.
      */
-    void aktualisieren(T obj);
+    void aktualisieren(T obj, String persistenceUnitName);
 
     /**
      * Sucht und liefert ein Objekt vom Typ T, basierend auf seiner eindeutigen ID.
@@ -40,7 +40,7 @@ public interface GenericDAO<T> {
      * @return Das gefundene Objekt vom Typ T, oder ein leeres Objekt,
      * falls kein Objekt mit der angegebenen ID gefunden wurde.
      */
-    T findById(int id);
+    T findById(int id, String persistenceUnitName);
 
     /**
      * Sucht und liefert ein Objekt vom Typ T, basierend auf dem Feldnamen und Wert.
@@ -50,7 +50,7 @@ public interface GenericDAO<T> {
      * @return Das gefundene Objekt vom Typ T, oder ein leeres Objekt,
      * falls kein Objekt mit der angegebenen Parameter gefunden wurde.
      */
-    T findEntityByFieldAndString(String fieldName, Object value);
+    T findEntityByFieldAndString(String fieldName, Object value, String persistenceUnitName);
 
     /**
      * Holt alle Objekte vom Typ T aus dem Datenbestand.
@@ -58,12 +58,12 @@ public interface GenericDAO<T> {
      * @return Eine Liste aller Objekte vom Typ T im Datenbestand.
      * Die Liste kann leer sein, falls keine Objekte gefunden wurden.
      */
-    List<T> alle();
+    List<T> alle(String persistenceUnitName);
 
     /**
      * Gibt an obe eine Tabelle leer oder voll ist
      *
      * @return true oder false
      */
-    boolean ifTableExist();
+    boolean ifTableExist(String persistenceUnitName);
 }

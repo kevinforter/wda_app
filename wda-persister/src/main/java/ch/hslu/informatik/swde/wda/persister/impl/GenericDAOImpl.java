@@ -40,9 +40,9 @@ public class GenericDAOImpl<T> implements GenericDAO<T> {
      * @throws RuntimeException if an exception occurs during the execution of the method
      */
     @Override
-    public void speichern(T obj) {
+    public void speichern(T obj, String persistenceUnitName) {
 
-        EntityManager em = JpaUtil.createEntityManager();
+        EntityManager em = JpaUtil.createEntityManager(persistenceUnitName);
 
         try {
             em.getTransaction().begin();
@@ -72,9 +72,9 @@ public class GenericDAOImpl<T> implements GenericDAO<T> {
      * @param id the id of the entity to be deleted
      */
     @Override
-    public void loeschen(int id) {
+    public void loeschen(int id, String persistenceUnitName) {
 
-        EntityManager em = JpaUtil.createEntityManager();
+        EntityManager em = JpaUtil.createEntityManager(persistenceUnitName);
 
         T objToDelete = em.find(entityClass, id);
 
@@ -108,9 +108,9 @@ public class GenericDAOImpl<T> implements GenericDAO<T> {
      * @param obj the entity to be updated
      */
     @Override
-    public void aktualisieren(T obj) {
+    public void aktualisieren(T obj, String persistenceUnitName) {
 
-        EntityManager em = JpaUtil.createEntityManager();
+        EntityManager em = JpaUtil.createEntityManager(persistenceUnitName);
 
         if (obj != null) {
 
@@ -142,9 +142,9 @@ public class GenericDAOImpl<T> implements GenericDAO<T> {
      * @return the entity with the provided id, or null if no such entity exists
      */
     @Override
-    public T findById(int id) {
+    public T findById(int id, String persistenceUnitName) {
 
-        EntityManager em = JpaUtil.createEntityManager();
+        EntityManager em = JpaUtil.createEntityManager(persistenceUnitName);
 
         T objFromDb = em.find(entityClass, id);
 
@@ -167,8 +167,8 @@ public class GenericDAOImpl<T> implements GenericDAO<T> {
      * @return the entity that matches the field and value, or null if no such entity exists
      */
     @Override
-    public T findEntityByFieldAndString(String fieldName, Object value) {
-        EntityManager em = JpaUtil.createEntityManager();
+    public T findEntityByFieldAndString(String fieldName, Object value, String persistenceUnitName) {
+        EntityManager em = JpaUtil.createEntityManager(persistenceUnitName);
 
         T objFromDb = null;
 
@@ -197,9 +197,9 @@ public class GenericDAOImpl<T> implements GenericDAO<T> {
      * @return a list of all entities, or an empty list if no entities exist
      */
     @Override
-    public List<T> alle() {
+    public List<T> alle(String persistenceUnitName) {
 
-        EntityManager em = JpaUtil.createEntityManager();
+        EntityManager em = JpaUtil.createEntityManager(persistenceUnitName);
 
         TypedQuery<T> tQry = em.createQuery("SELECT e FROM " + entityClass.getSimpleName() + " e", entityClass);
         List<T> objListe = tQry.getResultList();
@@ -220,9 +220,9 @@ public class GenericDAOImpl<T> implements GenericDAO<T> {
      * @throws RuntimeException if an exception occurs during the execution of the query
      */
     @Override
-    public boolean ifTableExist() {
+    public boolean ifTableExist(String persistenceUnitName) {
 
-        EntityManager em = JpaUtil.createEntityManager();
+        EntityManager em = JpaUtil.createEntityManager(persistenceUnitName);
 
         long count;
 

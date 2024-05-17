@@ -21,14 +21,14 @@ public interface BusinessAPI {
     /**
      * Fügt alle Städte zur Datenbank hinzu.
      */
-    void addAllCities();
+    void addAllCities(String persistenceUnitName);
 
     /**
      * Fügt das aktuelle Wetter einer bestimmten Stadt zur Datenbank hinzu.
      *
      * @param cityName Der Name der Stadt.
      */
-    void addCurrentWeatherOfCity(String cityName);
+    void addCurrentWeatherOfCity(String cityName, String persistenceUnitName);
 
     /**
      * Fügt das Wetter einer bestimmten Stadt für ein bestimmtes Jahr zur Datenbank hinzu.
@@ -36,7 +36,7 @@ public interface BusinessAPI {
      * @param city Der Name der Stadt.
      * @param year Das Jahr, für das die Wetterdaten hinzugefügt werden sollen.
      */
-    void addWeatherOfCityByYear(String city, int year);
+    void addWeatherOfCityByYear(String city, int year, String persistenceUnitName);
 
     /**
      * Ruft eine Stadt nach ihrem Namen ab.
@@ -44,14 +44,14 @@ public interface BusinessAPI {
      * @param name Der Name der Stadt.
      * @return Das City-Objekt, das dem gegebenen Namen entspricht.
      */
-    City getCityByName(String name);
+    City getCityByName(String name, String persistenceUnitName);
 
     /**
      * Ruft alle Städte aus der Datenbank ab.
      *
      * @return Eine Liste aller City-Objekte in der Datenbank.
      */
-    List<City> getAllCities();
+    List<City> getAllCities(String persistenceUnitName);
 
     /**
      * Ruft das aktuelle Wetter einer bestimmten Stadt ab.
@@ -59,7 +59,7 @@ public interface BusinessAPI {
      * @param cityName Der Name der Stadt.
      * @return Das Weather-Objekt, das das aktuelle Wetter der Stadt darstellt.
      */
-    Weather getCurrentWeatherOfCity(String cityName);
+    Weather getCurrentWeatherOfCity(String cityName, String persistenceUnitName);
 
     /**
      * Ruft die neuesten Wetterdaten einer bestimmten Stadt ab.
@@ -67,7 +67,7 @@ public interface BusinessAPI {
      * @param cityName Der Name der Stadt.
      * @return Das Weather-Objekt, das das neueste Wetter der Stadt darstellt.
      */
-    Weather getLatestWeatherOfCity(String cityName);
+    Weather getLatestWeatherOfCity(String cityName, String persistenceUnitName);
 
     /**
      * Ruft das Wetter einer bestimmten Stadt für ein bestimmtes Jahr ab.
@@ -76,7 +76,7 @@ public interface BusinessAPI {
      * @param cityName Der Name der Stadt.
      * @return Ein TreeMap, bei dem die Schlüssel die Daten und Zeiten der Wetterdaten sind und die Werte die entsprechenden Weather-Objekte.
      */
-    TreeMap<LocalDateTime, Weather> getWeatherOfCityByYear(int year, String cityName);
+    TreeMap<LocalDateTime, Weather> getWeatherOfCityByYear(int year, String cityName, String persistenceUnitName);
 
     /**
      * Ruft das Wetter einer bestimmten Stadt für ein bestimmtes Jahr ab.
@@ -85,7 +85,7 @@ public interface BusinessAPI {
      * @param cityName Der Name der Stadt.
      * @return Ein TreeMap, bei dem die Schlüssel die Daten und Zeiten der Wetterdaten sind und die Werte die entsprechenden Weather-Objekte.
      */
-    TreeMap<LocalDateTime, Weather> getWeatherOfCityByMonth(int month, String cityName);
+    TreeMap<LocalDateTime, Weather> getWeatherOfCityByMonth(int month, String cityName, String persistenceUnitName);
 
     /**
      * Ruft das Wetter für ein bestimmtes Jahr ab.
@@ -93,7 +93,7 @@ public interface BusinessAPI {
      * @param year Das Jahr, für das die Wetterdaten abgerufen werden sollen.
      * @return Ein TreeMap, bei dem die Schlüssel die Daten und Zeiten der Wetterdaten sind und die Werte die entsprechenden Weather-Objekte.
      */
-    TreeMap<LocalDateTime, Weather> getWeatherByYear(int year);
+    TreeMap<LocalDateTime, Weather> getWeatherByYear(int year, String persistenceUnitName);
 
     /**
      * Retrieves a map of Weather entities within a specific number of days from the current date.
@@ -105,7 +105,7 @@ public interface BusinessAPI {
      * @param days the number of days from the current date for which the Weather entities are to be retrieved
      * @return a TreeMap of Weather entities within the specified number of days from the current date, sorted in ascending order of the timestamp
      */
-    TreeMap<LocalDateTime, Weather> getWeatherByDayDifference(int days);
+    TreeMap<LocalDateTime, Weather> getWeatherByDayDifference(int days, String persistenceUnitName);
 
     /**
      * Retrieves a map of Weather entities associated with a specific city and within a specific time span.
@@ -119,7 +119,7 @@ public interface BusinessAPI {
      * @param bis       the end of the time span for which the Weather entities are to be retrieved
      * @return          a TreeMap of Weather entities associated with the provided city ID and within the specified time span, sorted in ascending order of the timestamp
      */
-    TreeMap<LocalDateTime, Weather> getWeatherByCityAndTimeSpan(String cityName, LocalDateTime von, LocalDateTime bis);
+    TreeMap<LocalDateTime, Weather> getWeatherByCityAndTimeSpan(String cityName, LocalDateTime von, LocalDateTime bis, String persistenceUnitName);
 
     /**
      * Initializes the Weather Data Application (WDA) by adding all cities and their current year's weather data.
@@ -130,5 +130,5 @@ public interface BusinessAPI {
      * and for each city in the list,
      * it calls the addWeatherOfCityByYear method of the service object with the city's name and the current year.
      */
-    boolean init();
+    boolean init(String persistenceUnitName);
 }

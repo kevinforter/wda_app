@@ -24,6 +24,8 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 public class WeatherDAOImplTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(WeatherDAOImplTest.class);
+    
+    private static final String puTEST = "testPU";
 
     @BeforeEach
     void setUp() {
@@ -49,13 +51,13 @@ public class WeatherDAOImplTest {
         CityDAO daoO = new CityDAOImpl();
 
         for (City c : cityList) {
-            daoO.speichern(c);
-            assertEquals(c, daoO.findById(c.getId()));
+            daoO.speichern(c, puTEST);
+            assertEquals(c, daoO.findById(c.getId(), puTEST));
         }
 
         for (Weather w : Util.createWetterList()) {
-            daoW.speichern(w);
-            assertEquals(w, daoW.findById(w.getId()));
+            daoW.speichern(w, puTEST);
+            assertEquals(w, daoW.findById(w.getId(), puTEST));
         }
 
     }
@@ -69,18 +71,18 @@ public class WeatherDAOImplTest {
         CityDAO daoO = new CityDAOImpl();
 
         for (City c : cityList) {
-            daoO.speichern(c);
-            assertEquals(c, daoO.findById(c.getId()));
+            daoO.speichern(c, puTEST);
+            assertEquals(c, daoO.findById(c.getId(), puTEST));
         }
 
         List<Weather> listFromUtil = Util.createWetterList();
 
         for (Weather w : listFromUtil) {
-            daoW.speichern(w);
-            assertEquals(w, daoW.findById(w.getId()));
+            daoW.speichern(w, puTEST);
+            assertEquals(w, daoW.findById(w.getId(), puTEST));
         }
 
-        List<Weather> listFromDB = daoW.alle();
+        List<Weather> listFromDB = daoW.alle(puTEST);
         assertEquals(listFromUtil.size(), listFromDB.size());
     }
 
@@ -93,15 +95,15 @@ public class WeatherDAOImplTest {
         CityDAO daoO = new CityDAOImpl();
 
         for (City c : cityList) {
-            daoO.speichern(c);
-            assertEquals(c, daoO.findById(c.getId()));
+            daoO.speichern(c, puTEST);
+            assertEquals(c, daoO.findById(c.getId(), puTEST));
         }
 
         List<Weather> wetterList = Util.createWetterList();
 
         for (Weather w : wetterList) {
-            daoW.speichern(w);
-            assertEquals(w, daoW.findById(w.getId()));
+            daoW.speichern(w, puTEST);
+            assertEquals(w, daoW.findById(w.getId(), puTEST));
         }
     }
 
@@ -114,19 +116,19 @@ public class WeatherDAOImplTest {
         CityDAO daoO = new CityDAOImpl();
 
         for (City c : cityList) {
-            daoO.speichern(c);
-            assertEquals(c, daoO.findById(c.getId()));
+            daoO.speichern(c, puTEST);
+            assertEquals(c, daoO.findById(c.getId(), puTEST));
         }
 
         List<Weather> wetterList = Util.createWetterList();
 
         for (Weather w : wetterList) {
-            daoW.speichern(w);
-            assertEquals(w, daoW.findById(w.getId()));
+            daoW.speichern(w, puTEST);
+            assertEquals(w, daoW.findById(w.getId(), puTEST));
         }
 
-        List<LocalDateTime> weatherRes = daoW.findWeatherDateFromCityByYear(2024, daoO.findCityByName("Davos", "testPU").getId());
-        List<LocalDateTime> weatherResNull = daoW.findWeatherDateFromCityByYear(2025, daoO.findCityByName("Davos", "testPU").getId());
+        List<LocalDateTime> weatherRes = daoW.findWeatherDateFromCityByYear(2024, daoO.findCityByName("Davos", puTEST).getId(), puTEST);
+        List<LocalDateTime> weatherResNull = daoW.findWeatherDateFromCityByYear(2025, daoO.findCityByName("Davos", puTEST).getId(), puTEST);
 
         assertAll(
                 () -> assertNotNull(weatherRes, "2024 sollte nicht eine leere Liste ergeben"),
@@ -143,19 +145,19 @@ public class WeatherDAOImplTest {
         CityDAO daoO = new CityDAOImpl();
 
         for (City c : cityList) {
-            daoO.speichern(c);
-            assertEquals(c, daoO.findById(c.getId()));
+            daoO.speichern(c, puTEST);
+            assertEquals(c, daoO.findById(c.getId(), puTEST));
         }
 
         List<Weather> wetterList = Util.createWetterList();
 
         for (Weather w : wetterList) {
-            daoW.speichern(w);
-            assertEquals(w, daoW.findById(w.getId()));
+            daoW.speichern(w, puTEST);
+            assertEquals(w, daoW.findById(w.getId(), puTEST));
         }
 
-        TreeMap<LocalDateTime, Weather> weatherRes = daoW.findWeatherFromCityByMonth(3, daoO.findCityByName("Davos", "testPU").getId());
-        TreeMap<LocalDateTime, Weather> weatherResNull = daoW.findWeatherFromCityByMonth(12, daoO.findCityByName("Davos", "testPU").getId());
+        TreeMap<LocalDateTime, Weather> weatherRes = daoW.findWeatherFromCityByMonth(3, daoO.findCityByName("Davos", puTEST).getId(), puTEST);
+        TreeMap<LocalDateTime, Weather> weatherResNull = daoW.findWeatherFromCityByMonth(12, daoO.findCityByName("Davos", puTEST).getId(), puTEST);
 
         assertAll(
                 () -> assertNotNull(weatherRes, "2024 sollte nicht eine leere Liste ergeben"),
@@ -172,18 +174,18 @@ public class WeatherDAOImplTest {
         CityDAO daoO = new CityDAOImpl();
 
         for (City c : cityList) {
-            daoO.speichern(c);
-            assertEquals(c, daoO.findById(c.getId()));
+            daoO.speichern(c, puTEST);
+            assertEquals(c, daoO.findById(c.getId(), puTEST));
         }
 
         List<Weather> wetterList = Util.createWetterList();
 
         for (Weather w : wetterList) {
-            daoW.speichern(w);
-            assertEquals(w, daoW.findById(w.getId()));
+            daoW.speichern(w, puTEST);
+            assertEquals(w, daoW.findById(w.getId(), puTEST));
         }
 
-        Weather resWeather = daoW.findWeatherFromCityByDateTime(LocalDateTime.now(), daoO.findCityIdByName("Davos", "testPU"));
+        Weather resWeather = daoW.findWeatherFromCityByDateTime(LocalDateTime.now(), daoO.findCityIdByName("Davos", puTEST), puTEST);
 
         assertNotNull(resWeather, "It should not be null");
 
@@ -198,13 +200,13 @@ public class WeatherDAOImplTest {
         CityDAO daoO = new CityDAOImpl();
 
         for (City c : cityList) {
-            daoO.speichern(c);
-            assertEquals(c, daoO.findById(c.getId()));
+            daoO.speichern(c, puTEST);
+            assertEquals(c, daoO.findById(c.getId(), puTEST));
         }
 
-        //daoW.saveAllWeather(Util.createWeatherMap(), "Neuchatel");
+        daoW.saveAllWeather(Util.createWeatherMap(), daoO.findCityIdByName("Neuchatel", puTEST), puTEST);
 
-        assertEquals(3, daoW.alle().size());
+        assertEquals(3, daoW.alle(puTEST).size());
     }
 
     @Tag("unittest")
@@ -216,11 +218,11 @@ public class WeatherDAOImplTest {
         CityDAO daoO = new CityDAOImpl();
 
         for (City c : cityList) {
-            daoO.speichern(c);
+            daoO.speichern(c, puTEST);
 
             assertAll(
-                    () -> assertEquals(c, daoO.findById(c.getId()), "City Wasn't in List"),
-                    () -> assertFalse(daoW.ifWeatherOfCityExist(c.getId()), "Table was empty")
+                    () -> assertEquals(c, daoO.findById(c.getId(), puTEST), "City Wasn't in List"),
+                    () -> assertFalse(daoW.ifWeatherOfCityExist(c.getId(), puTEST), "Table was empty")
             );
         }
     }

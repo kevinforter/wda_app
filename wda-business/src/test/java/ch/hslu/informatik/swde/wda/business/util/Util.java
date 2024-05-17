@@ -13,6 +13,8 @@ import java.time.LocalDateTime;
 
 public class Util {
 
+    private static final String puTEST = "testPU";
+
     private static final CityDAO daoC = new CityDAOImpl();
     private static final WeatherDAO daoW = new WeatherDAOImpl();
 
@@ -22,7 +24,7 @@ public class Util {
 
     public static void cleanDatabase() {
 
-        EntityManager em = JpaUtil.createEntityManager();
+        EntityManager em = JpaUtil.createEntityManager(puTEST);
         em.getTransaction().begin();
 
         em.createQuery("DELETE FROM Weather e").executeUpdate();
@@ -38,9 +40,9 @@ public class Util {
     public static void saveDummyWeather() {
 
         City dummyCity = new City(7270, "Davos", "CH");
-        daoC.speichern(dummyCity);
+        daoC.speichern(dummyCity, puTEST);
 
-        Weather dummyWeather = new Weather(daoC.findCityIdByName("Davos", "testPU"), LocalDateTime.now().minusDays(1), "DUMMY", "DUMMY", 69.69, 69.69, 69.69, 69.69, 69.69);
-        daoW.speichern(dummyWeather);
+        Weather dummyWeather = new Weather(daoC.findCityIdByName("Davos", puTEST), LocalDateTime.now().minusDays(1), "DUMMY", "DUMMY", 69.69, 69.69, 69.69, 69.69, 69.69);
+        daoW.speichern(dummyWeather, puTEST);
     }
 }

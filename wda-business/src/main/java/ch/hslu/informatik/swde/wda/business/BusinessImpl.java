@@ -75,7 +75,7 @@ public class BusinessImpl implements BusinessAPI {
     public void addCurrentWeatherOfCity(String cityName, String persistenceUnitName) {
 
         int cityId = daoC.findCityIdByName(cityName, persistenceUnitName);
-        if (cityId != 0) addCurrentWeatherOfCity(cityId, reader.readCurrentWeatherByCity(cityName));
+        if (cityId != 0) addCurrentWeatherOfCity(cityId, reader.readCurrentWeatherByCity(cityName), persistenceUnitName);
     }
 
     /**
@@ -90,16 +90,16 @@ public class BusinessImpl implements BusinessAPI {
      *
      * @param cityId the id of the city for which the current weather data is to be added
      */
-    private static void addCurrentWeatherOfCity(int cityId, Weather currentWeatherREADER) {
+    private static void addCurrentWeatherOfCity(int cityId, Weather currentWeatherREADER, String persistenceUnitName) {
 
         // Retrieve the latest weather data of the specified city from both the database and an external API
-        Weather latestWeatherDAO = getLatestWeatherOfCity(cityId);
+        Weather latestWeatherDAO = getLatestWeatherOfCity(cityId, persistenceUnitName);
 
         if (latestWeatherDAO == null) {
 
             // If there is no existing weather data in the database for the city, save the current weather data from the API to the database
             currentWeatherREADER.setCityId(cityId);
-            daoW.speichern(currentWeatherREADER);
+            daoW.speichern(currentWeatherREADER, persistenceUnitName);
 
         } else if (currentWeatherREADER != null && !latestWeatherDAO.getDTstamp().isEqual(currentWeatherREADER.getDTstamp())) {
 
@@ -111,12 +111,12 @@ public class BusinessImpl implements BusinessAPI {
 
                 // If the time difference is less than 40 minutes, save the current weather data from the API to the database
                 currentWeatherREADER.setCityId(cityId);
-                daoW.speichern(currentWeatherREADER);
+                daoW.speichern(currentWeatherREADER, persistenceUnitName);
 
             } else {
 
                 // If the time difference is 40 minutes or more, retrieve and save the weather data of the city for the current year
-                addWeatherOfCityByYear(cityId, reader.readWeatherByCityAndFilterByLatestWeather(daoC.findById(cityId).getName(), Year.now().getValue(), latestWeatherDAO.getDTstamp()));
+                addWeatherOfCityByYear(cityId, reader.readWeatherByCityAndFilterByLatestWeather(daoC.findById(cityId, persistenceUnitName).getName(), Year.now().getValue(), latestWeatherDAO.getDTstamp()), persistenceUnitName);
 
             }
         }
@@ -138,7 +138,7 @@ public class BusinessImpl implements BusinessAPI {
     public void addWeatherOfCityByYear(String cityName, int year, String persistenceUnitName) {
 
         int cityId = daoC.findCityIdByName(cityName, persistenceUnitName);
-        if (cityId != 0) addWeatherOfCityByYear(cityId, reader.readWeatherByCityAndYear(cityName, year));
+        if (cityId != 0) addWeatherOfCityByYear(cityId, reader.readWeatherByCityAndYear(cityName, year), persistenceUnitName);
     }
 
     /**
@@ -152,13 +152,13 @@ public class BusinessImpl implements BusinessAPI {
      *
      * @param cityId the id of the city for which the weather data is to be added
      */
-    private static void addWeatherOfCityByYear(int cityId, TreeMap<LocalDateTime, Weather> weatherMap) {
+    private static void addWeatherOfCityByYear(int cityId, TreeMap<LocalDateTime, Weather> weatherMap, String persistenceUnitName) {
 
         // If the size of the weather data retrieved from the API is different from the number of weather data in the database for the city
-        if (weatherMap.size() != daoW.getNumberOfWeatherByCity(cityId)) {
+        if (weatherMap.size() != daoW.getNumberOfWeatherByCity(cityId, persistenceUnitName)) {
 
             TreeMap<LocalDateTime, Weather> weatherToSave = new TreeMap<>();
-            Weather latestWeather = getLatestWeatherOfCity(cityId);
+            Weather latestWeather = getLatestWeatherOfCity(cityId, persistenceUnitName);
 
             // Set the city ID for each of the new weather data
             for (Weather weather : weatherMap.values()) {
@@ -170,7 +170,7 @@ public class BusinessImpl implements BusinessAPI {
             }
 
             // Save all the new weather data to the database as a batch
-            daoW.saveAllWeather(weatherToSave, cityId);
+            daoW.saveAllWeather(weatherToSave, cityId, persistenceUnitName);
         }
     }
 
@@ -197,8 +197,8 @@ public class BusinessImpl implements BusinessAPI {
      * @return a list of all city objects in the database
      */
     @Override
-    public List<City> getAllCities() {
-        return daoC.alle();
+    public List<City> getAllCities(String persistenceUnitName) {
+        return daoC.alle(persistenceUnitName);
     }
 
     /**
@@ -214,7 +214,7 @@ public class BusinessImpl implements BusinessAPI {
     @Override
     public Weather getCurrentWeatherOfCity(String cityName, String persistenceUnitName) {
         int cityId = daoC.findCityIdByName(cityName, persistenceUnitName);
-        return cityId != 0 ? getCurrentWeatherOfCity(cityId, cityName) : new Weather();
+        return cityId != 0 ? getCurrentWeatherOfCity(cityId, cityName, persistenceUnitName) : new Weather();
     }
 
     /**
@@ -228,16 +228,16 @@ public class BusinessImpl implements BusinessAPI {
      * @param cityName the name of the city for which the current weather is to be retrieved
      * @return the current weather of the city
      */
-    private Weather getCurrentWeatherOfCity(int cityId, String cityName) {
+    private Weather getCurrentWeatherOfCity(int cityId, String cityName, String persistenceUnitName) {
 
-        Weather daoWeather = daoW.findLatestWeatherByCity(cityId);
+        Weather daoWeather = daoW.findLatestWeatherByCity(cityId, persistenceUnitName);
         Weather readerWeather = reader.readCurrentWeatherByCity(cityName);
 
         if (daoWeather.getDTstamp().isEqual(readerWeather.getDTstamp())) {
             return daoWeather;
         } else {
-            addCurrentWeatherOfCity(cityName);
-            return getCurrentWeatherOfCity(cityName);
+            addCurrentWeatherOfCity(cityName, persistenceUnitName);
+            return getCurrentWeatherOfCity(cityName, persistenceUnitName);
         }
     }
 
@@ -254,7 +254,7 @@ public class BusinessImpl implements BusinessAPI {
     @Override
     public Weather getLatestWeatherOfCity(String cityName, String persistenceUnitName) {
         int cityId = daoC.findCityIdByName(cityName, persistenceUnitName);
-        return cityId != 0 ? getLatestWeatherOfCity(cityId) : new Weather();
+        return cityId != 0 ? getLatestWeatherOfCity(cityId, persistenceUnitName) : new Weather();
     }
 
     /**
@@ -266,8 +266,8 @@ public class BusinessImpl implements BusinessAPI {
      * @param cityId the ID of the city for which the latest weather is to be retrieved
      * @return the latest weather of the city
      */
-    private static Weather getLatestWeatherOfCity(int cityId) {
-        return daoW.findLatestWeatherByCity(cityId);
+    private static Weather getLatestWeatherOfCity(int cityId, String persistenceUnitName) {
+        return daoW.findLatestWeatherByCity(cityId, persistenceUnitName);
     }
 
     /**
@@ -284,7 +284,7 @@ public class BusinessImpl implements BusinessAPI {
     @Override
     public TreeMap<LocalDateTime, Weather> getWeatherOfCityByYear(int year, String cityName, String persistenceUnitName) {
         int cityId = daoC.findCityIdByName(cityName, persistenceUnitName);
-        return cityId != 0 ? getWeatherOfCityByYear(year, cityId) : new TreeMap<>();
+        return cityId != 0 ? getWeatherOfCityByYear(year, cityId, persistenceUnitName) : new TreeMap<>();
     }
 
     /**
@@ -297,8 +297,8 @@ public class BusinessImpl implements BusinessAPI {
      * @param cityId the ID of the city for which the weather is to be retrieved
      * @return a TreeMap of the weather of the city for the specified year
      */
-    private static TreeMap<LocalDateTime, Weather> getWeatherOfCityByYear(int year, int cityId) {
-        return daoW.findWeatherFromCityByYear(year, cityId);
+    private static TreeMap<LocalDateTime, Weather> getWeatherOfCityByYear(int year, int cityId, String persistenceUnitName) {
+        return daoW.findWeatherFromCityByYear(year, cityId, persistenceUnitName);
     }
 
     /**
@@ -315,7 +315,7 @@ public class BusinessImpl implements BusinessAPI {
     @Override
     public TreeMap<LocalDateTime, Weather> getWeatherOfCityByMonth(int month, String cityName, String persistenceUnitName) {
         int cityId = daoC.findCityIdByName(cityName, persistenceUnitName);
-        return cityId != 0 ? getWeatherOfCityByMonth(month, cityId) : new TreeMap<>();
+        return cityId != 0 ? getWeatherOfCityByMonth(month, cityId, persistenceUnitName) : new TreeMap<>();
     }
 
     /**
@@ -328,8 +328,8 @@ public class BusinessImpl implements BusinessAPI {
      * @param cityId the ID of the city for which the weather is to be retrieved
      * @return a TreeMap of the weather of the city for the specified year
      */
-    private static TreeMap<LocalDateTime, Weather> getWeatherOfCityByMonth(int month, int cityId) {
-        return daoW.findWeatherFromCityByMonth(month, cityId);
+    private static TreeMap<LocalDateTime, Weather> getWeatherOfCityByMonth(int month, int cityId, String persistenceUnitName) {
+        return daoW.findWeatherFromCityByMonth(month, cityId, persistenceUnitName);
     }
 
     /**
@@ -343,8 +343,8 @@ public class BusinessImpl implements BusinessAPI {
      * @return a TreeMap of the weather of the city for the specified year if the city ID is not 0, otherwise an empty TreeMap
      */
     @Override
-    public TreeMap<LocalDateTime, Weather> getWeatherByYear(int year) {
-        return isValidYear(year) ? daoW.findWeatherByYear(year) : new TreeMap<>();
+    public TreeMap<LocalDateTime, Weather> getWeatherByYear(int year, String persistenceUnitName) {
+        return isValidYear(year) ? daoW.findWeatherByYear(year, persistenceUnitName) : new TreeMap<>();
     }
 
     private static boolean isValidYear(int year) {
@@ -365,8 +365,8 @@ public class BusinessImpl implements BusinessAPI {
      * otherwise an empty TreeMap
      */
     @Override
-    public TreeMap<LocalDateTime, Weather> getWeatherByDayDifference(int days) {
-        return isValidDay(days) ? daoW.findWeatherByDayDifference(days) : new TreeMap<>();
+    public TreeMap<LocalDateTime, Weather> getWeatherByDayDifference(int days, String persistenceUnitName) {
+        return isValidDay(days) ? daoW.findWeatherByDayDifference(days, persistenceUnitName) : new TreeMap<>();
     }
 
     private static boolean isValidDay(int day) {
@@ -388,7 +388,7 @@ public class BusinessImpl implements BusinessAPI {
     @Override
     public TreeMap<LocalDateTime, Weather> getWeatherByCityAndTimeSpan(String cityName, LocalDateTime von, LocalDateTime bis, String persistenceUnitName) {
         int cityId = daoC.findCityIdByName(cityName, persistenceUnitName);
-        return cityId != 0 ? getWeatherByCityAndTimeSpan(cityId, von, bis) : new TreeMap<>();
+        return cityId != 0 ? getWeatherByCityAndTimeSpan(cityId, von, bis, persistenceUnitName) : new TreeMap<>();
     }
 
     /**
@@ -403,8 +403,8 @@ public class BusinessImpl implements BusinessAPI {
      * @param bis    the end of the time span for which the weather data is to be retrieved
      * @return a TreeMap of the weather data of the city within the specified time span
      */
-    private static TreeMap<LocalDateTime, Weather> getWeatherByCityAndTimeSpan(int cityId, LocalDateTime von, LocalDateTime bis) {
-        return daoW.findWeatherFromCityByTimeSpan(cityId, von, bis);
+    private static TreeMap<LocalDateTime, Weather> getWeatherByCityAndTimeSpan(int cityId, LocalDateTime von, LocalDateTime bis, String persistenceUnitName) {
+        return daoW.findWeatherFromCityByTimeSpan(cityId, von, bis, persistenceUnitName);
     }
 
     /**
@@ -417,22 +417,22 @@ public class BusinessImpl implements BusinessAPI {
      * it calls the addWeatherOfCityByYear method of the service object with the city's name and the current year.
      */
     @Override
-    public boolean init() {
+    public boolean init(String persistenceUnitName) {
 
-        boolean status = daoI.ifTableExist();
+        boolean status = daoI.ifTableExist(persistenceUnitName);
 
         if (!status) {
 
             try {
-                addAllCities();
+                addAllCities(persistenceUnitName);
 
-                List<City> cityList = getAllCities();
+                List<City> cityList = getAllCities(persistenceUnitName);
 
                 for (City c : cityList) {
-                    addWeatherOfCityByYear(c.getName(), LocalDateTime.now().getYear());
+                    addWeatherOfCityByYear(c.getName(), LocalDateTime.now().getYear(), persistenceUnitName);
                 }
 
-                daoI.speichern(new Init());
+                daoI.speichern(new Init(), persistenceUnitName);
 
                 return false;
             } catch (Exception e) {

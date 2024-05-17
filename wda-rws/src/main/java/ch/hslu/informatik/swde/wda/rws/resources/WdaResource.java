@@ -36,6 +36,8 @@ import java.util.*;
 @Path("wda")
 public class WdaResource {
 
+    private static final String puPROD = "postgresPU";
+
     private static final String BASE_URI = "http://localhost:8080/wda/";
 
     private static final Logger LOG = LoggerFactory.getLogger(WdaResource.class);
@@ -67,7 +69,7 @@ public class WdaResource {
     public Response addAllCities() {
 
         try {
-            service.addAllCities();
+            service.addAllCities(puPROD);
 
             return Response.ok().build();
         } catch (Exception e) {
@@ -101,7 +103,7 @@ public class WdaResource {
     public Response getAllCities() {
 
         try {
-            List<City> cityList = service.getAllCities();
+            List<City> cityList = service.getAllCities(puPROD);
 
             if (!cityList.isEmpty()) {
                 return Response.ok(cityList).build();
@@ -156,7 +158,7 @@ public class WdaResource {
 
              */
 
-            City cityByName = service.getCityByName(name);
+            City cityByName = service.getCityByName(name, puPROD);
 
             if (cityByName != null) {
                 return Response.ok(cityByName).build();
@@ -193,7 +195,7 @@ public class WdaResource {
     public Response addCurrentWeatherOfCity(@QueryParam("name") String name) {
 
         try {
-            service.addCurrentWeatherOfCity(name);
+            service.addCurrentWeatherOfCity(name, puPROD);
 
             return Response.ok().build();
         } catch (Exception e) {
@@ -229,7 +231,7 @@ public class WdaResource {
     public Response getCurrentWeatherOfCity(@QueryParam("name") String name) {
 
         try {
-            Weather currentWeather = service.getCurrentWeatherOfCity(name);
+            Weather currentWeather = service.getCurrentWeatherOfCity(name, puPROD);
 
             if (currentWeather != null) {
                 return Response.ok(currentWeather).build();
@@ -260,7 +262,7 @@ public class WdaResource {
     public Response getLatestWeatherOfCity(@QueryParam("name") String name) {
 
         try {
-            Weather latestWeather = service.getLatestWeatherOfCity(name);
+            Weather latestWeather = service.getLatestWeatherOfCity(name, puPROD);
 
             if (latestWeather != null) {
                 return Response.ok(latestWeather).build();
@@ -298,7 +300,7 @@ public class WdaResource {
     public Response addWeatherOfCityByYear(@PathParam("year") int year, @PathParam("name") String name) {
 
         try {
-            service.addWeatherOfCityByYear(name, year);
+            service.addWeatherOfCityByYear(name, year, puPROD);
 
             return Response.ok().build();
         } catch (Exception e) {
@@ -330,7 +332,7 @@ public class WdaResource {
                                                 @QueryParam("bis") LocalDateTime bis) {
 
         try {
-            TreeMap<LocalDateTime, Weather> weatherRes = service.getWeatherByCityAndTimeSpan(name, von, bis);
+            TreeMap<LocalDateTime, Weather> weatherRes = service.getWeatherByCityAndTimeSpan(name, von, bis, puPROD);
 
             if (!weatherRes.isEmpty()) {
                 return Response.ok(weatherRes).build();
@@ -371,7 +373,7 @@ public class WdaResource {
     public Response getWeatherOfCityByYear(@PathParam("year") int year, @QueryParam("name") String name) {
 
         try {
-            TreeMap<LocalDateTime, Weather> weatherMap = service.getWeatherOfCityByYear(year, name);
+            TreeMap<LocalDateTime, Weather> weatherMap = service.getWeatherOfCityByYear(year, name, puPROD);
 
             if (!weatherMap.isEmpty()) {
                 return Response.ok(weatherMap).build();
@@ -411,7 +413,7 @@ public class WdaResource {
     public Response getWeatherOfCityByMonth(@PathParam("year") int year, @QueryParam("name") String name, @QueryParam("month") int month) {
 
         try {
-            TreeMap<LocalDateTime, Weather> weatherMap = service.getWeatherOfCityByMonth(month, name);
+            TreeMap<LocalDateTime, Weather> weatherMap = service.getWeatherOfCityByMonth(month, name, puPROD);
 
             if (!weatherMap.isEmpty()) {
                 return Response.ok(weatherMap).build();
@@ -450,7 +452,7 @@ public class WdaResource {
     public Response getWeatherByYear(@QueryParam("year") int year) {
 
         try {
-            TreeMap<LocalDateTime, Weather> weatherMap = service.getWeatherByYear(year);
+            TreeMap<LocalDateTime, Weather> weatherMap = service.getWeatherByYear(year, puPROD);
 
             if (!weatherMap.isEmpty()) {
                 return Response.ok(weatherMap).build();
@@ -490,7 +492,7 @@ public class WdaResource {
     public Response getWeatherByDayDifference(@QueryParam("days") int days) {
 
         try {
-            TreeMap<LocalDateTime, Weather> weatherMap = service.getWeatherByDayDifference(days);
+            TreeMap<LocalDateTime, Weather> weatherMap = service.getWeatherByDayDifference(days, puPROD);
 
             if (!weatherMap.isEmpty()) {
                 return Response.ok(weatherMap).build();
@@ -528,10 +530,10 @@ public class WdaResource {
     public Response addAllWeather(@PathParam("year") int year) {
 
         try {
-            List<City> cityList = service.getAllCities();
+            List<City> cityList = service.getAllCities(puPROD);
 
             for (City c : cityList) {
-                service.addWeatherOfCityByYear(c.getName(), year);
+                service.addWeatherOfCityByYear(c.getName(), year, puPROD);
             }
 
             return Response.ok().build();
@@ -567,7 +569,7 @@ public class WdaResource {
     public Response initApp() {
 
         try {
-            boolean status = service.init();
+            boolean status = service.init(puPROD);
 
             if (!status) {
                 return Response.ok().entity("Init executed").build();

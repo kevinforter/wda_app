@@ -14,13 +14,15 @@ import java.util.TreeMap;
 
 public class Util {
 
+    private static final String puTEST = "testPU";
+
     private Util() {
 
     }
 
     public static void cleanDatabase() {
 
-        EntityManager em = JpaUtil.createEntityManager();
+        EntityManager em = JpaUtil.createEntityManager(puTEST);
         em.getTransaction().begin();
 
         em.createQuery("DELETE FROM Weather e").executeUpdate();
@@ -74,7 +76,7 @@ public class Util {
 
         for (City city : cityList) {
 
-            City ort = daoO.findCityByName(city.getName(),"testPU");
+            City ort = daoO.findCityByName(city.getName(),puTEST);
 
             Weather weather1 = new Weather(ort.getId(), LocalDateTime.of(2023, 12, 3, 22, 30, 19), "foggy", "fog", 23.0, 982.0, 91.0, 43.0, 10.0);
             Weather weather2 = new Weather(ort.getId(), LocalDateTime.of(2023, 12, 3, 23, 30, 19), "foggy", "fog", 23.0, 982.0, 91.0, 43.0, 10.0);
@@ -97,7 +99,7 @@ public class Util {
 
         for (City city : cityList) {
 
-            City ort = daoO.findCityByName(city.getName(), "testPU");
+            City ort = daoO.findCityByName(city.getName(), puTEST);
 
             Weather weather1 = new Weather(ort.getId(), LocalDateTime.of(2023, 12, 3, 21, 30, 19), "foggy", "fog", 23.0, 982.0, 91.0, 43.0, 10.0);
             Weather weather2 = new Weather(ort.getId(), LocalDateTime.of(2023, 12, 3, 22, 30, 19), "foggy", "fog", 23.0, 982.0, 91.0, 43.0, 10.0);
