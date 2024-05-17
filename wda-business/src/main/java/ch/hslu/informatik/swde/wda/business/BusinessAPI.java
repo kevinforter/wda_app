@@ -79,6 +79,15 @@ public interface BusinessAPI {
     TreeMap<LocalDateTime, Weather> getWeatherOfCityByYear(int year, String cityName);
 
     /**
+     * Ruft das Wetter einer bestimmten Stadt für ein bestimmtes Jahr ab.
+     *
+     * @param month     Der Monat, für das die Wetterdaten abgerufen werden sollen.
+     * @param cityName Der Name der Stadt.
+     * @return Ein TreeMap, bei dem die Schlüssel die Daten und Zeiten der Wetterdaten sind und die Werte die entsprechenden Weather-Objekte.
+     */
+    TreeMap<LocalDateTime, Weather> getWeatherOfCityByMonth(int month, String cityName);
+
+    /**
      * Ruft das Wetter für ein bestimmtes Jahr ab.
      *
      * @param year Das Jahr, für das die Wetterdaten abgerufen werden sollen.
