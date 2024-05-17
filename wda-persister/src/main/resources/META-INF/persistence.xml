@@ -40,4 +40,41 @@
 		</properties>
 	</persistence-unit>
 
+	<persistence-unit name="testPU" transaction-type="RESOURCE_LOCAL">
+
+		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+
+		<class>ch.hslu.informatik.swde.wda.domain.City</class>
+		<class>ch.hslu.informatik.swde.wda.domain.Weather</class>
+		<class>ch.hslu.informatik.swde.wda.domain.Init</class>
+
+		<validation-mode>AUTO</validation-mode>
+
+		<properties>
+			<property name="jakarta.persistence.jdbc.driver"
+					  value="org.postgresql.Driver" />
+			<property name="jakarta.persistence.jdbc.url"
+					  value="jdbc:postgresql://localhost:5432/app_db_test" />
+			<property name="jakarta.persistence.jdbc.user"
+					  value="postgres" />
+			<property name="jakarta.persistence.jdbc.password"
+					  value="postgres" />
+
+			<property name="eclipselink.ddl-generation.output-mode"
+					  value="database" />
+
+			<property name="eclipselink.ddl-generation"
+					  value="create-tables" />
+
+			<property name="eclipselink.jdbc.batch-writing" value="JDBC"/>
+			<property name="eclipselink.jdbc.batch-writing.size" value="500"/>
+
+			<!-- SQL-Statements ausgeben (JPA-Provider spezifisch, nur während der
+				Entwicklungszeit sinnvoll!) -->
+			<property name="eclipselink.logging.level.sql" value="off" />
+			<property name="eclipselink.logging.parameters" value="false" />
+
+		</properties>
+	</persistence-unit>
+
 </persistence>
