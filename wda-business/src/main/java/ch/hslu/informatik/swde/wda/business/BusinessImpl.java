@@ -46,11 +46,11 @@ public class BusinessImpl implements BusinessAPI {
      * If the numbers are different, it means there are new cities to be added, so it saves all the cities read into the database.
      */
     @Override
-    public void addAllCities() {
+    public void addAllCities(String persistenceUnitName) {
 
         // Read city details from an external source
         LinkedHashMap<Integer, City> cityRes = reader.readCities();
-        Set<String> existingCities = daoC.allCityNames();
+        Set<String> existingCities = daoC.allCityNames(persistenceUnitName);
 
         // Check if the City already exist
         LinkedHashMap<Integer, City> citiesToSave = new LinkedHashMap<>();
@@ -58,7 +58,7 @@ public class BusinessImpl implements BusinessAPI {
             if (!existingCities.contains(c.getName())) citiesToSave.put(c.getZip(), c);
         }
 
-        daoC.saveAllCities(citiesToSave);
+        daoC.saveAllCities(citiesToSave, persistenceUnitName);
     }
 
 
@@ -72,9 +72,9 @@ public class BusinessImpl implements BusinessAPI {
      * @param cityName the name of the city for which the current weather data is to be added
      */
     @Override
-    public void addCurrentWeatherOfCity(String cityName) {
+    public void addCurrentWeatherOfCity(String cityName, String persistenceUnitName) {
 
-        int cityId = daoC.findCityIdByName(cityName);
+        int cityId = daoC.findCityIdByName(cityName, persistenceUnitName);
         if (cityId != 0) addCurrentWeatherOfCity(cityId, reader.readCurrentWeatherByCity(cityName));
     }
 
@@ -135,9 +135,9 @@ public class BusinessImpl implements BusinessAPI {
      * @param year     the year for which the weather data is to be added
      */
     @Override
-    public void addWeatherOfCityByYear(String cityName, int year) {
+    public void addWeatherOfCityByYear(String cityName, int year, String persistenceUnitName) {
 
-        int cityId = daoC.findCityIdByName(cityName);
+        int cityId = daoC.findCityIdByName(cityName, persistenceUnitName);
         if (cityId != 0) addWeatherOfCityByYear(cityId, reader.readWeatherByCityAndYear(cityName, year));
     }
 
@@ -184,8 +184,8 @@ public class BusinessImpl implements BusinessAPI {
      * @return the city object if found, otherwise null
      */
     @Override
-    public City getCityByName(String name) {
-        return daoC.findCityByName(name);
+    public City getCityByName(String name, String persistenceUnitName) {
+        return daoC.findCityByName(name, persistenceUnitName);
     }
 
     /**
@@ -212,8 +212,8 @@ public class BusinessImpl implements BusinessAPI {
      * @return the current weather of the city if the city ID is not 0, otherwise a new weather object
      */
     @Override
-    public Weather getCurrentWeatherOfCity(String cityName) {
-        int cityId = daoC.findCityIdByName(cityName);
+    public Weather getCurrentWeatherOfCity(String cityName, String persistenceUnitName) {
+        int cityId = daoC.findCityIdByName(cityName, persistenceUnitName);
         return cityId != 0 ? getCurrentWeatherOfCity(cityId, cityName) : new Weather();
     }
 
@@ -252,8 +252,8 @@ public class BusinessImpl implements BusinessAPI {
      * @return the latest weather of the city if the city ID is not 0, otherwise a new weather object
      */
     @Override
-    public Weather getLatestWeatherOfCity(String cityName) {
-        int cityId = daoC.findCityIdByName(cityName);
+    public Weather getLatestWeatherOfCity(String cityName, String persistenceUnitName) {
+        int cityId = daoC.findCityIdByName(cityName, persistenceUnitName);
         return cityId != 0 ? getLatestWeatherOfCity(cityId) : new Weather();
     }
 
@@ -282,8 +282,8 @@ public class BusinessImpl implements BusinessAPI {
      * @return a TreeMap of the weather of the city for the specified year if the city ID is not 0, otherwise an empty TreeMap
      */
     @Override
-    public TreeMap<LocalDateTime, Weather> getWeatherOfCityByYear(int year, String cityName) {
-        int cityId = daoC.findCityIdByName(cityName);
+    public TreeMap<LocalDateTime, Weather> getWeatherOfCityByYear(int year, String cityName, String persistenceUnitName) {
+        int cityId = daoC.findCityIdByName(cityName, persistenceUnitName);
         return cityId != 0 ? getWeatherOfCityByYear(year, cityId) : new TreeMap<>();
     }
 
@@ -313,8 +313,8 @@ public class BusinessImpl implements BusinessAPI {
      * @return a TreeMap of the weather of the city for the specified year if the city ID is not 0, otherwise an empty TreeMap
      */
     @Override
-    public TreeMap<LocalDateTime, Weather> getWeatherOfCityByMonth(int month, String cityName) {
-        int cityId = daoC.findCityIdByName(cityName);
+    public TreeMap<LocalDateTime, Weather> getWeatherOfCityByMonth(int month, String cityName, String persistenceUnitName) {
+        int cityId = daoC.findCityIdByName(cityName, persistenceUnitName);
         return cityId != 0 ? getWeatherOfCityByMonth(month, cityId) : new TreeMap<>();
     }
 
@@ -386,8 +386,8 @@ public class BusinessImpl implements BusinessAPI {
      * @return a TreeMap of the weather data of the city within the specified time span if the city ID is not 0, otherwise an empty TreeMap
      */
     @Override
-    public TreeMap<LocalDateTime, Weather> getWeatherByCityAndTimeSpan(String cityName, LocalDateTime von, LocalDateTime bis) {
-        int cityId = daoC.findCityIdByName(cityName);
+    public TreeMap<LocalDateTime, Weather> getWeatherByCityAndTimeSpan(String cityName, LocalDateTime von, LocalDateTime bis, String persistenceUnitName) {
+        int cityId = daoC.findCityIdByName(cityName, persistenceUnitName);
         return cityId != 0 ? getWeatherByCityAndTimeSpan(cityId, von, bis) : new TreeMap<>();
     }
 

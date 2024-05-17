@@ -21,7 +21,7 @@ public interface CityDAO extends GenericDAO<City> {
      *
      * @return Anzahl der Städte
      */
-    long getNumberOfCities();
+    long getNumberOfCities(String persistenceUnitName);
 
     /**
      * Sucht und liefert eine City anhand ihres Namens.
@@ -30,7 +30,7 @@ public interface CityDAO extends GenericDAO<City> {
      * @return eine City ID, falls Stadt mit diesem Namen gefunden wurde,
      * ansonsten wird 0 zurückgegeben
      */
-    int findCityIdByName(String cityName);
+    int findCityIdByName(String cityName, String persistenceUnitName);
 
     /**
      * Sucht und liefert eine City anhand ihres Namens.
@@ -39,7 +39,7 @@ public interface CityDAO extends GenericDAO<City> {
      * @return Ein City-Objekt, falls eine City mit dem angegebenen Namen gefunden wurde
      * andernfalls leeres City-Objekt.
      */
-    City findCityByName(String cityName);
+    City findCityByName(String cityName, String persistenceUnitName);
 
     /**
      * Sucht nach einem Städtenamen
@@ -47,19 +47,19 @@ public interface CityDAO extends GenericDAO<City> {
      * @param cityName Der Name der zu suchenden City.
      * @return true oder false, falls Stadt schon existiert
      */
-    boolean cityExists(String cityName);
+    boolean cityExists(String cityName, String persistenceUnitName);
 
     /**
      * Sucht nach einem Städtenamen
      *
      * @return eine Liste aller City Namen
      */
-    Set<String> allCityNames();
+    Set<String> allCityNames(String persistenceUnitName);
 
     /**
      * Speichert alle Städte in der Map ab
      *
      * @param cityMap mit allen Städten
      */
-    void saveAllCities(LinkedHashMap<Integer, City> cityMap);
+    void saveAllCities(LinkedHashMap<Integer, City> cityMap, String persistenceUnitName);
 }

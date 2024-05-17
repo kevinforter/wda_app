@@ -40,7 +40,7 @@ public class Util {
         City dummyCity = new City(7270, "Davos", "CH");
         daoC.speichern(dummyCity);
 
-        Weather dummyWeather = new Weather(daoC.findCityIdByName("Davos"), LocalDateTime.now().minusDays(1), "DUMMY", "DUMMY", 69.69, 69.69, 69.69, 69.69, 69.69);
+        Weather dummyWeather = new Weather(daoC.findCityIdByName("Davos", "testPU"), LocalDateTime.now().minusDays(1), "DUMMY", "DUMMY", 69.69, 69.69, 69.69, 69.69, 69.69);
         daoW.speichern(dummyWeather);
     }
 }

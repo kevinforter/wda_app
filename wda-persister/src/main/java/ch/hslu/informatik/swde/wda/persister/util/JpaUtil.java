@@ -15,25 +15,18 @@ import org.slf4j.LoggerFactory;
 
 public class JpaUtil {
 
-    private JpaUtil() {
-
-    }
-
     private static final Logger LOG = LoggerFactory.getLogger(JpaUtil.class);
 
-    private static final EntityManagerFactory entityManagerFactory;
+    private JpaUtil() {
+    }
 
-    static {
+    public static EntityManager createEntityManager(String persistenceUnitName) {
         try {
-            /* EntityManagerFactory erzeugen */
-            entityManagerFactory = Persistence.createEntityManagerFactory("postgresPU");
+            EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory(persistenceUnitName);
+            return entityManagerFactory.createEntityManager();
         } catch (Exception e) {
             LOG.error("ERROR: ", e);
             throw new RuntimeException(e);
         }
-    }
-
-    public static EntityManager createEntityManager() {
-        return entityManagerFactory.createEntityManager();
     }
 }

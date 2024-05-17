@@ -53,7 +53,7 @@ public class CityDAOImplTest {
 
         for (City c : listFromUtil) {
             dao.speichern(c);
-            assertEquals(c.getId(), dao.findCityIdByName(c.getName()), "Objekte stimmen nicht überein");
+            assertEquals(c.getId(), dao.findCityIdByName(c.getName(), "testPU"), "Objekte stimmen nicht überein");
         }
 
     }
@@ -67,7 +67,7 @@ public class CityDAOImplTest {
 
         for (City c : listFromUtil) {
             dao.speichern(c);
-            assertEquals(c, dao.findCityByName(c.getName()), "Objekte stimmen nicht überein");
+            assertEquals(c, dao.findCityByName(c.getName(), "testPU"), "Objekte stimmen nicht überein");
         }
     }
 
@@ -108,7 +108,7 @@ public class CityDAOImplTest {
 
         CityDAO dao = new CityDAOImpl();
 
-        dao.saveAllCities(mapFromUtil);
+        dao.saveAllCities(mapFromUtil, "testPU");
         assertEquals(mapFromUtil.size(), dao.alle().size(), "Array not the Same");
 
     }

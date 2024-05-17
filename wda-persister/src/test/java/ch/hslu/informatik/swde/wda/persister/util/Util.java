@@ -74,7 +74,7 @@ public class Util {
 
         for (City city : cityList) {
 
-            City ort = daoO.findCityByName(city.getName());
+            City ort = daoO.findCityByName(city.getName(),"testPU");
 
             Weather weather1 = new Weather(ort.getId(), LocalDateTime.of(2023, 12, 3, 22, 30, 19), "foggy", "fog", 23.0, 982.0, 91.0, 43.0, 10.0);
             Weather weather2 = new Weather(ort.getId(), LocalDateTime.of(2023, 12, 3, 23, 30, 19), "foggy", "fog", 23.0, 982.0, 91.0, 43.0, 10.0);
@@ -97,7 +97,7 @@ public class Util {
 
         for (City city : cityList) {
 
-            City ort = daoO.findCityByName(city.getName());
+            City ort = daoO.findCityByName(city.getName(), "testPU");
 
             Weather weather1 = new Weather(ort.getId(), LocalDateTime.of(2023, 12, 3, 21, 30, 19), "foggy", "fog", 23.0, 982.0, 91.0, 43.0, 10.0);
             Weather weather2 = new Weather(ort.getId(), LocalDateTime.of(2023, 12, 3, 22, 30, 19), "foggy", "fog", 23.0, 982.0, 91.0, 43.0, 10.0);

@@ -125,8 +125,8 @@ public class WeatherDAOImplTest {
             assertEquals(w, daoW.findById(w.getId()));
         }
 
-        List<LocalDateTime> weatherRes = daoW.findWeatherDateFromCityByYear(2024, daoO.findCityByName("Davos").getId());
-        List<LocalDateTime> weatherResNull = daoW.findWeatherDateFromCityByYear(2025, daoO.findCityByName("Davos").getId());
+        List<LocalDateTime> weatherRes = daoW.findWeatherDateFromCityByYear(2024, daoO.findCityByName("Davos", "testPU").getId());
+        List<LocalDateTime> weatherResNull = daoW.findWeatherDateFromCityByYear(2025, daoO.findCityByName("Davos", "testPU").getId());
 
         assertAll(
                 () -> assertNotNull(weatherRes, "2024 sollte nicht eine leere Liste ergeben"),
@@ -154,8 +154,8 @@ public class WeatherDAOImplTest {
             assertEquals(w, daoW.findById(w.getId()));
         }
 
-        TreeMap<LocalDateTime, Weather> weatherRes = daoW.findWeatherFromCityByMonth(3, daoO.findCityByName("Davos").getId());
-        TreeMap<LocalDateTime, Weather> weatherResNull = daoW.findWeatherFromCityByMonth(12, daoO.findCityByName("Davos").getId());
+        TreeMap<LocalDateTime, Weather> weatherRes = daoW.findWeatherFromCityByMonth(3, daoO.findCityByName("Davos", "testPU").getId());
+        TreeMap<LocalDateTime, Weather> weatherResNull = daoW.findWeatherFromCityByMonth(12, daoO.findCityByName("Davos", "testPU").getId());
 
         assertAll(
                 () -> assertNotNull(weatherRes, "2024 sollte nicht eine leere Liste ergeben"),
@@ -183,7 +183,7 @@ public class WeatherDAOImplTest {
             assertEquals(w, daoW.findById(w.getId()));
         }
 
-        Weather resWeather = daoW.findWeatherFromCityByDateTime(LocalDateTime.now(), daoO.findCityIdByName("Davos"));
+        Weather resWeather = daoW.findWeatherFromCityByDateTime(LocalDateTime.now(), daoO.findCityIdByName("Davos", "testPU"));
 
         assertNotNull(resWeather, "It should not be null");
 
