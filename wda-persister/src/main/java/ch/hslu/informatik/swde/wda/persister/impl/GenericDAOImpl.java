@@ -23,10 +23,17 @@ public class GenericDAOImpl<T> implements GenericDAO<T> {
     private static final Logger LOG = LoggerFactory.getLogger(GenericDAOImpl.class);
 
     private final Class<T> entityClass;
+    
+    private String persistenceUnitName; 
 
     public GenericDAOImpl(Class<T> entityClass) {
         this.entityClass = entityClass;
     }
+
+    public GenericDAOImpl(Class<T> entityClass, String persistenceUnitName) {
+        this.entityClass = entityClass;
+        this.persistenceUnitName = persistenceUnitName;
+    } 
 
     /**
      * Persists the provided entity into the database.
@@ -40,7 +47,7 @@ public class GenericDAOImpl<T> implements GenericDAO<T> {
      * @throws RuntimeException if an exception occurs during the execution of the method
      */
     @Override
-    public void speichern(T obj, String persistenceUnitName) {
+    public void speichern(T obj) {
 
         EntityManager em = JpaUtil.createEntityManager(persistenceUnitName);
 
@@ -72,7 +79,7 @@ public class GenericDAOImpl<T> implements GenericDAO<T> {
      * @param id the id of the entity to be deleted
      */
     @Override
-    public void loeschen(int id, String persistenceUnitName) {
+    public void loeschen(int id) {
 
         EntityManager em = JpaUtil.createEntityManager(persistenceUnitName);
 
@@ -108,7 +115,7 @@ public class GenericDAOImpl<T> implements GenericDAO<T> {
      * @param obj the entity to be updated
      */
     @Override
-    public void aktualisieren(T obj, String persistenceUnitName) {
+    public void aktualisieren(T obj) {
 
         EntityManager em = JpaUtil.createEntityManager(persistenceUnitName);
 
@@ -142,7 +149,7 @@ public class GenericDAOImpl<T> implements GenericDAO<T> {
      * @return the entity with the provided id, or null if no such entity exists
      */
     @Override
-    public T findById(int id, String persistenceUnitName) {
+    public T findById(int id) {
 
         EntityManager em = JpaUtil.createEntityManager(persistenceUnitName);
 
@@ -167,7 +174,7 @@ public class GenericDAOImpl<T> implements GenericDAO<T> {
      * @return the entity that matches the field and value, or null if no such entity exists
      */
     @Override
-    public T findEntityByFieldAndString(String fieldName, Object value, String persistenceUnitName) {
+    public T findEntityByFieldAndString(String fieldName, Object value) {
         EntityManager em = JpaUtil.createEntityManager(persistenceUnitName);
 
         T objFromDb = null;
@@ -197,7 +204,7 @@ public class GenericDAOImpl<T> implements GenericDAO<T> {
      * @return a list of all entities, or an empty list if no entities exist
      */
     @Override
-    public List<T> alle(String persistenceUnitName) {
+    public List<T> alle() {
 
         EntityManager em = JpaUtil.createEntityManager(persistenceUnitName);
 
@@ -220,7 +227,7 @@ public class GenericDAOImpl<T> implements GenericDAO<T> {
      * @throws RuntimeException if an exception occurs during the execution of the query
      */
     @Override
-    public boolean ifTableExist(String persistenceUnitName) {
+    public boolean ifTableExist() {
 
         EntityManager em = JpaUtil.createEntityManager(persistenceUnitName);
 

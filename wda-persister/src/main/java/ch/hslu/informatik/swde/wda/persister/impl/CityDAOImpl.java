@@ -23,8 +23,15 @@ public class CityDAOImpl extends GenericDAOImpl<City> implements CityDAO {
 
     private static final Logger LOG = LoggerFactory.getLogger(CityDAOImpl.class);
 
+    private String persistenceUnitName;
+
     public CityDAOImpl() {
         super(City.class);
+    }
+
+    public CityDAOImpl(String persistenceUnitName) {
+        super(City.class, persistenceUnitName);
+        this.persistenceUnitName = persistenceUnitName;
     }
 
     /**
@@ -39,7 +46,7 @@ public class CityDAOImpl extends GenericDAOImpl<City> implements CityDAO {
      * @throws RuntimeException if an exception occurs during the execution of the query
      */
     @Override
-    public long getNumberOfCities(String persistenceUnitName) {
+    public long getNumberOfCities() {
 
         EntityManager em = JpaUtil.createEntityManager(persistenceUnitName);
 
@@ -69,7 +76,7 @@ public class CityDAOImpl extends GenericDAOImpl<City> implements CityDAO {
      * @return the ID of the city if found, otherwise 0
      */
     @Override
-    public int findCityIdByName(String cityName, String persistenceUnitName) {
+    public int findCityIdByName(String cityName) {
 
         EntityManager em = JpaUtil.createEntityManager(persistenceUnitName);
 
@@ -100,7 +107,7 @@ public class CityDAOImpl extends GenericDAOImpl<City> implements CityDAO {
      * @return the city if found, otherwise null
      */
     @Override
-    public City findCityByName(String cityName, String persistenceUnitName) {
+    public City findCityByName(String cityName) {
 
         EntityManager em = JpaUtil.createEntityManager(persistenceUnitName);
 
@@ -132,7 +139,7 @@ public class CityDAOImpl extends GenericDAOImpl<City> implements CityDAO {
      * @return true if the city exists, otherwise false
      */
     @Override
-    public boolean cityExists(String cityName, String persistenceUnitName) {
+    public boolean cityExists(String cityName) {
 
         EntityManager em = JpaUtil.createEntityManager(persistenceUnitName);
 
@@ -164,7 +171,7 @@ public class CityDAOImpl extends GenericDAOImpl<City> implements CityDAO {
      * @return a list of all city names in the database, or an empty list if no city names are found
      */
     @Override
-    public Set<String> allCityNames(String persistenceUnitName) {
+    public Set<String> allCityNames() {
         EntityManager em = JpaUtil.createEntityManager(persistenceUnitName);
 
         Set<String> existingNames = new HashSet<>(em.createQuery("SELECT c.name FROM City c", String.class).getResultList());
@@ -195,7 +202,7 @@ public class CityDAOImpl extends GenericDAOImpl<City> implements CityDAO {
      * @throws CityPersistenceException if an exception occurs during the execution of the method
      */
     @Override
-    public void saveAllCities(LinkedHashMap<Integer, City> cityMap, String persistenceUnitName) {
+    public void saveAllCities(LinkedHashMap<Integer, City> cityMap) {
 
         EntityManager em = JpaUtil.createEntityManager(persistenceUnitName);
 

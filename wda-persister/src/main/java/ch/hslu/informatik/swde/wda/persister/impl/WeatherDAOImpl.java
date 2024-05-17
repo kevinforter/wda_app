@@ -27,8 +27,15 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
 
     private static final Logger LOG = LoggerFactory.getLogger(WeatherDAOImpl.class);
 
+    private String persistenceUnitName;
+
     public WeatherDAOImpl() {
         super(Weather.class);
+    }
+
+    public WeatherDAOImpl(String persistenceUnitName) {
+        super(Weather.class, persistenceUnitName);
+        this.persistenceUnitName = persistenceUnitName;
     }
 
     /**
@@ -47,7 +54,7 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
      * @throws RuntimeException if an exception occurs during the execution of the query
      */
     @Override
-    public long getNumberOfWeatherByCity(int cityId, String persistenceUnitName) {
+    public long getNumberOfWeatherByCity(int cityId) {
 
         EntityManager em = JpaUtil.createEntityManager(persistenceUnitName);
 
@@ -82,7 +89,7 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
      * @return the latest Weather entity associated with the provided city ID, or null if no entity is found
      */
     @Override
-    public Weather findLatestWeatherByCity(int cityId, String persistenceUnitName) {
+    public Weather findLatestWeatherByCity(int cityId) {
 
         EntityManager em = JpaUtil.createEntityManager(persistenceUnitName);
 
@@ -120,7 +127,7 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
      * @return the oldest Weather entity associated with the provided city ID, or null if no entity is found
      */
     @Override
-    public Weather findOldestWeatherByCity(int cityId, String persistenceUnitName) {
+    public Weather findOldestWeatherByCity(int cityId) {
 
         EntityManager em = JpaUtil.createEntityManager(persistenceUnitName);
 
@@ -159,7 +166,7 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
      * @return the Weather entity associated with the provided city ID and timestamp, or null if no entity is found
      */
     @Override
-    public Weather findWeatherFromCityByDateTime(LocalDateTime DTstamp, int cityId, String persistenceUnitName) {
+    public Weather findWeatherFromCityByDateTime(LocalDateTime DTstamp, int cityId) {
 
         EntityManager em = JpaUtil.createEntityManager(persistenceUnitName);
 
@@ -202,7 +209,7 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
      * @return a list of timestamps associated with the provided city ID and year, or an empty list if no timestamps are found
      */
     @Override
-    public List<LocalDateTime> findWeatherDateFromCityByYear(int year, int cityId, String persistenceUnitName) {
+    public List<LocalDateTime> findWeatherDateFromCityByYear(int year, int cityId) {
 
         EntityManager em = JpaUtil.createEntityManager(persistenceUnitName);
 
@@ -239,7 +246,7 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
      * @return a TreeMap of Weather entities associated with the provided city ID and year, sorted in ascending order of the timestamp
      */
     @Override
-    public TreeMap<LocalDateTime, Weather> findWeatherFromCityByYear(int year, int cityId, String persistenceUnitName) {
+    public TreeMap<LocalDateTime, Weather> findWeatherFromCityByYear(int year, int cityId) {
 
         EntityManager em = JpaUtil.createEntityManager(persistenceUnitName);
 
@@ -281,7 +288,7 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
      * @return a TreeMap of Weather entities associated with the provided city ID and year, sorted in ascending order of the timestamp
      */
     @Override
-    public TreeMap<LocalDateTime, Weather> findWeatherByYear(int year, String persistenceUnitName) {
+    public TreeMap<LocalDateTime, Weather> findWeatherByYear(int year) {
 
         EntityManager em = JpaUtil.createEntityManager(persistenceUnitName);
 
@@ -322,7 +329,7 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
      * @return a TreeMap of Weather entities associated with the provided city ID and year, sorted in ascending order of the timestamp
      */
     @Override
-    public TreeMap<LocalDateTime, Weather> findWeatherFromCityByMonth(int month, int cityId, String persistenceUnitName) {
+    public TreeMap<LocalDateTime, Weather> findWeatherFromCityByMonth(int month, int cityId) {
 
         EntityManager em = JpaUtil.createEntityManager(persistenceUnitName);
 
@@ -370,7 +377,7 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
      * @return a TreeMap of Weather entities within the specified number of days from the current date, sorted in ascending order of the timestamp
      */
     @Override
-    public TreeMap<LocalDateTime, Weather> findWeatherByDayDifference(int days, String persistenceUnitName) {
+    public TreeMap<LocalDateTime, Weather> findWeatherByDayDifference(int days) {
 
         // Create an EntityManager instance
         EntityManager em = JpaUtil.createEntityManager(persistenceUnitName);
@@ -419,7 +426,7 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
      * @return a TreeMap of Weather entities associated with the provided city ID and within the specified time span, sorted in ascending order of the timestamp
      */
     @Override
-    public TreeMap<LocalDateTime, Weather> findWeatherFromCityByTimeSpan(int cityId, LocalDateTime von, LocalDateTime bis, String persistenceUnitName) {
+    public TreeMap<LocalDateTime, Weather> findWeatherFromCityByTimeSpan(int cityId, LocalDateTime von, LocalDateTime bis) {
 
         // Create an EntityManager instance
         EntityManager em = JpaUtil.createEntityManager(persistenceUnitName);
@@ -537,7 +544,7 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
      * @param cityId     the id of the city associated with the Weather entities
      */
     @Override
-    public void saveAllWeather(TreeMap<LocalDateTime, Weather> weatherMap, int cityId, String persistenceUnitName) {
+    public void saveAllWeather(TreeMap<LocalDateTime, Weather> weatherMap, int cityId) {
 
         EntityManager em = JpaUtil.createEntityManager(persistenceUnitName);
 
@@ -582,7 +589,7 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
      * @throws RuntimeException if an exception occurs during the execution of the query
      */
     @Override
-    public boolean ifWeatherOfCityExist(int cityId, String persistenceUnitName) {
+    public boolean ifWeatherOfCityExist(int cityId) {
 
         EntityManager em = JpaUtil.createEntityManager(persistenceUnitName);
 
