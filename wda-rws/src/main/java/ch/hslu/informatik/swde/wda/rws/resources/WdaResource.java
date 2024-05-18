@@ -389,7 +389,7 @@ public class WdaResource {
      * (Internal Server Error) and an entity containing a message describing the error.
      *
      * @param month the month for which to retrieve the weather data
-     * @param name the name of the city for which to retrieve the weather data
+     * @param name  the name of the city for which to retrieve the weather data
      * @return a Response object with an HTTP status code of 200 (OK) and the weather data as the entity if the operation is successful and the weather data is found,
      * a Response object with an HTTP status code of 404 (Not Found) if no weather data is found,
      * or a Response object with an HTTP status code of 500 (Internal Server Error) and an entity containing a message describing the error if an exception occurs
@@ -535,22 +535,47 @@ public class WdaResource {
         }
     }
 
+    /**
+     * This method is a RESTful web service endpoint
+     * that retrieves the minimum and maximum weather data for a specific city within a given number of past days.
+     * The client specifies the city and the number of past days through query parameters in the request.
+     *
+     * @param name The name of the city for which the minimum and maximum weather data is to be retrieved.
+     *             This is passed as a query parameter in the request.
+     * @param days The number of past days for which the minimum and maximum weather data is to be retrieved.
+     *             This is passed as a query parameter in the request.
+     * @return A Response object
+     * containing the minimum and maximum weather data for the specified city within the given number of past days.
+     * The weather data is represented as a String object in the response body.
+     * If the operation is successful and weather data exists for the specified city and number of past days,
+     * the HTTP status code of the response is 200
+     * (OK).
+     * If no weather data exists for the specified city and number of past days, the HTTP status code of the response is 404
+     * (Not Found).
+     * If an error occurs during the operation, the HTTP status code of the response is 500 (Internal Server Error),
+     * and the response body contains a message describing the error.
+     */
     @GET
     @Path("weather/past/minmax")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getMinMaxDataByDayDifference(@QueryParam("name") String name, @QueryParam("days") int days) {
 
         try {
+            // Retrieve the weather data for the specified city within the given number of past days
             TreeMap<LocalDateTime, Weather> weatherMap = service.getWeatherByDayDifference(days, name);
 
+            // Calculate the minimum and maximum weather data from the retrieved weather data
             String res = service.getWeatherMinMaxDataOfCity(weatherMap);
 
+            // If the minimum and maximum weather data is not empty, return it with a HTTP status code of 200 (OK)
             if (!res.isEmpty()) {
                 return Response.ok(res).build();
             } else {
+                // If the minimum and maximum weather data is empty, return a HTTP status code of 404 (Not Found)
                 return Response.status(Response.Status.NOT_FOUND).build();
             }
         } catch (Exception e) {
+            // Log the error and return a HTTP status code of 500 (Internal Server Error) with a message describing the error
             LOG.error("Error while adding weather: ", e);
             return Response
                     .status(Response.Status.INTERNAL_SERVER_ERROR)
