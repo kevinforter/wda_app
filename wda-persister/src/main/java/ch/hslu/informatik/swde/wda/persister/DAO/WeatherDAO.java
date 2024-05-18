@@ -139,7 +139,7 @@ public interface WeatherDAO extends GenericDAO<Weather> {
      *
      * @param weatherMap mit allen Wetterdaten
      */
-    void saveAllWeather(TreeMap<LocalDateTime, Weather> weatherMap, int cityId);
+    void saveAllWeather(TreeMap<LocalDateTime, Weather> weatherMap);
 
     /**
      * Gibt an obe eine Tabelle leer oder voll ist

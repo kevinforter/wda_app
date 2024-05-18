@@ -204,7 +204,7 @@ public class WeatherDAOImplTest {
             assertEquals(c, daoO.findById(c.getId()));
         }
 
-        daoW.saveAllWeather(Util.createWeatherMap(), daoO.findCityIdByName("Neuchatel"));
+        daoW.saveAllWeather(Util.createWeatherMap());
 
         assertEquals(3, daoW.alle().size());
     }

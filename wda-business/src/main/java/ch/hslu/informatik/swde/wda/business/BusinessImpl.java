@@ -182,7 +182,7 @@ public class BusinessImpl implements BusinessAPI {
                 }
             }
 
-            daoW.saveAllWeather(weatherToSave, cityId);
+            daoW.saveAllWeather(weatherToSave);
         }
     }
 

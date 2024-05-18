@@ -590,10 +590,9 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
      * The EntityManager is closed after the operation is completed.
      *
      * @param weatherMap a TreeMap of Weather entities to be saved, where the key is the timestamp and the value is the Weather entity
-     * @param cityId     the id of the city associated with the Weather entities
      */
     @Override
-    public void saveAllWeather(TreeMap<LocalDateTime, Weather> weatherMap, int cityId) {
+    public void saveAllWeather(TreeMap<LocalDateTime, Weather> weatherMap) {
 
         EntityManager em = JpaUtil.createEntityManager(persistenceUnitName);
 
