@@ -516,13 +516,37 @@ public class WdaResource {
     @GET
     @Path("weather/past")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getWeatherByDayDifference(@QueryParam("days") int days) {
+    public Response getWeatherByDayDifference(@QueryParam("name") String name, @QueryParam("days") int days) {
 
         try {
-            TreeMap<LocalDateTime, Weather> weatherMap = service.getWeatherByDayDifference(days);
+            TreeMap<LocalDateTime, Weather> weatherMap = service.getWeatherByDayDifference(days, name);
 
             if (!weatherMap.isEmpty()) {
                 return Response.ok(weatherMap).build();
+            } else {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+        } catch (Exception e) {
+            LOG.error("Error while adding weather: ", e);
+            return Response
+                    .status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Error while adding weather")
+                    .build();
+        }
+    }
+
+    @GET
+    @Path("weather/past/minmax")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getMinMaxDataByDayDifference(@QueryParam("name") String name, @QueryParam("days") int days) {
+
+        try {
+            TreeMap<LocalDateTime, Weather> weatherMap = service.getWeatherByDayDifference(days, name);
+
+            String res = service.getWeatherMinMaxDataOfCity(weatherMap);
+
+            if (!res.isEmpty()) {
+                return Response.ok(res).build();
             } else {
                 return Response.status(Response.Status.NOT_FOUND).build();
             }

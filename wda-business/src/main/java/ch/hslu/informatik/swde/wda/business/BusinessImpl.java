@@ -428,8 +428,13 @@ public class BusinessImpl implements BusinessAPI {
      * otherwise an empty TreeMap
      */
     @Override
-    public TreeMap<LocalDateTime, Weather> getWeatherByDayDifference(int days) {
-        return isValidDay(days) ? daoW.findWeatherByDayDifference(days) : new TreeMap<>();
+    public TreeMap<LocalDateTime, Weather> getWeatherByDayDifference(int days, String cityName) {
+        int cityId = daoC.findCityIdByName(cityName);
+        return cityId != 0 ? getWeatherByDayDifference(days, cityId) : new TreeMap<>();
+    }
+
+    private TreeMap<LocalDateTime, Weather> getWeatherByDayDifference(int days, int cityId) {
+        return isValidDay(days) ? daoW.findWeatherByDayDifference(days, cityId) : new TreeMap<>();
     }
 
     private static boolean isValidDay(int day) {

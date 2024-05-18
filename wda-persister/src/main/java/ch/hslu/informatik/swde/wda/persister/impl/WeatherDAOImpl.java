@@ -426,7 +426,7 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
      * @return a TreeMap of Weather entities within the specified number of days from the current date, sorted in ascending order of the timestamp
      */
     @Override
-    public TreeMap<LocalDateTime, Weather> findWeatherByDayDifference(int days) {
+    public TreeMap<LocalDateTime, Weather> findWeatherByDayDifference(int days, int cityId) {
 
         // Create an EntityManager instance
         EntityManager em = JpaUtil.createEntityManager(persistenceUnitName);
@@ -436,7 +436,8 @@ public class WeatherDAOImpl extends GenericDAOImpl<Weather> implements WeatherDA
         LocalDateTime difference = today.minusDays(days);
 
         // Construct a query to find the Weather entities that have a timestamp greater than or equal to the calculated date
-        TypedQuery<Weather> tQry = em.createQuery("SELECT w FROM Weather w WHERE w.DTstamp >= :difference", Weather.class);
+        TypedQuery<Weather> tQry = em.createQuery("SELECT w FROM Weather w WHERE w.city.id = :cityId AND w.DTstamp >= :difference", Weather.class);
+        tQry.setParameter("cityId", cityId);
         tQry.setParameter("difference", difference);
 
         // Execute the query and store the result in a list

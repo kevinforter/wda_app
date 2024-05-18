@@ -114,7 +114,7 @@ public interface BusinessAPI {
      * @param days the number of days from the current date for which the Weather entities are to be retrieved
      * @return a TreeMap of Weather entities within the specified number of days from the current date, sorted in ascending order of the timestamp
      */
-    TreeMap<LocalDateTime, Weather> getWeatherByDayDifference(int days);
+    TreeMap<LocalDateTime, Weather> getWeatherByDayDifference(int days, String cityName);
 
     /**
      * Retrieves a map of Weather entities associated with a specific city and within a specific time span.

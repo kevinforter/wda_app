@@ -98,7 +98,7 @@ public interface WeatherDAO extends GenericDAO<Weather> {
      * @param days die spezifischen Tage.
      * @return Eine Liste von Weather-Objekten; leer, wenn keine Daten gefunden werden.
      */
-    TreeMap<LocalDateTime, Weather> findWeatherByDayDifference(int days);
+    TreeMap<LocalDateTime, Weather> findWeatherByDayDifference(int days, int cityId);
 
     /**
      * Holt Wetterdaten für eine bestimmte Ortschaft innerhalb eines bestimmten Zeitraums.
