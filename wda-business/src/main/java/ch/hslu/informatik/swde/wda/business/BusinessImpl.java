@@ -184,6 +184,20 @@ public class BusinessImpl implements BusinessAPI {
 
             daoW.saveAllWeather(weatherToSave);
         }
+
+//        if (weatherMap.size() != daoW.getNumberOfWeatherByCity(cityId)) {
+//            TreeMap<LocalDateTime, Weather> weatherToSave = new TreeMap<>();
+//            Weather latestWeather = getLatestWeatherOfCity(cityId);
+//
+//            weatherMap.values().forEach(weather -> weather.setCityId(cityId));
+//
+//            for (Weather weather : weatherMap.values()) {
+//                if (latestWeather != null && !weather.getDTstamp().isAfter(latestWeather.getDTstamp())) break;
+//                weatherToSave.put(weather.getDTstamp(), weather);
+//            }
+//
+//            daoW.saveAllWeather(weatherToSave);
+//        }
     }
 
     /**
@@ -484,5 +498,17 @@ public class BusinessImpl implements BusinessAPI {
         } else {
             return true;
         }
+    }
+
+    /**
+     * Löscht alle Tabellen
+     */
+    @Override
+    public boolean destroy() {
+        List<GenericDAO<?>> daoList = Arrays.asList(daoI, daoW, daoC);
+
+        daoList.forEach(GenericDAO::deleteTable);
+
+        return !daoI.ifTableExist() && !daoW.ifTableExist() && !daoC.ifTableExist();
     }
 }

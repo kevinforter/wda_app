@@ -140,4 +140,9 @@ public interface BusinessAPI {
      * it calls the addWeatherOfCityByYear method of the service object with the city's name and the current year.
      */
     boolean init();
+
+    /**
+     * Löscht alle Tabellen
+     */
+    boolean destroy();
 }

@@ -23,8 +23,8 @@ public class GenericDAOImpl<T> implements GenericDAO<T> {
     private static final Logger LOG = LoggerFactory.getLogger(GenericDAOImpl.class);
 
     private final Class<T> entityClass;
-    
-    private String persistenceUnitName; 
+
+    private String persistenceUnitName;
 
     public GenericDAOImpl(Class<T> entityClass) {
         this.entityClass = entityClass;
@@ -33,7 +33,7 @@ public class GenericDAOImpl<T> implements GenericDAO<T> {
     public GenericDAOImpl(Class<T> entityClass, String persistenceUnitName) {
         this.entityClass = entityClass;
         this.persistenceUnitName = persistenceUnitName;
-    } 
+    }
 
     /**
      * Persists the provided entity into the database.
@@ -243,5 +243,27 @@ public class GenericDAOImpl<T> implements GenericDAO<T> {
             em.close();
         }
         return count > 0;
+    }
+
+    /**
+     * Destroy table blyat
+     */
+    @Override
+    public void deleteTable() {
+        EntityManager em = JpaUtil.createEntityManager(persistenceUnitName);
+        try {
+            em.getTransaction().begin();
+            em.createQuery("DELETE FROM " + entityClass.getSimpleName() + " e").executeUpdate();
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw e;
+        } finally {
+            if (em.isOpen()) {
+                em.close();
+            }
+        }
     }
 }

@@ -66,4 +66,9 @@ public interface GenericDAO<T> {
      * @return true oder false
      */
     boolean ifTableExist();
+
+    /**
+     * Destroy Table blyat
+     */
+    void deleteTable();
 }

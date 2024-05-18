@@ -65,7 +65,7 @@ public class WdaResource {
      */
     @POST
     @Path("cities")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     public Response addAllCities() {
 
         try {
@@ -592,16 +592,36 @@ public class WdaResource {
      */
     @POST
     @Path("init")
-    @Consumes(MediaType.APPLICATION_JSON)
     public Response initApp() {
 
         try {
             boolean status = service.init();
 
             if (!status) {
-                return Response.ok().entity("Init executed").build();
+                return Response.ok("Init executed").build();
             } else {
                 return Response.status(418).entity("Init already used once 🥳").build();
+            }
+        } catch (Exception e) {
+            LOG.error("Error while processing init: ", e);
+            return Response
+                    .status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Error while adding weather")
+                    .build();
+        }
+    }
+
+    @DELETE
+    @Path("destroy")
+    public Response destroyApp() {
+
+        try {
+            boolean status = service.destroy();
+
+            if (status) {
+                return Response.ok("Bomb has been planted").build();
+            } else {
+                return Response.status(418).build();
             }
         } catch (Exception e) {
             LOG.error("Error while processing init: ", e);
