@@ -456,6 +456,28 @@ public class WdaResource {
         }
     }
 
+    @GET
+    @Path("weather/{year}/byCityAndWeek/minmax")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getMinMaxDataOfCityByWeek(@QueryParam("name") String name, @QueryParam("week") int week) {
+
+        try {
+            TreeMap<LocalDateTime, Weather> weatherMap = service.getWeatherOfCityByWeek(week, name);
+
+            if (!weatherMap.isEmpty()) {
+                return Response.ok(weatherMap).build();
+            } else {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+        } catch (Exception e) {
+            LOG.error("Error while getting weather: ", e);
+            return Response
+                    .status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Error while getting weather")
+                    .build();
+        }
+    }
+
     /**
      * Retrieves weather data for a specific year from the Weather Data Application (WDA).
      * <p>
@@ -558,7 +580,7 @@ public class WdaResource {
     @GET
     @Path("weather/past/minmax")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getMinMaxDataByDayDifference(@QueryParam("name") String name, @QueryParam("days") int days) {
+    public Response getMinMaxDataOfCityByDayDifference(@QueryParam("name") String name, @QueryParam("days") int days) {
 
         try {
             // Retrieve the weather data for the specified city within the given number of past days
