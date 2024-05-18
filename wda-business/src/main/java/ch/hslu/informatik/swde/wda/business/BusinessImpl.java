@@ -81,14 +81,12 @@ public class BusinessImpl implements BusinessAPI {
     public void addCurrentWeatherOfCity(String cityName) {
 
         int cityId = daoC.findCityIdByName(cityName);
-        if (cityId != 0) {
-            addCurrentWeatherOfCity(cityId, reader.readCurrentWeatherByCity(cityName));
-        } else {
+        if (cityId == 0) {
             City city = reader.readCityDetails(cityName);
             daoC.speichern(city);
             cityId = daoC.findCityIdByName(cityName);
-            addCurrentWeatherOfCity(cityId, reader.readCurrentWeatherByCity(cityName));
         }
+        addCurrentWeatherOfCity(cityId, reader.readCurrentWeatherByCity(cityName));
     }
 
     /**
@@ -151,7 +149,12 @@ public class BusinessImpl implements BusinessAPI {
     public void addWeatherOfCityByYear(String cityName, int year) {
 
         int cityId = daoC.findCityIdByName(cityName);
-        if (cityId != 0) addWeatherOfCityByYear(cityId, reader.readWeatherByCityAndYear(cityName, year));
+        if (cityId == 0) {
+            City city = reader.readCityDetails(cityName);
+            daoC.speichern(city);
+            cityId = daoC.findCityIdByName(cityName);
+        }
+        addWeatherOfCityByYear(cityId, reader.readWeatherByCityAndYear(cityName, year));
     }
 
     /**
@@ -321,7 +324,7 @@ public class BusinessImpl implements BusinessAPI {
      * If the city ID is not 0, it retrieves the weather of the city for the specified year by its ID.
      * If the city ID is 0, it returns an empty TreeMap.
      *
-     * @param month     the year for which the weather is to be retrieved
+     * @param month    the year for which the weather is to be retrieved
      * @param cityName the name of the city for which the weather is to be retrieved
      * @return a TreeMap of the weather of the city for the specified year if the city ID is not 0, otherwise an empty TreeMap
      */
@@ -337,7 +340,7 @@ public class BusinessImpl implements BusinessAPI {
      * This method uses the WeatherDAO to find the weather of a city for a specific year by its ID in the database.
      * It returns a TreeMap of the weather if found.
      *
-     * @param month   the year for which the weather is to be retrieved
+     * @param month  the year for which the weather is to be retrieved
      * @param cityId the ID of the city for which the weather is to be retrieved
      * @return a TreeMap of the weather of the city for the specified year
      */
