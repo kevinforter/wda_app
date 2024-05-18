@@ -456,6 +456,25 @@ public class WdaResource {
         }
     }
 
+    /**
+     * This method is a RESTful web service endpoint
+     * that retrieves the minimum and maximum weather data for a specific city within a given week of the year.
+     * The client specifies the city and the week through query parameters in the request.
+     *
+     * @param name The name of the city for which the minimum and maximum weather data is to be retrieved.
+     *             This is passed as a query parameter in the request.
+     * @param week The week of the year for which the minimum and maximum weather data is to be retrieved.
+     *             This is passed as a query parameter in the request.
+     * @return A Response object
+     * containing the minimum and maximum weather data for the specified city within the given week of the year.
+     * The weather data is represented as a String object in the response body.
+     * If the operation is successful and weather data exists for the specified city and week,
+     * the HTTP status code of the response is 200
+     * (OK).
+     * If no weather data exists for the specified city and week, the HTTP status code of the response is 404 (Not Found).
+     * If an error occurs during the operation, the HTTP status code of the response is 500 (Internal Server Error),
+     * and the response body contains a message describing the error.
+     */
     @GET
     @Path("weather/{year}/byCityAndWeek/minmax")
     @Produces(MediaType.APPLICATION_JSON)
