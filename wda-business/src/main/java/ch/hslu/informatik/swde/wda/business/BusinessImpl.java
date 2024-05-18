@@ -127,7 +127,7 @@ public class BusinessImpl implements BusinessAPI {
             } else {
 
                 // If the time difference is 40 minutes or more, retrieve and save the weather data of the city for the current year
-                addWeatherOfCityByYear(cityId, reader.readWeatherByCityAndFilterByLatestWeather(daoC.findById(cityId).getName(), Year.now().getValue(), latestWeatherDAO.getDTstamp()));
+                addWeatherOfCityByYear(cityId, reader.readWeatherByCityAndFilterByLatestWeather(daoC.findById(cityId).getName(), Year.now().getValue(), latestWeatherDAO.getDTstamp()), Year.now().getValue());
 
             }
         }
@@ -154,7 +154,7 @@ public class BusinessImpl implements BusinessAPI {
             daoC.speichern(city);
             cityId = daoC.findCityIdByName(cityName);
         }
-        addWeatherOfCityByYear(cityId, reader.readWeatherByCityAndYear(cityName, year));
+        addWeatherOfCityByYear(cityId, reader.readWeatherByCityAndYear(cityName, year), year);
     }
 
     /**
@@ -168,24 +168,20 @@ public class BusinessImpl implements BusinessAPI {
      *
      * @param cityId the id of the city for which the weather data is to be added
      */
-    private void addWeatherOfCityByYear(int cityId, TreeMap<LocalDateTime, Weather> weatherMap) {
+    private void addWeatherOfCityByYear(int cityId, TreeMap<LocalDateTime, Weather> weatherMap, int year) {
 
-        // If the size of the weather data retrieved from the API is different from the number of weather data in the database for the city
-        if (weatherMap.size() != daoW.getNumberOfWeatherByCity(cityId)) {
+        TreeMap<LocalDateTime, Weather> weatherRes = getWeatherOfCityByYear(year, cityId);
 
+        if (weatherRes.size() != weatherMap.size() || !weatherRes.lastKey().isEqual(weatherMap.lastKey())) {
             TreeMap<LocalDateTime, Weather> weatherToSave = new TreeMap<>();
-            Weather latestWeather = getLatestWeatherOfCity(cityId);
 
-            // Set the city ID for each of the new weather data
-            for (Weather weather : weatherMap.values()) {
-
-                // If later than latest Weather break loop
-                if (latestWeather != null) if (!weather.getDTstamp().isAfter(latestWeather.getDTstamp())) break;
-                weather.setCityId(cityId);
-                weatherToSave.put(weather.getDTstamp(), weather);
+            for (Weather w : weatherMap.values()) {
+                if (!weatherRes.containsKey(w.getDTstamp())) {
+                    w.setCityId(cityId);
+                    weatherToSave.put(w.getDTstamp(), w);
+                }
             }
 
-            // Save all the new weather data to the database as a batch
             daoW.saveAllWeather(weatherToSave, cityId);
         }
     }
