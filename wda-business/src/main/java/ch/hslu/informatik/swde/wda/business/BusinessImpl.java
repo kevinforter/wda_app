@@ -339,6 +339,37 @@ public class BusinessImpl implements BusinessAPI {
     }
 
     /**
+     * Retrieves the weather of a specified city for a specific year by its name.
+     * <p>
+     * This method first finds the ID of the city by its name using the CityDAO.
+     * If the city ID is not 0, it retrieves the weather of the city for the specified year by its ID.
+     * If the city ID is 0, it returns an empty TreeMap.
+     *
+     * @param week     the year for which the weather is to be retrieved
+     * @param cityName the name of the city for which the weather is to be retrieved
+     * @return a TreeMap of the weather of the city for the specified year if the city ID is not 0, otherwise an empty TreeMap
+     */
+    @Override
+    public TreeMap<LocalDateTime, Weather> getWeatherOfCityByWeek(int week, String cityName) {
+        int cityId = daoC.findCityIdByName(cityName);
+        return cityId != 0 ? getWeatherOfCityByWeek(week, cityId) : new TreeMap<>();
+    }
+
+    /**
+     * Retrieves the weather of a specified city for a specific year by its ID.
+     * <p>
+     * This method uses the WeatherDAO to find the weather of a city for a specific year by its ID in the database.
+     * It returns a TreeMap of the weather if found.
+     *
+     * @param week   the year for which the weather is to be retrieved
+     * @param cityId the ID of the city for which the weather is to be retrieved
+     * @return a TreeMap of the weather of the city for the specified year
+     */
+    private TreeMap<LocalDateTime, Weather> getWeatherOfCityByWeek(int week, int cityId) {
+        return daoW.findWeatherFromCityByWeek(week, cityId);
+    }
+
+    /**
      * Retrieves the weather of a specified year
      * <p>
      * This method first finds the ID of the city by its name using the CityDAO.
