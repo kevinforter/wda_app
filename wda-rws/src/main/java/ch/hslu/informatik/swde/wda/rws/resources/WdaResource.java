@@ -145,19 +145,6 @@ public class WdaResource {
 
         try {
 
-            /*
-            List<City> cityList = service.getAllCities();
-
-            for (Iterator<City> it = cityList.iterator(); it.hasNext();) {
-                City c = it.next();
-
-                if (!c.getName().contains(name)) {
-                    it.remove();
-                }
-            }
-
-             */
-
             City cityByName = service.getCityByName(name);
 
             if (cityByName != null) {
@@ -190,9 +177,9 @@ public class WdaResource {
      * and an entity containing a message describing the error if an exception occurs
      */
     @POST
-    @Path("weather/current")
+    @Path("weather/current/{name}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response addCurrentWeatherOfCity(@QueryParam("name") String name) {
+    public Response addCurrentWeatherOfCity(@PathParam("name") String name) {
 
         try {
             service.addCurrentWeatherOfCity(name);
