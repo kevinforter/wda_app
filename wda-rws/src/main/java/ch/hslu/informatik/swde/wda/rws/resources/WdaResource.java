@@ -424,6 +424,8 @@ public class WdaResource {
         try {
             TreeMap<LocalDateTime, Weather> weatherMap = service.getWeatherOfCityByMonth(month, name);
 
+
+            if (weatherMap.isEmpty()) return Response.status(Response.Status.NOT_FOUND).build();
             String res = service.getWeatherMinMaxDataOfCity(weatherMap);
 
             if (!res.isEmpty()) {
@@ -506,6 +508,7 @@ public class WdaResource {
 
         try {
             TreeMap<LocalDateTime, Weather> weatherMap = service.getWeatherOfCityByWeek(week, name);
+            if (weatherMap.isEmpty()) return Response.status(Response.Status.NOT_FOUND).build();
 
             String res = service.getWeatherMinMaxDataOfCity(weatherMap);
 
@@ -630,6 +633,7 @@ public class WdaResource {
         try {
             // Retrieve the weather data for the specified city within the given number of past days
             TreeMap<LocalDateTime, Weather> weatherMap = service.getWeatherByDayDifference(days, name);
+            if (weatherMap.isEmpty()) return Response.status(Response.Status.NOT_FOUND).build();
 
             // Calculate the minimum and maximum weather data from the retrieved weather data
             String res = service.getWeatherMinMaxDataOfCity(weatherMap);
