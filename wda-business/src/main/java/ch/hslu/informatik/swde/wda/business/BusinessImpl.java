@@ -21,6 +21,8 @@ import ch.hslu.informatik.swde.wda.persister.impl.GenericDAOImpl;
 import ch.hslu.informatik.swde.wda.persister.impl.WeatherDAOImpl;
 import ch.hslu.informatik.swde.wda.reader.ApiReader;
 import ch.hslu.informatik.swde.wda.reader.ApiReaderImpl;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -469,6 +471,47 @@ public class BusinessImpl implements BusinessAPI {
     }
 
     /**
+     * Retrieves the minimum and maximum temperature, pressure, and humidity data of a city from a given TreeMap of Weather data.
+     * <p>
+     * This method is used to fetch the minimum and maximum temperature, pressure, and humidity data for a city.
+     * The TreeMap provided as an argument should contain the timestamp of the weather data as the key and the corresponding Weather entity as the value.
+     * The method will iterate through the TreeMap and find the minimum and maximum temperature, pressure, and humidity data.
+     * The result is returned as a JSON String, which contains the minimum and maximum values for temperature, pressure, and humidity.
+     * For example, the result could be a formatted String like "{"Temperature":{"max":20.0,"min":10.0},"Pressure":{"max":1013.0,"min":1007.0},"Humidity":{"max":93.0,"min":87.0}}".
+     *
+     * @param weatherMap a TreeMap containing the timestamp as the key and the corresponding Weather entity as the value
+     * @return a JSON String representing the minimum and maximum temperature, pressure, and humidity data of a city
+     * @throws RuntimeException if there is an error while converting the data map to a JSON string
+     */
+    @Override
+    public String getWeatherMinMaxDataOfCity(TreeMap<LocalDateTime, Weather> weatherMap) {
+        Map<String, Map<String, Double>> data = new HashMap<>();
+
+        Map<String, Double> temperature = new HashMap<>();
+        temperature.put("max", calc.getMaxForTemperature(weatherMap));
+        temperature.put("min", calc.getMinForTemperature(weatherMap));
+        data.put("Temperature", temperature);
+
+        Map<String, Double> pressure = new HashMap<>();
+        pressure.put("max", calc.getMaxForPressure(weatherMap));
+        pressure.put("min", calc.getMinForPressure(weatherMap));
+        data.put("Pressure", pressure);
+
+        Map<String, Double> humidity = new HashMap<>();
+        humidity.put("max", calc.getMaxForHumidity(weatherMap));
+        humidity.put("min", calc.getMinForHumidity(weatherMap));
+        data.put("Humidity", humidity);
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        try {
+            return mapper.writeValueAsString(data);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
      * Initializes the Weather Data Application (WDA) by adding all cities and their current year's weather data.
      * <p>
      * This method first calls the addAllCities method of the service object,
@@ -505,7 +548,16 @@ public class BusinessImpl implements BusinessAPI {
     }
 
     /**
-     * Löscht alle Tabellen
+     * Destroys all tables in the database.
+     * <p>
+     * This method is used to delete all tables in the database.
+     * It's a destructive operation and should be used with caution.
+     * It's typically used for cleanup during testing or when a complete reset of data is required.
+     * The method returns a boolean indicating the success of the operation.
+     * If all tables are successfully deleted, it returns true.
+     * If any table still exists after the operation, it returns false.
+     *
+     * @return a boolean value indicating whether the operation was successful or not
      */
     @Override
     public boolean destroy() {

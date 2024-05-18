@@ -81,7 +81,7 @@ public interface BusinessAPI {
     /**
      * Ruft das Wetter einer bestimmten Stadt für einen bestimmten Monat ab.
      *
-     * @param month     Der Monat, für das die Wetterdaten abgerufen werden sollen.
+     * @param month    Der Monat, für das die Wetterdaten abgerufen werden sollen.
      * @param cityName Der Name der Stadt.
      * @return Ein TreeMap, bei dem die Schlüssel die Daten und Zeiten der Wetterdaten sind und die Werte die entsprechenden Weather-Objekte.
      */
@@ -90,7 +90,7 @@ public interface BusinessAPI {
     /**
      * Ruft das Wetter einer bestimmten Stadt für eine bestimmte Woche ab.
      *
-     * @param week    Die Woche, für das die Wetterdaten abgerufen werden sollen.
+     * @param week     Die Woche, für das die Wetterdaten abgerufen werden sollen.
      * @param cityName Der Name der Stadt.
      * @return Ein TreeMap, bei dem die Schlüssel die Daten und Zeiten der Wetterdaten sind und die Werte die entsprechenden Weather-Objekte.
      */
@@ -123,12 +123,26 @@ public interface BusinessAPI {
      * The returned map contains the timestamp of the weather data as the key and the corresponding Weather entity as the value.
      * The map is sorted in ascending order of the timestamp.
      *
-     * @param cityName  the Name of the city for which the Weather entities are to be retrieved
-     * @param von       the start of the time span for which the Weather entities are to be retrieved
-     * @param bis       the end of the time span for which the Weather entities are to be retrieved
-     * @return          a TreeMap of Weather entities associated with the provided city ID and within the specified time span, sorted in ascending order of the timestamp
+     * @param cityName the Name of the city for which the Weather entities are to be retrieved
+     * @param von      the start of the time span for which the Weather entities are to be retrieved
+     * @param bis      the end of the time span for which the Weather entities are to be retrieved
+     * @return a TreeMap of Weather entities associated with the provided city ID and within the specified time span, sorted in ascending order of the timestamp
      */
     TreeMap<LocalDateTime, Weather> getWeatherByCityAndTimeSpan(String cityName, LocalDateTime von, LocalDateTime bis);
+
+    /**
+     * Retrieves the minimum and maximum weather data of a city from a given TreeMap of Weather data.
+     * <p>
+     * This method is used to fetch the minimum and maximum weather data for a city.
+     * The TreeMap provided as an argument should contain the timestamp of the weather data as the key and the corresponding Weather entity as the value.
+     * The method will iterate through the TreeMap and find the minimum and maximum weather data.
+     * The result is returned as a String, which could be in any format as per the implementation.
+     * For example, the result could be a formatted String like "Min: 10, Max: 20".
+     *
+     * @param weatherMap a TreeMap containing the timestamp as the key and the corresponding Weather entity as the value
+     * @return a String representing the minimum and maximum weather data of a city
+     */
+    String getWeatherMinMaxDataOfCity(TreeMap<LocalDateTime, Weather> weatherMap);
 
     /**
      * Initializes the Weather Data Application (WDA) by adding all cities and their current year's weather data.
@@ -142,7 +156,13 @@ public interface BusinessAPI {
     boolean init();
 
     /**
-     * Löscht alle Tabellen
+     * Destroys all tables in the database.
+     * <p>
+     * This method is used to delete all tables in the database. It's a destructive operation and should be used with caution.
+     * It's typically used for cleanup during testing or when a complete reset of data is required.
+     * The method returns a boolean indicating the success of the operation.
+     *
+     * @return a boolean value indicating whether the operation was successful or not
      */
     boolean destroy();
 }
