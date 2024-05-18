@@ -464,8 +464,10 @@ public class WdaResource {
         try {
             TreeMap<LocalDateTime, Weather> weatherMap = service.getWeatherOfCityByWeek(week, name);
 
-            if (!weatherMap.isEmpty()) {
-                return Response.ok(weatherMap).build();
+            String res = service.getWeatherMinMaxDataOfCity(weatherMap);
+
+            if (!res.isEmpty()) {
+                return Response.ok(res).build();
             } else {
                 return Response.status(Response.Status.NOT_FOUND).build();
             }
@@ -589,15 +591,15 @@ public class WdaResource {
             // Calculate the minimum and maximum weather data from the retrieved weather data
             String res = service.getWeatherMinMaxDataOfCity(weatherMap);
 
-            // If the minimum and maximum weather data is not empty, return it with a HTTP status code of 200 (OK)
+            // If the minimum and maximum weather data is not empty, return it with an HTTP status code of 200 (OK)
             if (!res.isEmpty()) {
                 return Response.ok(res).build();
             } else {
-                // If the minimum and maximum weather data is empty, return a HTTP status code of 404 (Not Found)
+                // If the minimum and maximum weather data is empty, return an HTTP status code of 404 (Not Found)
                 return Response.status(Response.Status.NOT_FOUND).build();
             }
         } catch (Exception e) {
-            // Log the error and return a HTTP status code of 500 (Internal Server Error) with a message describing the error
+            // Log the error and return an HTTP status code of 500 (Internal Server Error) with a message describing the error
             LOG.error("Error while adding weather: ", e);
             return Response
                     .status(Response.Status.INTERNAL_SERVER_ERROR)
