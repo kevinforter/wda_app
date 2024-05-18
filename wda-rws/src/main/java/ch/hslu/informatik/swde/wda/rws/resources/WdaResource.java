@@ -416,6 +416,30 @@ public class WdaResource {
         }
     }
 
+    @GET
+    @Path("weather/{year}/byCityAndMonth/minmax")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getMinMaxDataOfCityByMonth(@QueryParam("name") String name, @QueryParam("month") int month) {
+
+        try {
+            TreeMap<LocalDateTime, Weather> weatherMap = service.getWeatherOfCityByMonth(month, name);
+
+            String res = service.getWeatherMinMaxDataOfCity(weatherMap);
+
+            if (!res.isEmpty()) {
+                return Response.ok(res).build();
+            } else {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+        } catch (Exception e) {
+            LOG.error("Error while getting weather: ", e);
+            return Response
+                    .status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Error while getting weather")
+                    .build();
+        }
+    }
+
     /**
      * Retrieves weather data for a specific city and week from the Weather Data Application (WDA).
      * <p>
