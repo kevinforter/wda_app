@@ -8,6 +8,8 @@
 
 package ch.hslu.informatik.swde.wda.business;
 
+import ch.hslu.informatik.swde.wda.calc.Calc;
+import ch.hslu.informatik.swde.wda.calc.CalcImpl;
 import ch.hslu.informatik.swde.wda.domain.City;
 import ch.hslu.informatik.swde.wda.domain.Init;
 import ch.hslu.informatik.swde.wda.domain.Weather;
@@ -37,6 +39,8 @@ public class BusinessImpl implements BusinessAPI {
     private final WeatherDAO daoW;
     private final GenericDAO<Init> daoI;
     private static final ApiReader reader = new ApiReaderImpl();
+
+    private static final Calc calc = new CalcImpl();
 
     public BusinessImpl(String persistenceUnitName) {
         this.daoC = new CityDAOImpl(persistenceUnitName);
