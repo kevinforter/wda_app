@@ -669,7 +669,6 @@ public class WdaResource {
         }
     }
 
-
     /**
      * Retrieves weather data for a specific number of days in the past from the Weather Data Application (WDA).
      * <p>
@@ -884,6 +883,24 @@ public class WdaResource {
         }
     }
 
+    /**
+     * This method is a RESTful web service endpoint that destroys the Weather Data Application (WDA).
+     * It calls the destroy method of the service object, which is an instance of the BusinessAPI interface.
+     * <p>
+     * If the operation is successful,
+     * it returns a Response object with an HTTP status code of 200 (OK)
+     * and a message indicating the successful destruction of the application.
+     * If the operation is unsuccessful, it returns a Response object with an HTTP status code of 418 (I'm a teapot),
+     * indicating that the server refuses to brew coffee because it is a teapot.
+     * If an exception occurs during the operation,
+     * it logs an error message and returns a Response object with an HTTP status code of 500
+     * (Internal Server Error),
+     * and the response body contains a message describing the error.
+     *
+     * @return a Response object with an HTTP status code of 200 (OK) and a message indicating the successful destruction of the application if the operation is successful,
+     * a Response object with an HTTP status code of 418 (I'm a teapot) if the operation is unsuccessful,
+     * or a Response object with an HTTP status code of 500 (Internal Server Error) and an entity containing a message describing the error if an exception occurs
+     */
     @DELETE
     @Path("destroy")
     public Response destroyApp() {
