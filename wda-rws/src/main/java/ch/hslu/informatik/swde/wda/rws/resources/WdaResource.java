@@ -416,6 +416,25 @@ public class WdaResource {
         }
     }
 
+    /**
+     * This method is a RESTful web service endpoint
+     * that retrieves the minimum and maximum weather data for a specific city within a given month of the year.
+     * The client specifies the city and the month through query parameters in the request.
+     *
+     * @param name  The name of the city for which the minimum and maximum weather data is to be retrieved.
+     *              This is passed as a query parameter in the request.
+     * @param month The month of the year for which the minimum and maximum weather data is to be retrieved.
+     *              This is passed as a query parameter in the request.
+     * @return A Response object
+     * containing the minimum and maximum weather data for the specified city within the given month of the year.
+     * The weather data is represented as a String object in the response body.
+     * If the operation is successful and weather data exists for the specified city and month,
+     * the HTTP status code of the response is 200
+     * (OK).
+     * If no weather data exists for the specified city and month, the HTTP status code of the response is 404 (Not Found).
+     * If an error occurs during the operation, the HTTP status code of the response is 500 (Internal Server Error),
+     * and the response body contains a message describing the error.
+     */
     @GET
     @Path("weather/{year}/byCityAndMonth/minmax")
     @Produces(MediaType.APPLICATION_JSON)
@@ -423,7 +442,6 @@ public class WdaResource {
 
         try {
             TreeMap<LocalDateTime, Weather> weatherMap = service.getWeatherOfCityByMonth(month, name);
-
 
             if (weatherMap.isEmpty()) return Response.status(Response.Status.NOT_FOUND).build();
             String res = service.getWeatherMinMaxDataOfCity(weatherMap);
