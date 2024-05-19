@@ -48,6 +48,7 @@ public class WdaResource {
 
     private final BusinessAPI service = new BusinessImpl(puPROD);
 
+    /*----------------------------------------------CITY RESOURCES---------------------------------------------*/
 
     /**
      * Adds all cities to the Weather Data Application (WDA).
@@ -157,6 +158,46 @@ public class WdaResource {
             return Response
                     .status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("Error while getting cities")
+                    .build();
+        }
+    }
+
+    /*----------------------------------------------WEATHER RESOURCES---------------------------------------------*/
+
+    /**
+     * Adds weather data for all cities and a specific year to the Weather Data Application (WDA).
+     * <p>
+     * This method retrieves a list of all cities from the service object,
+     * which is an instance of the BusinessAPI interface.
+     * It then calls the addWeatherOfCityByYear method of the service object for each city in the list with the provided year.
+     * If the operation is successful, it returns a Response object with an HTTP status code of 200 (OK).
+     * If an exception occurs during the operation,
+     * it logs an error message and returns a Response object with an HTTP status code of 500
+     * (Internal Server Error) and an entity containing a message describing the error.
+     *
+     * @param year the year for which to add the weather data
+     * @return a Response object with an HTTP status code of 200 (OK) if the operation is successful,
+     * or a Response object with an HTTP status code of 500 (Internal Server Error)
+     * and an entity containing a message describing the error if an exception occurs
+     */
+    @POST
+    @Path("weather/{year}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response addAllWeather(@PathParam("year") int year) {
+
+        try {
+            List<City> cityList = service.getAllCities();
+
+            for (City c : cityList) {
+                service.addWeatherOfCityByYear(c.getName(), year);
+            }
+
+            return Response.ok().build();
+        } catch (Exception e) {
+            LOG.error("Error while adding weather: ", e);
+            return Response
+                    .status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Error while adding weather")
                     .build();
         }
     }
@@ -300,43 +341,6 @@ public class WdaResource {
     }
 
     /**
-     * This method is a RESTful web service endpoint that retrieves weather data for a specific city within a given timespan.
-     * The client specifies the city and the timespan through path and query parameters in the request.
-     *
-     * @param name The name of the city for which the weather data is to be retrieved. This is passed as a path parameter in the request.
-     * @param von  The start of the timespan for which the weather data is to be retrieved. This is passed as a query parameter in the request.
-     * @param bis  The end of the timespan for which the weather data is to be retrieved. This is passed as a query parameter in the request.
-     * @return A Response object containing the weather data for the specified city within the given timespan. The weather data is represented as a TreeMap object in the response body.
-     * If the operation is successful and weather data exists for the specified city and timespan, the HTTP status code of the response is 200 (OK).
-     * If no weather data exists for the specified city and timespan, the HTTP status code of the response is 503 (Service Unavailable).
-     * If an error occurs during the operation, the HTTP status code of the response is 500 (Internal Server Error), and the response body contains a message describing the error.
-     */
-    @GET
-    @Path("weather/timespan/{name}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getWeatherByCityAndTimeSpan(@PathParam("name") String name,
-                                                @QueryParam("von") LocalDateTime von,
-                                                @QueryParam("bis") LocalDateTime bis) {
-
-        try {
-            TreeMap<LocalDateTime, Weather> weatherRes = service.getWeatherByCityAndTimeSpan(name, von, bis);
-
-            if (!weatherRes.isEmpty()) {
-                return Response.ok(weatherRes).build();
-            } else {
-                return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
-            }
-
-        } catch (Exception e) {
-            LOG.error("Error while getting weather: ", e);
-            return Response
-                    .status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("Error while getting weather")
-                    .build();
-        }
-    }
-
-    /**
      * Retrieves weather data for a specific city and year from the Weather Data Application (WDA).
      * <p>
      * This method calls the getWeatherOfCityByYear method of the service object,
@@ -367,6 +371,80 @@ public class WdaResource {
             } else {
                 return Response.status(Response.Status.NOT_FOUND).build();
             }
+        } catch (Exception e) {
+            LOG.error("Error while getting weather: ", e);
+            return Response
+                    .status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Error while getting weather")
+                    .build();
+        }
+    }
+
+    /**
+     * Retrieves weather data for a specific year from the Weather Data Application (WDA).
+     * <p>
+     * This method calls the getWeatherOfCityByYear method of the service object,
+     * which is an instance of the BusinessAPI interface, with the provided city name and year.
+     * If the operation is successful and the weather data is found,
+     * it returns a Response object with an HTTP status code of 200 (OK) and the weather data as the entity.
+     * If no weather data is found, it returns a Response object with an HTTP status code of 404 (Not Found).
+     * If an exception occurs during the operation,
+     * it logs an error message and returns a Response object with an HTTP status code of 500
+     * (Internal Server Error) and an entity containing a message describing the error.
+     *
+     * @param year the year for which to retrieve the weather data
+     * @return a Response object with an HTTP status code of 200 (OK) and the weather data as the entity if the operation is successful and the weather data is found,
+     * a Response object with an HTTP status code of 404 (Not Found) if no weather data is found,
+     * or a Response object with an HTTP status code of 500 (Internal Server Error) and an entity containing a message describing the error if an exception occurs
+     */
+    @GET
+    @Path("weather")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getWeatherByYear(@QueryParam("year") int year) {
+
+        try {
+            TreeMap<LocalDateTime, Weather> weatherMap = service.getWeatherByYear(year);
+
+            if (!weatherMap.isEmpty()) {
+                return Response.ok(weatherMap).build();
+            } else {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+        } catch (Exception e) {
+            LOG.error("Error while getting weather: ", e);
+            return Response
+                    .status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Error while getting weather")
+                    .build();
+        }
+    }
+
+    /**
+     * This method is a RESTful web service endpoint that retrieves weather data for a specific city within a given timespan.
+     * The client specifies the city and the timespan through path and query parameters in the request.
+     *
+     * @param name The name of the city for which the weather data is to be retrieved. This is passed as a path parameter in the request.
+     * @param von  The start of the timespan for which the weather data is to be retrieved. This is passed as a query parameter in the request.
+     * @param bis  The end of the timespan for which the weather data is to be retrieved. This is passed as a query parameter in the request.
+     * @return A Response object containing the weather data for the specified city within the given timespan. The weather data is represented as a TreeMap object in the response body.
+     * If the operation is successful and weather data exists for the specified city and timespan, the HTTP status code of the response is 200 (OK).
+     * If no weather data exists for the specified city and timespan, the HTTP status code of the response is 503 (Service Unavailable).
+     * If an error occurs during the operation, the HTTP status code of the response is 500 (Internal Server Error), and the response body contains a message describing the error.
+     */
+    @GET
+    @Path("weather/timespan/{name}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getWeatherByCityAndTimeSpan(@PathParam("name") String name, @QueryParam("von") LocalDateTime von, @QueryParam("bis") LocalDateTime bis) {
+
+        try {
+            TreeMap<LocalDateTime, Weather> weatherRes = service.getWeatherByCityAndTimeSpan(name, von, bis);
+
+            if (!weatherRes.isEmpty()) {
+                return Response.ok(weatherRes).build();
+            } else {
+                return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
+            }
+
         } catch (Exception e) {
             LOG.error("Error while getting weather: ", e);
             return Response
@@ -631,45 +709,6 @@ public class WdaResource {
     }
 
     /**
-     * Retrieves weather data for a specific year from the Weather Data Application (WDA).
-     * <p>
-     * This method calls the getWeatherOfCityByYear method of the service object,
-     * which is an instance of the BusinessAPI interface, with the provided city name and year.
-     * If the operation is successful and the weather data is found,
-     * it returns a Response object with an HTTP status code of 200 (OK) and the weather data as the entity.
-     * If no weather data is found, it returns a Response object with an HTTP status code of 404 (Not Found).
-     * If an exception occurs during the operation,
-     * it logs an error message and returns a Response object with an HTTP status code of 500
-     * (Internal Server Error) and an entity containing a message describing the error.
-     *
-     * @param year the year for which to retrieve the weather data
-     * @return a Response object with an HTTP status code of 200 (OK) and the weather data as the entity if the operation is successful and the weather data is found,
-     * a Response object with an HTTP status code of 404 (Not Found) if no weather data is found,
-     * or a Response object with an HTTP status code of 500 (Internal Server Error) and an entity containing a message describing the error if an exception occurs
-     */
-    @GET
-    @Path("weather")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getWeatherByYear(@QueryParam("year") int year) {
-
-        try {
-            TreeMap<LocalDateTime, Weather> weatherMap = service.getWeatherByYear(year);
-
-            if (!weatherMap.isEmpty()) {
-                return Response.ok(weatherMap).build();
-            } else {
-                return Response.status(Response.Status.NOT_FOUND).build();
-            }
-        } catch (Exception e) {
-            LOG.error("Error while getting weather: ", e);
-            return Response
-                    .status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("Error while getting weather")
-                    .build();
-        }
-    }
-
-    /**
      * Retrieves weather data for a specific number of days in the past from the Weather Data Application (WDA).
      * <p>
      * This method calls the getWeatherByDayDifference method of the service object,
@@ -807,43 +846,7 @@ public class WdaResource {
         }
     }
 
-    /**
-     * Adds weather data for all cities and a specific year to the Weather Data Application (WDA).
-     * <p>
-     * This method retrieves a list of all cities from the service object,
-     * which is an instance of the BusinessAPI interface.
-     * It then calls the addWeatherOfCityByYear method of the service object for each city in the list with the provided year.
-     * If the operation is successful, it returns a Response object with an HTTP status code of 200 (OK).
-     * If an exception occurs during the operation,
-     * it logs an error message and returns a Response object with an HTTP status code of 500
-     * (Internal Server Error) and an entity containing a message describing the error.
-     *
-     * @param year the year for which to add the weather data
-     * @return a Response object with an HTTP status code of 200 (OK) if the operation is successful,
-     * or a Response object with an HTTP status code of 500 (Internal Server Error)
-     * and an entity containing a message describing the error if an exception occurs
-     */
-    @POST
-    @Path("weather/{year}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response addAllWeather(@PathParam("year") int year) {
-
-        try {
-            List<City> cityList = service.getAllCities();
-
-            for (City c : cityList) {
-                service.addWeatherOfCityByYear(c.getName(), year);
-            }
-
-            return Response.ok().build();
-        } catch (Exception e) {
-            LOG.error("Error while adding weather: ", e);
-            return Response
-                    .status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("Error while adding weather")
-                    .build();
-        }
-    }
+    /*----------------------------------------------UTIL RESOURCES---------------------------------------------*/
 
     /**
      * Initializes the Weather Data Application (WDA) by adding all cities and their current year's weather data.
