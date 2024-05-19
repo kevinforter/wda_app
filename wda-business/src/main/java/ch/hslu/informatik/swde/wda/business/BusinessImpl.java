@@ -531,6 +531,7 @@ public class BusinessImpl implements BusinessAPI {
      * @return a JSON String representing the mean temperature, pressure, and humidity data of a city
      * @throws RuntimeException if there is an error while converting the data map to a JSON string
      */
+    @Override
     public String getWeatherMeanDataOfCity(TreeMap<LocalDateTime, Weather> weatherMap) {
         Map<String, Map<String, Double>> data = new HashMap<>();
 

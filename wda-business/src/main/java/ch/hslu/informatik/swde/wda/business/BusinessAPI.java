@@ -145,6 +145,21 @@ public interface BusinessAPI {
     String getWeatherMinMaxDataOfCity(TreeMap<LocalDateTime, Weather> weatherMap);
 
     /**
+     * Retrieves the mean temperature, pressure, and humidity data of a city from a given TreeMap of Weather data.
+     * <p>
+     * This method is used to fetch the mean temperature, pressure, and humidity data for a city.
+     * The TreeMap provided as an argument should contain the timestamp of the weather data as the key and the corresponding Weather entity as the value.
+     * The method will iterate through the TreeMap and calculate the mean temperature, pressure, and humidity data.
+     * The result is returned as a JSON String, which contains the mean values for temperature, pressure, and humidity.
+     * For example, the result could be a formatted String like "{"Temperature":{"mean":15.0},"Pressure":{"mean":1010.0},"Humidity":{"mean":90.0}}".
+     *
+     * @param weatherMap a TreeMap containing the timestamp as the key and the corresponding Weather entity as the value
+     * @return a JSON String representing the mean temperature, pressure, and humidity data of a city
+     * @throws RuntimeException if there is an error while converting the data map to a JSON string
+     */
+    String getWeatherMeanDataOfCity(TreeMap<LocalDateTime, Weather> weatherMap);
+
+    /**
      * Initializes the Weather Data Application (WDA) by adding all cities and their current year's weather data.
      * <p>
      * This method first calls the addAllCities method of the service object,
